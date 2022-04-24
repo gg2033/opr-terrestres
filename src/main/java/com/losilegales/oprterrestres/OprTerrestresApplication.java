@@ -37,7 +37,8 @@ public class OprTerrestresApplication {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-       return usuarios.toString();
+//       return usuarios.toString();
+		return "Hola mundo!";
     }
 	
 	public static void main(String[] args) {
