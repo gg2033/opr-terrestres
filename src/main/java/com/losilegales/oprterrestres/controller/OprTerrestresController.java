@@ -15,8 +15,12 @@ import com.losilegales.oprterrestres.dto.PasajeroDTO;
 import com.losilegales.oprterrestres.repository.UsuarioRepository;
 import com.losilegales.oprterrestres.service.OpTerrGoogleSheetService;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping(OprConstants.BASE_ENDPOINT)
+@Tag(name = "Rutas", description = "Endpoints de Rutas")
 public class OprTerrestresController {
 	
 	@Autowired
