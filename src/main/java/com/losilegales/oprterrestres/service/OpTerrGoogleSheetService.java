@@ -2,6 +2,7 @@ package com.losilegales.oprterrestres.service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import com.google.api.client.util.Value;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
 import com.google.api.services.sheets.v4.model.Sheet;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.losilegales.oprterrestres.GoogleAuthorizationConfig;
+import com.losilegales.oprterrestres.dto.PasajeroDTO;
 
 @Service
 public class OpTerrGoogleSheetService  implements GoogleSheetsService {
@@ -30,20 +31,24 @@ public class OpTerrGoogleSheetService  implements GoogleSheetsService {
     private GoogleAuthorizationConfig googleAuthorizationConfig;
 
     @Override
-    public void getSpreadsheetValues() throws IOException, GeneralSecurityException {
+    public List<PasajeroDTO> getSpreadsheetValues(String maestro) throws IOException, GeneralSecurityException {
         Sheets sheetsService = googleAuthorizationConfig.getSheetsService();
         Sheets.Spreadsheets.Values.BatchGet request =
-                sheetsService.spreadsheets().values().batchGet(env.getProperty("spreadsheet.id"));
+                sheetsService.spreadsheets().values().batchGet(maestro);
         request.setRanges(getSpreadSheetRange());
         request.setMajorDimension("ROWS");
         BatchGetValuesResponse response = request.execute();
         List<List<Object>> spreadSheetValues = response.getValueRanges().get(0).getValues();
         List<Object> headers = spreadSheetValues.remove(0);
+        List<PasajeroDTO> pasajeros = new ArrayList<PasajeroDTO>();
+        PasajeroDTO pasajeroDto = new PasajeroDTO();
         for ( List<Object> row : spreadSheetValues ) {
-            LOGGER.info("{}: {}, {}: {}, {}: {}, {}: {}",
-                    headers.get(0),row.get(0), headers.get(1),row.get(1),
-                    headers.get(2),row.get(2), headers.get(3),row.get(3));
+        	//buscar alternativa mejor.
+        	pasajeroDto.setIdPasajero(Integer.parseInt((String) row.get(0)));
+        	pasajeroDto.setNombre((String) row.get(1));
+        	pasajeros.add(pasajeroDto);
         }
+        return pasajeros;
     }
 
     private List<String> getSpreadSheetRange() throws IOException, GeneralSecurityException {
