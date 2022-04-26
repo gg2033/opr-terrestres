@@ -27,7 +27,7 @@ Api con el proposito de suministrar los recursos de operaciones terrestres neces
 
 ## Que se hizo
 
- * Estructural de la aplicación.
+ * Estructura de la aplicación.
  * Se hicieron configuraciones generales para la comunicion de maestros y servicios externos.
  * Se genera la documentacion base con swagger para suministrar las operaciones disponibles de la api.
  * Configuraciones esenciales para la comunicacion con la plataforma heroku.
