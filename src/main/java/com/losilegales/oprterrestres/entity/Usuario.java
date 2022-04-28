@@ -1,6 +1,7 @@
 package com.losilegales.oprterrestres.entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,8 +21,37 @@ public class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id_usuario")
 	private Integer idUsuario;
-    
+	
+	@Column(name="nombre")
+	private String nombre;
+	
+	@Column(name="apellido")
+	private String apellido;
+	
+	@Column(name="codigo_usuario")
+	private String codigoUsuario;
+	
+	@Column(name="contraseña")
+	private String contraseña;
+	
+	@Column(name="creado")
+	private LocalDate fechaCreacion;
+	
+	@Column(name="creado_por")
+	private String nombreCreador;
+	
+	@Column(name="modificado")
+	private LocalDate fechaModificacion;
 
+	@Column(name="modificado_por")
+	private String nombreModificador;
+
+	@Column(name="activo")
+	private boolean activo;
+	
+	@Column(name="tipo_usuario")
+	private String tipoUsuario;
+    
 	public Usuario() {
 		super();
 	}
@@ -33,7 +63,85 @@ public class Usuario implements Serializable {
 	public void setIdUsuario(Integer idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-	
-	
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getCodigoUsuario() {
+		return codigoUsuario;
+	}
+
+	public void setCodigoUsuario(String codigoUsuario) {
+		this.codigoUsuario = codigoUsuario;
+	}
+
+	public String getContraseña() {
+		return contraseña;
+	}
+
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
+	}
+
+	public LocalDate getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(LocalDate fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public String getNombreCreador() {
+		return nombreCreador;
+	}
+
+	public void setNombreCreador(String nombreCreador) {
+		this.nombreCreador = nombreCreador;
+	}
+
+	public LocalDate getFechaModificacion() {
+		return fechaModificacion;
+	}
+
+	public void setFechaModificacion(LocalDate fechaModificacion) {
+		this.fechaModificacion = fechaModificacion;
+	}
+
+	public String getNombreModificador() {
+		return nombreModificador;
+	}
+
+	public void setNombreModificador(String nombreModificador) {
+		this.nombreModificador = nombreModificador;
+	}
+
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
+	public String getTipoUsuario() {
+		return tipoUsuario;
+	}
+
+	public void setTipoUsuario(String tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
+	}
 
 }
