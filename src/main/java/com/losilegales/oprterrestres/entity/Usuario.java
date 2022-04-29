@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 @Entity
 @Table(name="USUARIOS",schema="public")
@@ -18,7 +20,7 @@ public class Usuario implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id_usuario")
 	private Integer idUsuario;
 	
@@ -28,30 +30,42 @@ public class Usuario implements Serializable {
 	@Column(name="apellido")
 	private String apellido;
 	
-	@Column(name="codigo_usuario")
+	@Column(name="codigo_usuario", insertable=false)
 	private String codigoUsuario;
 	
 	@Column(name="contraseña")
 	private String contraseña;
 	
-	@Column(name="creado")
+	@Column(name="creado", insertable=false)
+	//@Column(name="creado")
 	private LocalDate fechaCreacion;
 	
 	@Column(name="creado_por")
 	private String nombreCreador;
 	
-	@Column(name="modificado")
+	@Column(name="modificado", nullable = true)
 	private LocalDate fechaModificacion;
 
-	@Column(name="modificado_por")
+	@Column(name="modificado_por", nullable = true)
 	private String nombreModificador;
 
-	@Column(name="activo")
+	@Column(name="activo", insertable=false)
+//	@Column(name="activo");
 	private boolean activo;
 	
-	@Column(name="id_tipo_usuario")
+//	@ManyToOne
+//	@JoinColumn(name = "id_tipo_usuario")
+	@Column(name = "id_tipo_usuario")
 	private Integer tipoUsuario;
     
+	@Override
+	public String toString() {
+		return "Usuario [idUsuario=" + idUsuario + ", nombre=" + nombre + ", apellido=" + apellido + ", codigoUsuario="
+				+ codigoUsuario + ", contraseña=" + contraseña + ", fechaCreacion=" + fechaCreacion + ", nombreCreador="
+				+ nombreCreador + ", fechaModificacion=" + fechaModificacion + ", nombreModificador="
+				+ nombreModificador + ", activo=" + activo + ", tipoUsuario=" + tipoUsuario + "]";
+	}
+
 	public Usuario() {
 		super();
 	}
