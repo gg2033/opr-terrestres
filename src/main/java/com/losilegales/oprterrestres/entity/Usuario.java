@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
-@Table(name="USUARIO",schema="public")
+@Table(name="USUARIOS",schema="public")
 public class Usuario implements Serializable {
 	
     /**
@@ -49,8 +49,8 @@ public class Usuario implements Serializable {
 	@Column(name="activo")
 	private boolean activo;
 	
-	@Column(name="tipo_usuario")
-	private String tipoUsuario;
+	@Column(name="id_tipo_usuario")
+	private Integer tipoUsuario;
     
 	public Usuario() {
 		super();
@@ -136,11 +136,11 @@ public class Usuario implements Serializable {
 		this.activo = activo;
 	}
 
-	public String getTipoUsuario() {
+	public Integer getTipoUsuario() {
 		return tipoUsuario;
 	}
 
-	public void setTipoUsuario(String tipoUsuario) {
+	public void setTipoUsuario(Integer tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
 

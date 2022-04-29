@@ -26,9 +26,10 @@ public class OprUsuariosController {
 	public OpTerrGoogleSheetService opTerrGoogleSheetService;
 
 	@GetMapping("/usuarios")
-	@ResponseBody
-	String home() {
+//	@ResponseBody
+	public List<Usuario> getUsuarios() {
 		List<Usuario> usuarios = usuarioRepository.findAll();
-		return usuarios.toString();
+		return usuarios;
 	}
+	
 }
