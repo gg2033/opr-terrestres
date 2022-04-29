@@ -49,7 +49,7 @@ public class Usuario implements Serializable {
 	@Column(name="modificado_por", nullable = true)
 	private String nombreModificador;
 
-	@Column(name="activo", insertable=false)
+	@Column(name="activo", insertable=false, updatable = true)
 //	@Column(name="activo");
 	private boolean activo;
 	
