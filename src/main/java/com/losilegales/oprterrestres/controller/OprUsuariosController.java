@@ -1,5 +1,8 @@
 package com.losilegales.oprterrestres.controller;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import com.losilegales.oprterrestres.entity.Usuario;
 import com.losilegales.oprterrestres.repository.UsuarioRepository;
 import com.losilegales.oprterrestres.service.OpTerrGoogleSheetService;
 
+import converter.LocalDateAttributeConverter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -39,18 +43,46 @@ public class OprUsuariosController {
 		return usuarios;
 	}
 	
-	@PostMapping(value = "/crear")
-	public String crearUsuario(@RequestBody Usuario usuario) {
-		usuarioRepository.save(usuario);
-		return "Creado el usuario " + usuario.getNombre() + " " + usuario.getApellido();
+	//TODO Ver donde ubicar este metodo
+	private String generarCodigoUsuario(Usuario usuario) {
+		//TODO Falta una forma de agregar el id del usuario al codigo de usuario para que sea unico
+		String apellido = usuario.getApellido();
+		String nombre = usuario.getNombre();
+		
+		String codigoUsuario = 
+				nombre.substring(0, 3) + 
+				apellido.substring(0, 3) +
+				apellido.substring(apellido.length() - 2);
+		
+		return codigoUsuario;
 	}
 	
-	@PutMapping(value= "/deshabilitar/{id}/")
-	public String deshabilitarUsuario(@PathVariable Integer id) {
-		Usuario usuarioModificado = usuarioRepository.findById(id).get();
-		usuarioRepository.deshabilitarUsuario(id, false);
-		return "Usuario "+ usuarioModificado.getNombre() + " " + usuarioModificado.getApellido() +" deshabilitado";
+	//TODO comentar informacion de esto y ver donde ubicarlo
+	private LocalDate getFechaActual() {
+		return new LocalDateAttributeConverter().convertToEntityAttribute(new Date(System.currentTimeMillis()));
 	}
+	
+	//TODO Agregar check para largo de los valores de usuario (nombre, apellido, contraseña, creado por)
+	//TODO Agregar check para el tipo de usuario (verificar si el tipo existe en la base)
+	@PostMapping(value = "/usuario")
+	public Usuario crearUsuario(@RequestBody Usuario usuario) {
+//		verificarDatosTexto(usuario);
+//		verificarTipoUsuarioExistente(usuario);
+		usuario.setActivo(true);
+		usuario.setCodigoUsuario(generarCodigoUsuario(usuario));
+		usuario.setFechaCreacion(getFechaActual());
+
+		usuarioRepository.save(usuario);
+		return usuario;
+	}
+
+	//patch
+//	@PutMapping(value= "/usuario/{id}/")
+//	public String deshabilitarUsuario(@PathVariable Integer id) {
+//		Usuario usuarioModificado = usuarioRepository.findById(id).get();
+//		usuarioRepository.deshabilitarUsuario(id, false);
+//		return "Usuario "+ usuarioModificado.getNombre() + " " + usuarioModificado.getApellido() +" deshabilitado";
+//	}
 	
 //	@PutMapping(value= "/deshabilitar/{id}/")
 //	public String deshabilitarUsuario(@PathVariable Integer id) {
@@ -59,11 +91,12 @@ public class OprUsuariosController {
 //		usuarioRepository.save(usuarioModificado);
 //		return "Usuario "+ usuarioModificado.getNombre() + " " + usuarioModificado.getApellido() +" deshabilitado";
 //	}
-	
-//	@PutMapping(value= "/deshabilitar/{id}/")
-//	public String modificarUsuario(@PathVariable Integer id,@RequestBody Usuario usuario) {
-//		Usuario usuarioModificado = usuarioRepository.findById(id).get();
-//		usuarioModificado.setActivo(usuario.isActivo());
-//		return "";
-//	}
+
+	@PutMapping(value= "/update_usuario")
+	public Usuario modificarUsuario(@RequestBody Usuario usuario) {
+		Usuario usuarioModificado = usuarioRepository.findById(usuario.getIdUsuario()).get();
+		usuarioModificado.setActivo(usuario.getActivo());
+		usuarioRepository.save(usuarioModificado);
+		return usuario;
+	}
 }

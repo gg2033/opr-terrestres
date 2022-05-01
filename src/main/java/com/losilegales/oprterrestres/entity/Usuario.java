@@ -1,6 +1,7 @@
 package com.losilegales.oprterrestres.entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -30,14 +31,15 @@ public class Usuario implements Serializable {
 	@Column(name="apellido")
 	private String apellido;
 	
-	@Column(name="codigo_usuario", insertable=false)
+//	@Column(name="codigo_usuario", insertable=false)
+	@Column(name="codigo_usuario")
 	private String codigoUsuario;
 	
 	@Column(name="contraseña")
 	private String contraseña;
 	
-	@Column(name="creado", insertable=false)
-	//@Column(name="creado")
+//	@Column(name="creado", insertable=false)
+	@Column(name="creado")
 	private LocalDate fechaCreacion;
 	
 	@Column(name="creado_por")
@@ -49,8 +51,8 @@ public class Usuario implements Serializable {
 	@Column(name="modificado_por", nullable = true)
 	private String nombreModificador;
 
-	@Column(name="activo", insertable=false, updatable = true)
-//	@Column(name="activo");
+//	@Column(name="activo", insertable=false, updatable = true)
+	@Column(name="activo")
 	private boolean activo;
 	
 //	@ManyToOne
@@ -114,8 +116,8 @@ public class Usuario implements Serializable {
 		return fechaCreacion;
 	}
 
-	public void setFechaCreacion(LocalDate fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
+	public void setFechaCreacion(LocalDate date) {
+		this.fechaCreacion = date;
 	}
 
 	public String getNombreCreador() {
@@ -142,7 +144,7 @@ public class Usuario implements Serializable {
 		this.nombreModificador = nombreModificador;
 	}
 
-	public boolean isActivo() {
+	public boolean getActivo() {
 		return activo;
 	}
 
