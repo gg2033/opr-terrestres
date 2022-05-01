@@ -9,28 +9,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
-@Table(name="usuarios",schema="public")
-public class Usuario implements Serializable {
+@Table(name="vuelo",schema="public")
+public class Tripulante implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="id_usuario")
-	private Integer idUsuario;
-    
-
-	public Usuario() {
-		super();
-	}
-
-	public Integer getIdUsuario() {
-		return idUsuario;
-	}
-
-	public void setIdUsuario(Integer idUsuario) {
-		this.idUsuario = idUsuario;
-	}
+	@Column(name="id_tripulacion")
+	private Integer idTripulacion;
 	
+	@Column(name="id_vuelo")
+	private Integer idVuelo;
 	
+	@Column(name="id_tipo_tripulacion")
+	private Integer idTipoTripulacion;
+	
+	@Column(name="nombre")
+	private Integer nombre;
+	
+	@Column(name="apellido")
+	private Integer apellido;
+
 
 }

@@ -5,7 +5,9 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class OpTerrGoogleSheetService  implements GoogleSheetsService {
     private GoogleAuthorizationConfig googleAuthorizationConfig;
 
     @Override
-    public List<PasajeroDTO> getSpreadsheetValues(String maestro) throws IOException, GeneralSecurityException {
+    public List<List<Object>> getSpreadsheetValues(String maestro) throws IOException, GeneralSecurityException {
         Sheets sheetsService = googleAuthorizationConfig.getSheetsService();
         Sheets.Spreadsheets.Values.BatchGet request =
                 sheetsService.spreadsheets().values().batchGet(maestro);
@@ -40,15 +42,24 @@ public class OpTerrGoogleSheetService  implements GoogleSheetsService {
         BatchGetValuesResponse response = request.execute();
         List<List<Object>> spreadSheetValues = response.getValueRanges().get(0).getValues();
         List<Object> headers = spreadSheetValues.remove(0);
-        List<PasajeroDTO> pasajeros = new ArrayList<PasajeroDTO>();
-        PasajeroDTO pasajeroDto = new PasajeroDTO();
-        for ( List<Object> row : spreadSheetValues ) {
-        	//buscar alternativa mejor.
-        	pasajeroDto.setIdPasajero(Integer.parseInt((String) row.get(0)));
-        	pasajeroDto.setNombre((String) row.get(1));
-        	pasajeros.add(pasajeroDto);
-        }
-        return pasajeros;
+        
+        
+//        List<PasajeroDTO> pasajeros = new ArrayList<PasajeroDTO>();
+   
+//        List<Object> row = spreadSheetValues;
+
+        
+//        for ( List<Object> row : spreadSheetValues ) {
+//        	
+//        	
+//        	//buscar alternativa mejor.
+//        	pasajeroDto.setIdPasajero(Integer.parseInt((String) row.get(0)));
+//        	pasajeroDto.setNombre((String) row.get(1));
+//        	pasajeros.add(pasajeroDto);
+//        }
+        
+        
+        return spreadSheetValues;
     }
 
     private List<String> getSpreadSheetRange() throws IOException, GeneralSecurityException {
@@ -61,5 +72,8 @@ public class OpTerrGoogleSheetService  implements GoogleSheetsService {
         return Collections.singletonList("R1C1:R".concat(String.valueOf(row))
                 .concat("C").concat(String.valueOf(col)));
     }
+    
+    
+    
     
 }
