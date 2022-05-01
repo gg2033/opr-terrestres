@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.losilegales.oprterrestres.constants.OprConstants;
 import com.losilegales.oprterrestres.entity.Usuario;
+import com.losilegales.oprterrestres.repository.TipoUsuarioRepository;
 import com.losilegales.oprterrestres.repository.UsuarioRepository;
 import com.losilegales.oprterrestres.service.OpTerrGoogleSheetService;
 
@@ -35,6 +36,8 @@ public class OprUsuariosController {
 	private UsuarioRepository usuarioRepository;
 	@Autowired
 	public OpTerrGoogleSheetService opTerrGoogleSheetService;
+	@Autowired
+	public TipoUsuarioRepository tipoUsuarioRepository;
 
 	@GetMapping("/usuarios")
 //	@ResponseBody
@@ -62,18 +65,41 @@ public class OprUsuariosController {
 		return new LocalDateAttributeConverter().convertToEntityAttribute(new Date(System.currentTimeMillis()));
 	}
 	
-	//TODO Agregar check para largo de los valores de usuario (nombre, apellido, contraseña, creado por)
-	//TODO Agregar check para el tipo de usuario (verificar si el tipo existe en la base)
+	//TODO ver si es bueno usar excepciones y si no cambiarlo
 	@PostMapping(value = "/usuario")
-	public Usuario crearUsuario(@RequestBody Usuario usuario) {
-//		verificarDatosTexto(usuario);
-//		verificarTipoUsuarioExistente(usuario);
+	public Usuario crearUsuario(@RequestBody Usuario usuario) throws IllegalArgumentException {
+		verificarDatosTexto(usuario);
+		verificarTipoUsuarioExistente(usuario);
 		usuario.setActivo(true);
 		usuario.setCodigoUsuario(generarCodigoUsuario(usuario));
 		usuario.setFechaCreacion(getFechaActual());
 
 		usuarioRepository.save(usuario);
 		return usuario;
+	}
+
+	private void verificarTipoUsuarioExistente(Usuario usuario) throws IllegalArgumentException{		
+		if(tipoUsuarioRepository.getById(usuario.getTipoUsuario()).equals(null)) {
+			System.out.println(tipoUsuarioRepository.getById(usuario.getTipoUsuario()) == null);
+			throw new IllegalArgumentException("No existe el tipo de usuario " + usuario.getTipoUsuario());
+		}
+		System.out.println(tipoUsuarioRepository.getById(usuario.getTipoUsuario()) == null);
+	}
+
+	private void verificarDatosTexto(Usuario usuario) throws IllegalArgumentException{
+		int cantCaracteresPermitidos = 100;
+		if(usuario.getApellido().length() > cantCaracteresPermitidos) {
+			throw new IllegalArgumentException("Los caracteres para apellido sobrepasan los permitidos " + cantCaracteresPermitidos);
+		}
+		if(usuario.getNombre().length() > cantCaracteresPermitidos) {
+			throw new IllegalArgumentException("Los caracteres para nombre sobrepasan los permitidos " + cantCaracteresPermitidos);
+		}
+		if(usuario.getContraseña().length() > cantCaracteresPermitidos) {
+			throw new IllegalArgumentException("Los caracteres para contraseña sobrepasan los permitidos " + cantCaracteresPermitidos);
+		}
+		if(usuario.getNombreCreador().length() > cantCaracteresPermitidos) {
+			throw new IllegalArgumentException("Los caracteres para nombre de creador sobrepasan los permitidos " + cantCaracteresPermitidos);
+		}
 	}
 
 	//patch que funciona
@@ -94,7 +120,6 @@ public class OprUsuariosController {
 
 	@PutMapping(value= "/update_usuario")
 	public Usuario modificarUsuario(@RequestBody Usuario usuario) {
-		//TODO agregar fecha de modificacion
 		//TODO agregar verificacion a tipo de usuario 
 		Usuario usuarioModificado = usuarioRepository.findById(usuario.getIdUsuario()).get();
 		
@@ -102,6 +127,8 @@ public class OprUsuariosController {
 		usuarioModificado.setNombre(usuario.getNombre());
 		usuarioModificado.setContraseña(usuario.getContraseña());
 		usuarioModificado.setCodigoUsuario(usuario.getCodigoUsuario());
+		usuarioModificado.setNombreCreador(usuario.getNombreCreador());
+		usuarioModificado.setFechaCreacion(usuario.getFechaCreacion());
 		usuarioModificado.setNombreModificador(usuario.getNombreModificador());
 		usuarioModificado.setFechaModificacion(getFechaActual());
 		usuarioModificado.setActivo(usuario.getActivo());
