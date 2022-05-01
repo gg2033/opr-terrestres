@@ -78,6 +78,7 @@ public class OprUsuariosController {
 		return usuario;
 	}
 
+	//TODO ver si es bueno usar excepciones y si no cambiarlo
 	private void verificarTipoUsuarioExistente(Usuario usuario) throws IllegalArgumentException{		
 		if(tipoUsuarioRepository.getById(usuario.getTipoUsuario()).equals(null)) {
 			System.out.println(tipoUsuarioRepository.getById(usuario.getTipoUsuario()) == null);

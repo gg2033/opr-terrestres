@@ -11,8 +11,9 @@ import com.losilegales.oprterrestres.entity.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 	
-	@Modifying
-	@Transactional
-	@Query(value = "update usuarios set activo = :valor where id_usuario = :id", nativeQuery = true)
-	void deshabilitarUsuario(@Param(value = "id") int id, @Param(value = "valor") boolean valor);
+	//TODO ver si esto servira de algo
+//	@Modifying
+//	@Transactional
+//	@Query(value = "update usuarios set activo = :valor where id_usuario = :id", nativeQuery = true)
+//	void deshabilitarUsuario(@Param(value = "id") int id, @Param(value = "valor") boolean valor);
 }
