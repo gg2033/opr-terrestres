@@ -58,6 +58,7 @@ public class OprTerrestresCheckIngService {
 				checkInDto.setEquipajeMano((String) row.get(18));
 				checkInDto.setAlimentacion((String) row.get(19));
 				checkInDto.setCondicion((String) row.get(20));
+				
 				// la parte aburrida.
 //			checkInDto.setIdVuelo((String) row.get(0));
 //			checkInDto.setOrigen((String) row.get(1));
@@ -79,13 +80,13 @@ public class OprTerrestresCheckIngService {
 		boolean isValidData = true;
 		
 		for (int i = 0; i < row.size(); i++) {
-			Vuelo vuelo = vueloRepository.findByCodigoVuelo((String)row.get(i));
+		
 			if (i == 0) {// check aerolinea debe ser SF
 				if("SF".equals((String)row.get(i))){
 					isValidData = false;
 				}
 			} else if (i == 1) {// check vuelo, debe estar vuelo en db
-				
+				Vuelo vuelo = vueloRepository.findByCodigoVuelo((String)row.get(i));
 				if(Objects.isNull(vuelo)) {
 					isValidData = false;
 				}
@@ -107,7 +108,7 @@ public class OprTerrestresCheckIngService {
 		}
 		
 		if(!isValidData) {
-			emailService.sendConfirmationEmail("token", "emailSupervisor");
+//			emailService.sendConfirmationEmail("token", "emailSupervisor");
 		}
 	}
 

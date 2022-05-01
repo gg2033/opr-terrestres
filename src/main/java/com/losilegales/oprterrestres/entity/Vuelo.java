@@ -30,11 +30,11 @@ public class Vuelo implements Serializable {
 	@Column(name="cantidad_pasajeros")
 	private Integer cantPasajeros;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "vuelo")
 	private List<Tripulante> tripulantes;
 	
-	@OneToMany
-	private List<Pasajero> pasajeros;
+//	@OneToMany(mappedBy = "vuelo")
+//	private List<Pasajero> pasajeros;
 	
 	@Column(name="id_aeronave")
 	private Integer idAeronave;
