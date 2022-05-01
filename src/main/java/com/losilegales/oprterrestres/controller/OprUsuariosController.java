@@ -76,7 +76,7 @@ public class OprUsuariosController {
 		return usuario;
 	}
 
-	//patch
+	//patch que funciona
 //	@PutMapping(value= "/usuario/{id}/")
 //	public String deshabilitarUsuario(@PathVariable Integer id) {
 //		Usuario usuarioModificado = usuarioRepository.findById(id).get();
@@ -94,8 +94,19 @@ public class OprUsuariosController {
 
 	@PutMapping(value= "/update_usuario")
 	public Usuario modificarUsuario(@RequestBody Usuario usuario) {
+		//TODO agregar fecha de modificacion
+		//TODO agregar verificacion a tipo de usuario 
 		Usuario usuarioModificado = usuarioRepository.findById(usuario.getIdUsuario()).get();
+		
+		usuarioModificado.setApellido(usuario.getApellido());
+		usuarioModificado.setNombre(usuario.getNombre());
+		usuarioModificado.setContraseña(usuario.getContraseña());
+		usuarioModificado.setCodigoUsuario(usuario.getCodigoUsuario());
+		usuarioModificado.setNombreModificador(usuario.getNombreModificador());
+		usuarioModificado.setFechaModificacion(getFechaActual());
 		usuarioModificado.setActivo(usuario.getActivo());
+		usuarioModificado.setTipoUsuario(usuario.getTipoUsuario());
+		
 		usuarioRepository.save(usuarioModificado);
 		return usuario;
 	}
