@@ -2,12 +2,9 @@ package com.losilegales.oprterrestres.service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,6 @@ import com.google.api.services.sheets.v4.model.BatchGetValuesResponse;
 import com.google.api.services.sheets.v4.model.Sheet;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.losilegales.oprterrestres.GoogleAuthorizationConfig;
-import com.losilegales.oprterrestres.dto.PasajeroDTO;
 
 @Service
 public class OpTerrGoogleSheetService  implements GoogleSheetsService {
