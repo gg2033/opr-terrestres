@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.losilegales.oprterrestres.constants.OprConstants;
 import com.losilegales.oprterrestres.entity.Usuario;
 import com.losilegales.oprterrestres.repository.RolUsuarioRepository;
 import com.losilegales.oprterrestres.repository.UsuarioRepository;
 import com.losilegales.oprterrestres.service.OpTerrGoogleSheetService;
+import com.losilegales.oprterrestres.utils.OprConstants;
 
 import converter.LocalDateAttributeConverter;
 import io.swagger.v3.oas.annotations.tags.Tag;

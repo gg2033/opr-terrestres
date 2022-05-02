@@ -17,4 +17,9 @@ public class PasajeroDTO {
 	}
 	
 	
+	public class Person {
+
+
+	}
+	
 }

@@ -28,13 +28,6 @@ import com.google.api.services.sheets.v4.SheetsScopes;
 public class GoogleAuthorizationConfig {
 
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-
-//    @Value("${application.name}")
-//    private String applicationName;
-//    @Value("${credentials.file.path}")
-//    private String credentialsFilePath;
-//    @Value("${tokens.directory.path}")
-//    private String tokensDirectoryPath;
     
     @Autowired
     private Environment env;
