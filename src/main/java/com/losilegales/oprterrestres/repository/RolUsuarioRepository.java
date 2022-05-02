@@ -3,9 +3,9 @@ package com.losilegales.oprterrestres.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.losilegales.oprterrestres.entity.TipoUsuario;
+import com.losilegales.oprterrestres.entity.RolUsuario;
 
 @Repository
-public interface TipoUsuarioRepository extends JpaRepository<TipoUsuario, Integer>{
+public interface RolUsuarioRepository extends JpaRepository<RolUsuario, Integer>{
 
 }

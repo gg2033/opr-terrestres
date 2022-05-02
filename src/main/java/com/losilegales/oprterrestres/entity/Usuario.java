@@ -57,19 +57,38 @@ public class Usuario implements Serializable {
 	
 //	@ManyToOne
 //	@JoinColumn(name = "id_tipo_usuario")
-	@Column(name = "id_tipo_usuario")
-	private Integer tipoUsuario;
-    
+	@Column(name = "id_rol_usuario")
+	private Integer rolUsuario;
+	
+	@Column(name = "correo")
+	private String correo;
+
 	@Override
 	public String toString() {
 		return "Usuario [idUsuario=" + idUsuario + ", nombre=" + nombre + ", apellido=" + apellido + ", codigoUsuario="
 				+ codigoUsuario + ", contraseña=" + contraseña + ", fechaCreacion=" + fechaCreacion + ", nombreCreador="
 				+ nombreCreador + ", fechaModificacion=" + fechaModificacion + ", nombreModificador="
-				+ nombreModificador + ", activo=" + activo + ", tipoUsuario=" + tipoUsuario + "]";
+				+ nombreModificador + ", activo=" + activo + ", tipoUsuario=" + rolUsuario + "]";
 	}
 
 	public Usuario() {
 		super();
+	}
+
+	public Usuario(String nombre, String apellido, String codigoUsuario, String contraseña, LocalDate fechaCreacion,
+			String nombreCreador, LocalDate fechaModificacion, String nombreModificador, boolean activo,
+			Integer rolUsuario) {
+		super();
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.codigoUsuario = codigoUsuario;
+		this.contraseña = contraseña;
+		this.fechaCreacion = fechaCreacion;
+		this.nombreCreador = nombreCreador;
+		this.fechaModificacion = fechaModificacion;
+		this.nombreModificador = nombreModificador;
+		this.activo = activo;
+		this.rolUsuario = rolUsuario;
 	}
 
 	public Integer getIdUsuario() {
@@ -152,12 +171,20 @@ public class Usuario implements Serializable {
 		this.activo = activo;
 	}
 
-	public Integer getTipoUsuario() {
-		return tipoUsuario;
+	public Integer getRolUsuario() {
+		return rolUsuario;
 	}
 
-	public void setTipoUsuario(Integer tipoUsuario) {
-		this.tipoUsuario = tipoUsuario;
+	public void setRolUsuario(Integer rolUsuario) {
+		this.rolUsuario = rolUsuario;
+	}
+	
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
 	}
 
 }
