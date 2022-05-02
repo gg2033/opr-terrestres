@@ -45,10 +45,17 @@ public class OprUsuariosController {
 
 	//TODO Ver como usar el DTO para usuario
 	@GetMapping("/usuarios")
-//	@ResponseBody
 	public List<Usuario> getUsuarios() {
 		List<Usuario> usuarios = usuarioRepository.findAll();
 		return usuarios;
+	}
+	
+	@GetMapping("/usuario/{id}/")
+	public Usuario getUsuarioById(@PathVariable Integer id) {
+		verificarUsuarioExistente(id);
+		
+		Usuario usuario = usuarioRepository.findById(id).get();
+		return usuario;
 	}
 	
 	//TODO Ver donde ubicar este metodo
@@ -85,7 +92,6 @@ public class OprUsuariosController {
 		return usuario;
 	}
 
-	//TODO agregar verificacion correo
 	private void verificarCorreo(Usuario usuario) throws IllegalArgumentException{
 		 Pattern p = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
 		 Matcher m = p.matcher(usuario.getCorreo());
@@ -93,10 +99,14 @@ public class OprUsuariosController {
 			 throw new IllegalArgumentException("Formato de correo incorrecto.");
 		 }
 	}
+	
+	private void verificarUsuarioExistente(Integer id) throws IllegalArgumentException{
+		if (! usuarioRepository.existsById(id)) {
+			throw new IllegalArgumentException("El usuario con id " + id + "no existe.");
+		}
+	}
 
-	//TODO verificar que este funciona
 	private void verificarRolUsuarioExistente(Usuario usuario) throws IllegalArgumentException{		
-//		if(tipoUsuarioRepository.getById(usuario.getRolUsuario())) {
 		if( ! rolUsuarioRepository.existsById(usuario.getRolUsuario()) ) {
 			throw new IllegalArgumentException("No existe el tipo de usuario " + usuario.getRolUsuario());
 		}
@@ -118,22 +128,6 @@ public class OprUsuariosController {
 		}
 	}
 
-	//patch que funciona
-//	@PutMapping(value= "/usuario/{id}/")
-//	public String deshabilitarUsuario(@PathVariable Integer id) {
-//		Usuario usuarioModificado = usuarioRepository.findById(id).get();
-//		usuarioRepository.deshabilitarUsuario(id, false);
-//		return "Usuario "+ usuarioModificado.getNombre() + " " + usuarioModificado.getApellido() +" deshabilitado";
-//	}
-	
-//	@PutMapping(value= "/deshabilitar/{id}/")
-//	public String deshabilitarUsuario(@PathVariable Integer id) {
-//		Usuario usuarioModificado = usuarioRepository.findById(id).get();
-//		usuarioModificado.setActivo(false);
-//		usuarioRepository.save(usuarioModificado);
-//		return "Usuario "+ usuarioModificado.getNombre() + " " + usuarioModificado.getApellido() +" deshabilitado";
-//	}
-
 	//TODO Ver si es necesaria la verificacion con excepciones
 	@PutMapping(value= "/usuario")
 	public Usuario modificarUsuario(@RequestBody Usuario usuario) throws IllegalArgumentException{
@@ -145,19 +139,7 @@ public class OprUsuariosController {
 
 		Mapper mapper = new DozerBeanMapper();
 		mapper.map(usuario, usuarioModificado);
-		
 		usuarioModificado.setFechaModificacion(getFechaActual());
-		
-//		usuarioModificado.setApellido(usuario.getApellido());
-//		usuarioModificado.setNombre(usuario.getNombre());
-//		usuarioModificado.setContraseña(usuario.getContraseña());
-//		usuarioModificado.setCodigoUsuario(usuario.getCodigoUsuario());
-//		usuarioModificado.setNombreCreador(usuario.getNombreCreador());
-//		usuarioModificado.setFechaCreacion(usuario.getFechaCreacion());
-//		usuarioModificado.setNombreModificador(usuario.getNombreModificador());
-//		usuarioModificado.setFechaModificacion(getFechaActual());
-//		usuarioModificado.setActivo(usuario.getActivo());
-//		usuarioModificado.setTipoUsuario(usuario.getTipoUsuario());
 		
 		usuarioRepository.save(usuarioModificado);
 		return usuario;
