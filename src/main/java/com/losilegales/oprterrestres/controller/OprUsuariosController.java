@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.losilegales.oprterrestres.entity.Usuario;
+import com.losilegales.oprterrestres.exceptions.UsuarioServiceException;
 import com.losilegales.oprterrestres.repository.RolUsuarioRepository;
 import com.losilegales.oprterrestres.repository.UsuarioRepository;
 import com.losilegales.oprterrestres.service.OpTerrGoogleSheetService;
@@ -51,7 +52,7 @@ public class OprUsuariosController {
 	}
 	
 	@GetMapping("/usuario/{id}/")
-	public Usuario getUsuarioById(@PathVariable Integer id) {
+	public Usuario getUsuarioById(@PathVariable Integer id) throws UsuarioServiceException{
 		verificarUsuarioExistente(id);
 		
 		Usuario usuario = usuarioRepository.findById(id).get();
@@ -79,10 +80,11 @@ public class OprUsuariosController {
 	
 	//TODO ver si es bueno usar excepciones y si no cambiarlo
 	@PostMapping(value = "/usuario")
-	public Usuario crearUsuario(@RequestBody Usuario usuario) throws IllegalArgumentException {
+	public Usuario crearUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException {
 		verificarCorreo(usuario);
 		verificarDatosTexto(usuario);
 		verificarRolUsuarioExistente(usuario);
+		verificarBodyParaPOST(usuario);
 		
 		usuario.setActivo(true);
 		usuario.setCodigoUsuario(generarCodigoUsuario(usuario));
@@ -92,48 +94,55 @@ public class OprUsuariosController {
 		return usuario;
 	}
 
-	private void verificarCorreo(Usuario usuario) throws IllegalArgumentException{
+	private void verificarCorreo(Usuario usuario) throws UsuarioServiceException{
 		 Pattern p = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
 		 Matcher m = p.matcher(usuario.getCorreo());
 		 if (!m.matches()) {
-			 throw new IllegalArgumentException("Formato de correo incorrecto.");
+			 throw new UsuarioServiceException("Formato de correo incorrecto.");
 		 }
 	}
 	
-	private void verificarUsuarioExistente(Integer id) throws IllegalArgumentException{
+	private void verificarUsuarioExistente(Integer id) throws UsuarioServiceException{
 		if (! usuarioRepository.existsById(id)) {
-			throw new IllegalArgumentException("El usuario con id " + id + "no existe.");
+			throw new UsuarioServiceException("El usuario con id " + id + " no existe.");
 		}
 	}
 
-	private void verificarRolUsuarioExistente(Usuario usuario) throws IllegalArgumentException{		
+	private void verificarRolUsuarioExistente(Usuario usuario) throws UsuarioServiceException{		
 		if( ! rolUsuarioRepository.existsById(usuario.getRolUsuario()) ) {
-			throw new IllegalArgumentException("No existe el tipo de usuario " + usuario.getRolUsuario());
+			throw new UsuarioServiceException("No existe el tipo de usuario " + usuario.getRolUsuario());
 		}
 	}
 
-	private void verificarDatosTexto(Usuario usuario) throws IllegalArgumentException{
+	private void verificarDatosTexto(Usuario usuario) throws UsuarioServiceException{
 		int cantCaracteresPermitidos = 100;
 		if(usuario.getApellido().length() > cantCaracteresPermitidos) {
-			throw new IllegalArgumentException("Los caracteres para apellido sobrepasan los permitidos " + cantCaracteresPermitidos);
+			throw new UsuarioServiceException("Los caracteres para apellido sobrepasan los permitidos " + cantCaracteresPermitidos);
 		}
 		if(usuario.getNombre().length() > cantCaracteresPermitidos) {
-			throw new IllegalArgumentException("Los caracteres para nombre sobrepasan los permitidos " + cantCaracteresPermitidos);
+			throw new UsuarioServiceException("Los caracteres para nombre sobrepasan los permitidos " + cantCaracteresPermitidos);
 		}
 		if(usuario.getContraseña().length() > cantCaracteresPermitidos) {
-			throw new IllegalArgumentException("Los caracteres para contraseña sobrepasan los permitidos " + cantCaracteresPermitidos);
+			throw new UsuarioServiceException("Los caracteres para contraseña sobrepasan los permitidos " + cantCaracteresPermitidos);
 		}
 		if(usuario.getNombreCreador().length() > cantCaracteresPermitidos) {
-			throw new IllegalArgumentException("Los caracteres para nombre de creador sobrepasan los permitidos " + cantCaracteresPermitidos);
+			throw new UsuarioServiceException("Los caracteres para nombre de creador sobrepasan los permitidos " + cantCaracteresPermitidos);
+		}
+	}
+	
+	private void verificarBodyParaPOST(Usuario usuario) throws UsuarioServiceException{
+		if (usuario.getIdUsuario() != null) {
+			throw new UsuarioServiceException("Argumento invalido en el body. No pasar id de usuario");
 		}
 	}
 
 	//TODO Ver si es necesaria la verificacion con excepciones
 	@PutMapping(value= "/usuario")
-	public Usuario modificarUsuario(@RequestBody Usuario usuario) throws IllegalArgumentException{
+	public Usuario modificarUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException{
 		verificarCorreo(usuario);
 		verificarDatosTexto(usuario);
 		verificarRolUsuarioExistente(usuario);
+		verificarUsuarioExistente(usuario.getIdUsuario());
 		
 		Usuario usuarioModificado = usuarioRepository.findById(usuario.getIdUsuario()).get();
 
