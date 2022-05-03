@@ -1,25 +1,14 @@
 package com.losilegales.oprterrestres.dto;
 
+import java.util.List;
+
+import lombok.Data;
+@Data
 public class PasajeroDTO {
 	private int idPasajero;
 	private String nombre;
-	public int getIdPasajero() {
-		return idPasajero;
-	}
-	public void setIdPasajero(int idPasajero) {
-		this.idPasajero = idPasajero;
-	}
-	public String getNombre() {
-		return nombre;
-	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
 	
+	private List<CargaDTO> carga;
 	
-	public class Person {
-
-
-	}
 	
 }
