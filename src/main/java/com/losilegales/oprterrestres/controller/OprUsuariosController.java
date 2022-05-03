@@ -142,6 +142,7 @@ public class OprUsuariosController {
 		verificarCorreo(usuario);
 		verificarDatosTexto(usuario);
 		verificarRolUsuarioExistente(usuario);
+		verificarUsuarioExistente(usuario.getIdUsuario());
 		
 		Usuario usuarioModificado = usuarioRepository.findById(usuario.getIdUsuario()).get();
 
