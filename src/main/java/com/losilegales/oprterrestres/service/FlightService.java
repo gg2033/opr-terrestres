@@ -27,7 +27,7 @@ public class FlightService {
 	public Optional<Vuelo> updateFlight(Vuelo vueloRequest) {
 		
 		Optional<Vuelo> vuelo = flightRepository.findById(vueloRequest.getIdVuelo());
-		if(!vuelo.isEmpty()) {
+		if(!vuelo.isPresent()) {
 			//campos que se pueden modificar
 			vuelo.get().setActivo(vuelo.get().getActivo());
 			vuelo.get().setModificado(LocalDateTime.now());
