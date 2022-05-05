@@ -122,7 +122,7 @@ public class OprTerrestresCheckIngService {
 		Optional<Vuelo> vuelo = null;	
 		for (List<CheckInDTO> checkin : checkByVuelo.values()) {
 			vuelo = vueloRepository.findByCodigo((String) checkin.get(0).getVuelo());
-			if(!vuelo.isEmpty()) {
+			if(!vuelo.isPresent()) {
 
 				vuelo.get().setCantPasajeros(checkin.size());
 //				List<Pasajero> pasajeros = new ArrayList<Pasajero>();
