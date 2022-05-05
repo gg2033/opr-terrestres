@@ -123,6 +123,7 @@ public class OprTerrestresCheckIngService {
 		for (List<CheckInDTO> checkin : checkByVuelo.values()) {
 			vuelo = vueloRepository.findByCodigo((String) checkin.get(0).getVuelo());
 			if(!vuelo.isEmpty()) {
+
 				vuelo.get().setCantPasajeros(checkin.size());
 //				List<Pasajero> pasajeros = new ArrayList<Pasajero>();
 				
@@ -133,7 +134,7 @@ public class OprTerrestresCheckIngService {
 						}
 				
 					// check vuelo, debe estar vuelo en db
-					if (vuelo.isEmpty()) {
+					if (!vuelo.isPresent()) {
 							isValidData = false;
 						}
 //					if ("SF".equals((String) checkin.get(i).getFecha())) {
