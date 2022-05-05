@@ -40,7 +40,7 @@ public class OprTerrestresVuelosController {
 		Vuelo vuelo = modelMapper.map(vueloDto, Vuelo.class);
 		
 		Optional<Vuelo> response = flightService.updateFlight(vuelo);
-		if(!response.isEmpty()) {
+		if(!response.isPresent()) {
 			return Optional.of(modelMapper.map(response, VueloDTO.class));
 		}
 		return Optional.empty();
