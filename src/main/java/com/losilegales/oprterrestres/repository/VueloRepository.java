@@ -9,6 +9,6 @@ import com.losilegales.oprterrestres.entity.Vuelo;
 @Repository
 public interface VueloRepository extends JpaRepository<Vuelo, Integer>{
 	
-	public Optional<Vuelo> findByCodigoVuelo(String codigoVuelo);
+	public Optional<Vuelo> findByCodigo(String codigo);
 
 }

@@ -1,7 +1,7 @@
 package com.losilegales.oprterrestres.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,11 +31,27 @@ public class Vuelo {
 	private Integer idAerolinea;
 	
 	@Column(name="codigo")
-	private String codigoVuelo;
+	private String codigo;
 	@Column(name="horario_salida")
-	private LocalDateTime horarioSalida;
+	private Date horarioSalida;
+	
 	@Column(name="horario_llegada")
-	private LocalDateTime horarioLlegada;
+	private Date horarioLlegada;
+	
+	@Column(name="id_aeronave")
+	private Integer idAeronave;
+	
+	@Column(name="creado")
+	private Date creado;
+	
+	@Column(name="creadoPor")
+	private String creadoPor;
+	
+	@Column(name="modificado")
+	private LocalDateTime modificado;
+	
+	@Column(name="modificado_por")
+	private String modificadoPor;
 	
 //	@OneToOne
 //	private AeroPuerto aeropuertoSalida;
@@ -55,8 +71,8 @@ public class Vuelo {
 //	@OneToMany(mappedBy = "vuelo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 //	private List<Pasajero> pasajeros;
 
-//	@Column(name="id_aeronave")
-//	private Integer idAeronave;
+	@Column(name="activo")
+	private Boolean activo;
 	
 
 
