@@ -48,11 +48,12 @@ public class OprUsuariosController {
 	public OpTerrGoogleSheetService opTerrGoogleSheetService;
 	@Autowired
 	public RolUsuarioRepository rolUsuarioRepository;
+	
+	private Mapper mapper = new DozerBeanMapper();
 
 	//TODO Ver como usar el DTO para usuario
 	@GetMapping("/usuarios")
-	public List<UsuarioDTO> getUsuarios() {
-		Mapper mapper = new DozerBeanMapper();	
+	public List<UsuarioDTO> getUsuarios() {	
 		List<Usuario> usuarios = usuarioRepository.findAll();
 		List<UsuarioDTO> usuariosdto = new ArrayList<UsuarioDTO>(usuarios.size());
 		for (Usuario u : usuarios) {
@@ -74,11 +75,13 @@ public class OprUsuariosController {
 	}
 	
 	@GetMapping("/usuario/{id}/")
-	public Usuario getUsuarioById(@PathVariable Integer id) throws UsuarioServiceException{
+	public UsuarioDTO getUsuarioById(@PathVariable Integer id) throws UsuarioServiceException{
 		verificarUsuarioExistente(id);
 		
 		Usuario usuario = usuarioRepository.findById(id).get();
-		return usuario;
+		UsuarioDTO udto = mapper.map(usuario, UsuarioDTO.class);
+		setFechasUtoUDTO(usuario, udto);
+		return udto;
 	}
 	
 	//TODO Ver donde ubicar este metodo
@@ -203,7 +206,6 @@ public class OprUsuariosController {
 		
 		Usuario usuarioModificado = usuarioRepository.findById(usuario.getIdUsuario()).get();
 
-		Mapper mapper = new DozerBeanMapper();
 		mapper.map(usuario, usuarioModificado);
 		usuarioModificado.setFechaModificacion(getFechaActual());
 		
