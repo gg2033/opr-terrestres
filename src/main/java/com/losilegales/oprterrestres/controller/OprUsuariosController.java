@@ -99,7 +99,7 @@ public class OprUsuariosController {
 	
 	//TODO ver si es bueno usar excepciones y si no cambiarlo
 	@PostMapping(value = "/usuario")
-	public Usuario crearUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException {
+	public String crearUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException {
 		verificarCorreo(usuario);
 		verificarDatosTexto(usuario);
 		verificarRolUsuarioExistente(usuario);
@@ -109,15 +109,10 @@ public class OprUsuariosController {
 		usuario.setActivo(true);
 		usuario.setCodigoUsuario(generarCodigoUsuario(usuario));
 		usuario.setFechaCreacion(getFechaActual());
-		
-		//TODO quitar esta asignacion c y el seteo de contraseña luego de guardarlo en la base
-		//cuando se implemente el DTO.
-		String c = usuario.getContraseña();
 		usuario.setContraseña(HashContraseña(usuario.getContraseña()));
 
 		usuarioRepository.save(usuario);
-		usuario.setContraseña(c);
-		return usuario;
+		return "Usuario creado correctamente. id: " + usuario.getIdUsuario() + " codigo_usuario: " + usuario.getCodigoUsuario();
 	}
 
 	private void verificarCorreo(Usuario usuario) throws UsuarioServiceException{
@@ -177,6 +172,8 @@ public class OprUsuariosController {
 		}
 	}
 
+	//TODO el mensaje final debe ser si se pudo modificar el usuario.
+	//TODO si puede cambiar cualquier dato, hay que verificar que e
 	@PutMapping(value= "/usuario")
 	public Usuario modificarUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException{
 		verificarUsuarioExistente(usuario.getIdUsuario());
