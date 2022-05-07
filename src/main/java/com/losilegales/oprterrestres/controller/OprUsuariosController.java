@@ -163,7 +163,6 @@ public class OprUsuariosController {
 		}
 	}
 
-	//TODO Ver si es necesaria la verificacion con excepciones
 	@PutMapping(value= "/usuario")
 	public Usuario modificarUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException{
 		verificarUsuarioExistente(usuario.getIdUsuario());
@@ -180,5 +179,24 @@ public class OprUsuariosController {
 		
 		usuarioRepository.save(usuarioModificado);
 		return usuario;
+	}
+	
+	//TODO verificar
+	@GetMapping("/usuario_login/{id}/")
+	public String logInUsuario(@PathVariable Usuario usuario) {
+		String ret; 
+		if(usuario.getCodigoUsuario() == null || usuario.getContraseña() == null) {
+			return "Los campos no pueden estar vacíos. Verifique.";
+		}
+		String hashContrasena = Integer.toString(usuario.getContraseña().hashCode());
+		
+		usuario.setContraseña(hashContrasena);
+		
+		boolean flag = usuarioRepository.logInUsuario(usuario.getCodigoUsuario(), usuario.getContraseña());
+		if(flag) {
+			return "La verificación fue exitosa";
+		}else {
+			return "Usuario y/o contraseña incorrecta. Verifique.";
+		}
 	}
 }
