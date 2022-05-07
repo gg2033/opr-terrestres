@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +33,7 @@ import com.losilegales.oprterrestres.repository.UsuarioRepository;
 import com.losilegales.oprterrestres.service.OpTerrGoogleSheetService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 
+import converter.LocalDateAndStringConverter;
 import converter.LocalDateAttributeConverter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -49,9 +51,26 @@ public class OprUsuariosController {
 
 	//TODO Ver como usar el DTO para usuario
 	@GetMapping("/usuarios")
-	public List<Usuario> getUsuarios() {
+	public List<UsuarioDTO> getUsuarios() {
+		Mapper mapper = new DozerBeanMapper();	
 		List<Usuario> usuarios = usuarioRepository.findAll();
-		return usuarios;
+		List<UsuarioDTO> usuariosdto = new ArrayList<UsuarioDTO>(usuarios.size());
+		for (Usuario u : usuarios) {
+			UsuarioDTO udto = mapper.map(u, UsuarioDTO.class);
+			setFechasUtoUDTO(u, udto);
+		    usuariosdto.add(udto);
+		}
+		return usuariosdto;
+	}
+	
+	private void setFechasUtoUDTO(Usuario u, UsuarioDTO udto) {
+		udto.setFechaCreacion(LocalDateAndStringConverter.localDateToString(u.getFechaCreacion()));
+		udto.setFechaModificacion(LocalDateAndStringConverter.localDateToString(u.getFechaModificacion()));
+	}
+	
+	private void setFechasUDTOtoU(UsuarioDTO udto, Usuario u) {
+		u.setFechaCreacion(LocalDateAndStringConverter.stringToLocalDate(udto.getFechaCreacion()));
+		u.setFechaModificacion(LocalDateAndStringConverter.stringToLocalDate(udto.getFechaModificacion()));
 	}
 	
 	@GetMapping("/usuario/{id}/")
