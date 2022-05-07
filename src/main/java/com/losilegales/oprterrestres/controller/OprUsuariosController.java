@@ -84,7 +84,6 @@ public class OprUsuariosController {
 		return udto;
 	}
 	
-	//TODO Ver donde ubicar este metodo
 	private String generarCodigoUsuario(Usuario usuario) {
 		String apellido = usuario.getApellido();
 		String nombre = usuario.getNombre();
@@ -118,10 +117,12 @@ public class OprUsuariosController {
 		return contraseñaSha256hex;
 	}
 	
-	
 	//TODO ver si es bueno usar excepciones y si no cambiarlo
 	@PostMapping(value = "/usuario")
-	public String crearUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException {
+	public String crearUsuario(@RequestBody UsuarioDTO usuariodto) throws UsuarioServiceException {
+		Usuario usuario = mapper.map(usuariodto, Usuario.class);
+		setFechasUDTOtoU(usuariodto, usuario);
+		
 		verificarCorreo(usuario);
 		verificarDatosTexto(usuario);
 		verificarRolUsuarioExistente(usuario);
