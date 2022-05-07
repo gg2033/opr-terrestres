@@ -5,16 +5,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.losilegales.oprterrestres.dto.CheckInDTO;
-import com.losilegales.oprterrestres.dto.AeroNaves.AeroNavesResponse;
 import com.losilegales.oprterrestres.service.AeroNavesService;
 import com.losilegales.oprterrestres.service.OprTerrestresCheckIngService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 
+import Excel.ExcelResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -27,22 +28,33 @@ public class OprTerrestresController {
 	@Autowired
 	private AeroNavesService aeronavesService;
 	
-	@GetMapping("/vuelo")
+	// NO BORRAR
+//	@GetMapping("/vuelo")
+//	@ResponseBody
+//	List<CheckInDTO> registrarVuelo() {
+//		List<CheckInDTO> data = oprTerrestresCheckIngService.getDataCheckIn();
+//
+//		return data;
+//
+//	}
+	// NO BORRAR
+//	@GetMapping("/check")
+//	@ResponseBody
+//	ExcelResponse getCheckin() {
+//		ExcelResponse  data = oprTerrestresCheckIngService.getDataCheckinJson();
+//
+//		return data;
+//
+//	}
+		
+	@GetMapping("/aeronave/{codigoAvion}/{campo}")
 	@ResponseBody
-	List<CheckInDTO> registrarVuelo() {
-		List<CheckInDTO> data = oprTerrestresCheckIngService.getDataCheckIn();
-
-		return data;
+	ResponseEntity<String> getAeronavesJson(@PathVariable String codigoAvion, @PathVariable String campo ) {
+		return ResponseEntity.ok(aeronavesService.obtenerAeronavesJson(codigoAvion, campo));
 
 	}
 	
 	
-	@GetMapping("/aeronaves")
-	@ResponseBody
-	ResponseEntity<AeroNavesResponse> getAeronaves() {
-		return ResponseEntity.ok(aeronavesService.obtenerAeronaves());
-
-	}
 	
 	
 	
