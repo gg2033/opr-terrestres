@@ -16,4 +16,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 //	@Transactional
 //	@Query(value = "update usuarios set activo = :valor where id_usuario = :id", nativeQuery = true)
 //	void deshabilitarUsuario(@Param(value = "id") int id, @Param(value = "valor") boolean valor);
+	
+	@Query(value = "SELECT * FROM usuarios WHERE dni = :dni LIMIT 1", nativeQuery = true)
+	Usuario usuarioConDni(@Param(value = "dni") int dni);
+	
+	@Query(value = "SELECT * FROM usuarios WHERE correo = :correo LIMIT 1", nativeQuery = true)
+	Usuario usuarioConCorreo(@Param(value = "correo") String correo);
+	
+	@Query(value = "SELECT * FROM usuarios WHERE codigo_usuario = :codigo LIMIT 1", nativeQuery = true)
+	Usuario usuarioConCodigo(@Param(value = "codigo") String codigo);
+	//Verificar que el dni este bien escrito
 }

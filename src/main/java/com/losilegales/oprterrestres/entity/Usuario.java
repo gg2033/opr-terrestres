@@ -30,11 +30,17 @@ public class Usuario implements Serializable {
 	@Column(name="apellido")
 	private String apellido;
 	
-//	@Column(name="codigo_usuario", insertable=false)
+	@Column(name="dni")
+	private int dni;
+	
+	@Column(name="iata_aeropuerto")
+	private String iataAeropuerto;
+
+	//	@Column(name="codigo_usuario", insertable=false)
 	@Column(name="codigo_usuario")
 	private String codigoUsuario;
 	
-	@Column(name="contraseña")
+	@Column(name="contrasena")
 	private String contraseña;
 	
 //	@Column(name="creado", insertable=false)
@@ -184,6 +190,22 @@ public class Usuario implements Serializable {
 
 	public void setCorreo(String correo) {
 		this.correo = correo;
+	}
+	
+	public int getDni() {
+		return dni;
+	}
+
+	public void setDni(int dni) {
+		this.dni = dni;
+	}
+
+	public String getIataAeropuerto() {
+		return iataAeropuerto;
+	}
+
+	public void setIataAeropuerto(String iataAeropuerto) {
+		this.iataAeropuerto = iataAeropuerto;
 	}
 
 }

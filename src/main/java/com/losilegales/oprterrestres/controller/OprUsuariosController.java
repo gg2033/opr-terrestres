@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.losilegales.oprterrestres.dto.UsuarioDTO;
 import com.losilegales.oprterrestres.entity.Usuario;
 import com.losilegales.oprterrestres.exceptions.UsuarioServiceException;
 import com.losilegales.oprterrestres.repository.RolUsuarioRepository;
@@ -61,15 +62,23 @@ public class OprUsuariosController {
 	
 	//TODO Ver donde ubicar este metodo
 	private String generarCodigoUsuario(Usuario usuario) {
-		//TODO Falta una forma de agregar el id del usuario al codigo de usuario para que sea unico
 		String apellido = usuario.getApellido();
 		String nombre = usuario.getNombre();
+		String dni = String.valueOf(usuario.getDni());
 		
-		String codigoUsuario = 
-				nombre.substring(0, 3) + 
-				apellido.substring(0, 3) +
-				apellido.substring(apellido.length() - 2);
-		
+		//Ver si es realmente necesario el do while loop...
+		String codigoUsuario;
+		do {
+			//Las primeras 2 letras del apellido y nombre en mayusculas junto con los ultimos 4 digitos del dni
+			codigoUsuario = 
+					apellido.substring(0, 2).toUpperCase() + 
+					nombre.substring(0, 2).toUpperCase() + 
+					dni.substring(dni.length() - 4);
+			
+			//Uso para la proxima iteracion (si existe)
+			dni = String.valueOf(usuario.getDni() + 1);
+		}
+		while(usuarioRepository.usuarioConCodigo(codigoUsuario) != null);
 		return codigoUsuario;
 	}
 	
@@ -78,6 +87,7 @@ public class OprUsuariosController {
 		return new LocalDateAttributeConverter().convertToEntityAttribute(new Date(System.currentTimeMillis()));
 	}
 	
+	
 	//TODO ver si es bueno usar excepciones y si no cambiarlo
 	@PostMapping(value = "/usuario")
 	public Usuario crearUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException {
@@ -85,12 +95,14 @@ public class OprUsuariosController {
 		verificarDatosTexto(usuario);
 		verificarRolUsuarioExistente(usuario);
 		verificarBodyParaPOST(usuario);
+		verificarIata(usuario);
 		
 		usuario.setActivo(true);
 		usuario.setCodigoUsuario(generarCodigoUsuario(usuario));
 		usuario.setFechaCreacion(getFechaActual());
 
 		usuarioRepository.save(usuario);
+		
 		return usuario;
 	}
 
@@ -100,6 +112,21 @@ public class OprUsuariosController {
 		 if (!m.matches()) {
 			 throw new UsuarioServiceException("Formato de correo incorrecto.");
 		 }
+		 //TODO probar esto
+		 else if(usuarioRepository.usuarioConCorreo(usuario.getCorreo()) != null){
+			 throw new UsuarioServiceException("El correo que ha introducido [" + usuario.getCorreo() + "] ya esta registrado.");
+		 }
+	}
+	
+	//TODO verificar si es necesario implementar una verificacion para los DNI
+//	private void verificarDni(Usuario usuario) throws UsuarioServiceException
+	
+	private void verificarIata(Usuario usuario) throws UsuarioServiceException{
+		Pattern p = Pattern.compile("[a-zA-Z]{3}");
+		Matcher m = p.matcher(usuario.getIataAeropuerto());
+		if(!m.matches()) {
+			throw new UsuarioServiceException("Formato para iata de usuario incorrecto [Debe ser 3 caracteres de la A a la Z]");
+		}
 	}
 	
 	private void verificarUsuarioExistente(Integer id) throws UsuarioServiceException{
@@ -139,10 +166,11 @@ public class OprUsuariosController {
 	//TODO Ver si es necesaria la verificacion con excepciones
 	@PutMapping(value= "/usuario")
 	public Usuario modificarUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException{
+		verificarUsuarioExistente(usuario.getIdUsuario());
 		verificarCorreo(usuario);
 		verificarDatosTexto(usuario);
 		verificarRolUsuarioExistente(usuario);
-		verificarUsuarioExistente(usuario.getIdUsuario());
+		verificarIata(usuario);
 		
 		Usuario usuarioModificado = usuarioRepository.findById(usuario.getIdUsuario()).get();
 
