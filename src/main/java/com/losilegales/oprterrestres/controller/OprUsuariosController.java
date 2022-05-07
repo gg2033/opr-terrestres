@@ -198,7 +198,10 @@ public class OprUsuariosController {
 	//TODO el mensaje final debe ser si se pudo modificar el usuario.
 	//TODO si puede cambiar cualquier dato, hay que verificar que e
 	@PutMapping(value= "/usuario")
-	public Usuario modificarUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException{
+	public String modificarUsuario(@RequestBody UsuarioDTO usuariodto) throws UsuarioServiceException{
+		Usuario usuario = mapper.map(usuariodto, Usuario.class);
+		setFechasUDTOtoU(usuariodto, usuario);
+		
 		verificarUsuarioExistente(usuario.getIdUsuario());
 		verificarCorreo(usuario);
 		verificarDatosTexto(usuario);
@@ -211,7 +214,7 @@ public class OprUsuariosController {
 		usuarioModificado.setFechaModificacion(getFechaActual());
 		
 		usuarioRepository.save(usuarioModificado);
-		return usuario;
+		return "Usuario con el id " + usuario.getIdUsuario() + " ha sido modificado correctamente.";
 	}
 	
 	//TODO verificar
