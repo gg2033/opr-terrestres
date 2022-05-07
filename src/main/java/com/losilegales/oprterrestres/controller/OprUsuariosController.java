@@ -1,5 +1,6 @@
 package com.losilegales.oprterrestres.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.hash.Hashing;
 import com.losilegales.oprterrestres.dto.UsuarioDTO;
 import com.losilegales.oprterrestres.entity.Usuario;
 import com.losilegales.oprterrestres.exceptions.UsuarioServiceException;
@@ -87,6 +89,13 @@ public class OprUsuariosController {
 		return new LocalDateAttributeConverter().convertToEntityAttribute(new Date(System.currentTimeMillis()));
 	}
 	
+	private String HashContraseña(String c) {
+		String contraseñaSha256hex = Hashing.sha256()
+				  .hashString(c, StandardCharsets.UTF_8)
+				  .toString();
+		return contraseñaSha256hex;
+	}
+	
 	
 	//TODO ver si es bueno usar excepciones y si no cambiarlo
 	@PostMapping(value = "/usuario")
@@ -100,9 +109,14 @@ public class OprUsuariosController {
 		usuario.setActivo(true);
 		usuario.setCodigoUsuario(generarCodigoUsuario(usuario));
 		usuario.setFechaCreacion(getFechaActual());
+		
+		//TODO quitar esta asignacion c y el seteo de contraseña luego de guardarlo en la base
+		//cuando se implemente el DTO.
+		String c = usuario.getContraseña();
+		usuario.setContraseña(HashContraseña(usuario.getContraseña()));
 
 		usuarioRepository.save(usuario);
-		
+		usuario.setContraseña(c);
 		return usuario;
 	}
 
@@ -142,15 +156,15 @@ public class OprUsuariosController {
 	}
 
 	private void verificarDatosTexto(Usuario usuario) throws UsuarioServiceException{
-		int cantCaracteresPermitidos = 100;
+		int cantCaracteresPermitidos = 20;
 		if(usuario.getApellido().length() > cantCaracteresPermitidos) {
 			throw new UsuarioServiceException("Los caracteres para apellido sobrepasan los permitidos " + cantCaracteresPermitidos);
 		}
 		if(usuario.getNombre().length() > cantCaracteresPermitidos) {
 			throw new UsuarioServiceException("Los caracteres para nombre sobrepasan los permitidos " + cantCaracteresPermitidos);
 		}
-		if(usuario.getContraseña().length() > cantCaracteresPermitidos) {
-			throw new UsuarioServiceException("Los caracteres para contraseña sobrepasan los permitidos " + cantCaracteresPermitidos);
+		if(usuario.getContraseña().length() > 64) {
+			throw new UsuarioServiceException("Los caracteres para contraseña sobrepasan los permitidos " + String.valueOf(64));
 		}
 		if(usuario.getNombreCreador().length() > cantCaracteresPermitidos) {
 			throw new UsuarioServiceException("Los caracteres para nombre de creador sobrepasan los permitidos " + cantCaracteresPermitidos);
