@@ -239,10 +239,10 @@ public class OprUsuariosController {
 //	}
 	
 	//TODO verificar
-	@GetMapping("/usuarioLogin")
-	public String logInUsuario(@RequestBody UsuarioDTO usuariodto) {
-		Usuario usuario = mapper.map(usuariodto, Usuario.class);
-		Usuario ulogin = usuarioRepository.usuarioLogin(usuario.getCodigoUsuario(), HashContraseña(usuario.getContraseña()));
+	@PostMapping("/usuarioLogin/{codigo_usuario}/{contrasena}/")
+	public String logInUsuario(@PathVariable String codigoUsuario, @PathVariable String contraseña) {
+//		Usuario usuario = mapper.map(usuariodto, Usuario.class);
+		Usuario ulogin = usuarioRepository.usuarioLogin(codigoUsuario, HashContraseña(contraseña));
 		
 		if(ulogin != null) {
 			return "Login exitoso.";
