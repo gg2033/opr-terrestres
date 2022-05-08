@@ -217,22 +217,36 @@ public class OprUsuariosController {
 		return "Usuario con el id " + usuario.getIdUsuario() + " ha sido modificado correctamente.";
 	}
 	
+//	//TODO verificar
+//	@GetMapping("/usuario_login/{id}/")
+//	public String logInUsuario(@PathVariable Usuario usuario) {
+//		String ret; 
+//		if(usuario.getCodigoUsuario() == null || usuario.getContraseña() == null) {
+//			return "Los campos no pueden estar vacíos. Verifique.";
+//		}
+//		String hashContrasena = Integer.toString(usuario.getContraseña().hashCode());
+//		
+//		usuario.setContraseña(hashContrasena);
+//		
+//		boolean flag = usuarioRepository.logInUsuario(usuario.getCodigoUsuario(), usuario.getContraseña());
+//		if(flag) {
+//			return "La verificación fue exitosa";
+//		}else {
+//			return "Usuario y/o contraseña incorrecta. Verifique.";
+//		}
+//	}
+	
 	//TODO verificar
-	@GetMapping("/usuario_login/{id}/")
-	public String logInUsuario(@PathVariable Usuario usuario) {
-		String ret; 
-		if(usuario.getCodigoUsuario() == null || usuario.getContraseña() == null) {
-			return "Los campos no pueden estar vacíos. Verifique.";
+	@GetMapping("/usuarioLogin")
+	public String logInUsuario(@RequestBody UsuarioDTO usuariodto) {
+		Usuario usuario = mapper.map(usuariodto, Usuario.class);
+		Usuario ulogin = usuarioRepository.usuarioLogin(usuario.getCodigoUsuario(), HashContraseña(usuario.getContraseña()));
+		
+		if(ulogin != null) {
+			return "Login exitoso.";
 		}
-		String hashContrasena = Integer.toString(usuario.getContraseña().hashCode());
-		
-		usuario.setContraseña(hashContrasena);
-		
-		boolean flag = usuarioRepository.logInUsuario(usuario.getCodigoUsuario(), usuario.getContraseña());
-		if(flag) {
-			return "La verificación fue exitosa";
-		}else {
-			return "Usuario y/o contraseña incorrecta. Verifique.";
+		else {
+			return "Verifique los datos pasados.";
 		}
 	}
 }
