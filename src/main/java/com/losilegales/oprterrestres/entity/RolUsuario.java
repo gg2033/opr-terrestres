@@ -22,7 +22,7 @@ public class RolUsuario implements Serializable {
 	@Column(name="id_rol_usuario")
 	private Integer idRolUsuario;
 	
-	@Column(name="nombre_tipo")
+	@Column(name="nombre_rol")
 	private String nombreRolUsuario;
 
 	public Integer getIdRolUsuario() {

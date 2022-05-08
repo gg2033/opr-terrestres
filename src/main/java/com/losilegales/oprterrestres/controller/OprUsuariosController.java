@@ -1,8 +1,10 @@
 package com.losilegales.oprterrestres.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.hash.Hashing;
+import com.losilegales.oprterrestres.dto.UsuarioDTO;
 import com.losilegales.oprterrestres.entity.Usuario;
 import com.losilegales.oprterrestres.exceptions.UsuarioServiceException;
 import com.losilegales.oprterrestres.repository.RolUsuarioRepository;
@@ -29,6 +33,7 @@ import com.losilegales.oprterrestres.repository.UsuarioRepository;
 import com.losilegales.oprterrestres.service.OpTerrGoogleSheetService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 
+import converter.LocalDateAndStringConverter;
 import converter.LocalDateAttributeConverter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -43,33 +48,60 @@ public class OprUsuariosController {
 	public OpTerrGoogleSheetService opTerrGoogleSheetService;
 	@Autowired
 	public RolUsuarioRepository rolUsuarioRepository;
+	
+	private Mapper mapper = new DozerBeanMapper();
 
 	//TODO Ver como usar el DTO para usuario
 	@GetMapping("/usuarios")
-	public List<Usuario> getUsuarios() {
+	public List<UsuarioDTO> getUsuarios() {	
 		List<Usuario> usuarios = usuarioRepository.findAll();
-		return usuarios;
+		List<UsuarioDTO> usuariosdto = new ArrayList<UsuarioDTO>(usuarios.size());
+		for (Usuario u : usuarios) {
+			UsuarioDTO udto = mapper.map(u, UsuarioDTO.class);
+			setFechasUtoUDTO(u, udto);
+		    usuariosdto.add(udto);
+		}
+		return usuariosdto;
+	}
+	
+	private void setFechasUtoUDTO(Usuario u, UsuarioDTO udto) {
+		udto.setFechaCreacion(LocalDateAndStringConverter.localDateToString(u.getFechaCreacion()));
+		udto.setFechaModificacion(LocalDateAndStringConverter.localDateToString(u.getFechaModificacion()));
+	}
+	
+	private void setFechasUDTOtoU(UsuarioDTO udto, Usuario u) {
+		u.setFechaCreacion(LocalDateAndStringConverter.stringToLocalDate(udto.getFechaCreacion()));
+		u.setFechaModificacion(LocalDateAndStringConverter.stringToLocalDate(udto.getFechaModificacion()));
 	}
 	
 	@GetMapping("/usuario/{id}/")
-	public Usuario getUsuarioById(@PathVariable Integer id) throws UsuarioServiceException{
+	public UsuarioDTO getUsuarioById(@PathVariable Integer id) throws UsuarioServiceException{
 		verificarUsuarioExistente(id);
 		
 		Usuario usuario = usuarioRepository.findById(id).get();
-		return usuario;
+		UsuarioDTO udto = mapper.map(usuario, UsuarioDTO.class);
+		setFechasUtoUDTO(usuario, udto);
+		return udto;
 	}
 	
-	//TODO Ver donde ubicar este metodo
 	private String generarCodigoUsuario(Usuario usuario) {
-		//TODO Falta una forma de agregar el id del usuario al codigo de usuario para que sea unico
 		String apellido = usuario.getApellido();
 		String nombre = usuario.getNombre();
+		String dni = String.valueOf(usuario.getDni());
 		
-		String codigoUsuario = 
-				nombre.substring(0, 3) + 
-				apellido.substring(0, 3) +
-				apellido.substring(apellido.length() - 2);
-		
+		//Ver si es realmente necesario el do while loop...
+		String codigoUsuario;
+		do {
+			//Las primeras 2 letras del apellido y nombre en mayusculas junto con los ultimos 4 digitos del dni
+			codigoUsuario = 
+					apellido.substring(0, 2).toUpperCase() + 
+					nombre.substring(0, 2).toUpperCase() + 
+					dni.substring(dni.length() - 4);
+			
+			//Uso para la proxima iteracion (si existe)
+			dni = String.valueOf(usuario.getDni() + 1);
+		}
+		while(usuarioRepository.usuarioConCodigo(codigoUsuario) != null);
 		return codigoUsuario;
 	}
 	
@@ -78,20 +110,32 @@ public class OprUsuariosController {
 		return new LocalDateAttributeConverter().convertToEntityAttribute(new Date(System.currentTimeMillis()));
 	}
 	
+	private String HashContraseña(String c) {
+		String contraseñaSha256hex = Hashing.sha256()
+				  .hashString(c, StandardCharsets.UTF_8)
+				  .toString();
+		return contraseñaSha256hex;
+	}
+	
 	//TODO ver si es bueno usar excepciones y si no cambiarlo
 	@PostMapping(value = "/usuario")
-	public Usuario crearUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException {
+	public String crearUsuario(@RequestBody UsuarioDTO usuariodto) throws UsuarioServiceException {
+		Usuario usuario = mapper.map(usuariodto, Usuario.class);
+		setFechasUDTOtoU(usuariodto, usuario);
+		
 		verificarCorreo(usuario);
 		verificarDatosTexto(usuario);
 		verificarRolUsuarioExistente(usuario);
 		verificarBodyParaPOST(usuario);
+		verificarIata(usuario);
 		
 		usuario.setActivo(true);
 		usuario.setCodigoUsuario(generarCodigoUsuario(usuario));
 		usuario.setFechaCreacion(getFechaActual());
+		usuario.setContraseña(HashContraseña(usuario.getContraseña()));
 
 		usuarioRepository.save(usuario);
-		return usuario;
+		return "Usuario creado correctamente. id: " + usuario.getIdUsuario() + " codigo_usuario: " + usuario.getCodigoUsuario();
 	}
 
 	private void verificarCorreo(Usuario usuario) throws UsuarioServiceException{
@@ -100,6 +144,21 @@ public class OprUsuariosController {
 		 if (!m.matches()) {
 			 throw new UsuarioServiceException("Formato de correo incorrecto.");
 		 }
+		 //TODO probar esto
+		 else if(usuarioRepository.usuarioConCorreo(usuario.getCorreo()) != null){
+			 throw new UsuarioServiceException("El correo que ha introducido [" + usuario.getCorreo() + "] ya esta registrado.");
+		 }
+	}
+	
+	//TODO verificar si es necesario implementar una verificacion para los DNI
+//	private void verificarDni(Usuario usuario) throws UsuarioServiceException
+	
+	private void verificarIata(Usuario usuario) throws UsuarioServiceException{
+		Pattern p = Pattern.compile("[a-zA-Z]{3}");
+		Matcher m = p.matcher(usuario.getIataAeropuerto());
+		if(!m.matches()) {
+			throw new UsuarioServiceException("Formato para iata de usuario incorrecto [Debe ser 3 caracteres de la A a la Z]");
+		}
 	}
 	
 	private void verificarUsuarioExistente(Integer id) throws UsuarioServiceException{
@@ -115,15 +174,15 @@ public class OprUsuariosController {
 	}
 
 	private void verificarDatosTexto(Usuario usuario) throws UsuarioServiceException{
-		int cantCaracteresPermitidos = 100;
+		int cantCaracteresPermitidos = 20;
 		if(usuario.getApellido().length() > cantCaracteresPermitidos) {
 			throw new UsuarioServiceException("Los caracteres para apellido sobrepasan los permitidos " + cantCaracteresPermitidos);
 		}
 		if(usuario.getNombre().length() > cantCaracteresPermitidos) {
 			throw new UsuarioServiceException("Los caracteres para nombre sobrepasan los permitidos " + cantCaracteresPermitidos);
 		}
-		if(usuario.getContraseña().length() > cantCaracteresPermitidos) {
-			throw new UsuarioServiceException("Los caracteres para contraseña sobrepasan los permitidos " + cantCaracteresPermitidos);
+		if(usuario.getContraseña().length() > 64) {
+			throw new UsuarioServiceException("Los caracteres para contraseña sobrepasan los permitidos " + String.valueOf(64));
 		}
 		if(usuario.getNombreCreador().length() > cantCaracteresPermitidos) {
 			throw new UsuarioServiceException("Los caracteres para nombre de creador sobrepasan los permitidos " + cantCaracteresPermitidos);
@@ -136,21 +195,44 @@ public class OprUsuariosController {
 		}
 	}
 
-	//TODO Ver si es necesaria la verificacion con excepciones
+	//TODO el mensaje final debe ser si se pudo modificar el usuario.
+	//TODO si puede cambiar cualquier dato, hay que verificar que e
 	@PutMapping(value= "/usuario")
-	public Usuario modificarUsuario(@RequestBody Usuario usuario) throws UsuarioServiceException{
+	public String modificarUsuario(@RequestBody UsuarioDTO usuariodto) throws UsuarioServiceException{
+		Usuario usuario = mapper.map(usuariodto, Usuario.class);
+		setFechasUDTOtoU(usuariodto, usuario);
+		
+		verificarUsuarioExistente(usuario.getIdUsuario());
 		verificarCorreo(usuario);
 		verificarDatosTexto(usuario);
 		verificarRolUsuarioExistente(usuario);
-		verificarUsuarioExistente(usuario.getIdUsuario());
+		verificarIata(usuario);
 		
 		Usuario usuarioModificado = usuarioRepository.findById(usuario.getIdUsuario()).get();
 
-		Mapper mapper = new DozerBeanMapper();
 		mapper.map(usuario, usuarioModificado);
 		usuarioModificado.setFechaModificacion(getFechaActual());
 		
 		usuarioRepository.save(usuarioModificado);
-		return usuario;
+		return "Usuario con el id " + usuario.getIdUsuario() + " ha sido modificado correctamente.";
+	}
+	
+	//TODO verificar
+	@GetMapping("/usuario_login/{id}/")
+	public String logInUsuario(@PathVariable Usuario usuario) {
+		String ret; 
+		if(usuario.getCodigoUsuario() == null || usuario.getContraseña() == null) {
+			return "Los campos no pueden estar vacíos. Verifique.";
+		}
+		String hashContrasena = Integer.toString(usuario.getContraseña().hashCode());
+		
+		usuario.setContraseña(hashContrasena);
+		
+		boolean flag = usuarioRepository.logInUsuario(usuario.getCodigoUsuario(), usuario.getContraseña());
+		if(flag) {
+			return "La verificación fue exitosa";
+		}else {
+			return "Usuario y/o contraseña incorrecta. Verifique.";
+		}
 	}
 }

@@ -50,4 +50,22 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler{
 		ErrorMessage errorMessage = new ErrorMessage(new Date(), errorMessageDescription);
 		return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@ExceptionHandler(value = {PermisoServiceException.class})
+	public ResponseEntity<Object> handlePermisoServiceException(PermisoServiceException ex, WebRequest request){
+		String errorMessageDescription = ex.getLocalizedMessage();
+		if(errorMessageDescription == null) errorMessageDescription = ex.toString();
+		
+		ErrorMessage errorMessage = new ErrorMessage(new Date(), errorMessageDescription);
+		return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(value = {RolPermisoServiceException.class})
+	public ResponseEntity<Object> handleRolPermisoServiceException(RolPermisoServiceException ex, WebRequest request){
+		String errorMessageDescription = ex.getLocalizedMessage();
+		if(errorMessageDescription == null) errorMessageDescription = ex.toString();
+		
+		ErrorMessage errorMessage = new ErrorMessage(new Date(), errorMessageDescription);
+		return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }
