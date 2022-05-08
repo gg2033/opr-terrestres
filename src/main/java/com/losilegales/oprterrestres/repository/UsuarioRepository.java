@@ -20,6 +20,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 	@Query(value = "SELECT COUNT(*) FROM usuarios WHERE codigo_usuario = :codigo_usuario AND contrasena = :contrasena", nativeQuery = true)
 	boolean logInUsuario(@Param(value = "codigo_usuario") String codigo_usuario, @Param(value = "contrasena") String contrasena);
 	
+	@Query(value="SELECT * from usuarios WHERE codigo_usuario = :codigo_usuario AND contrasena = :contrasena", nativeQuery = true)
+	Usuario usuarioLogin(@Param(value = "codigo_usuario") String codigoUsuario, @Param(value = "contrasena") String contraseñaHasheada);
+	
 	@Query(value = "SELECT * FROM usuarios WHERE dni = :dni LIMIT 1", nativeQuery = true)
 	Usuario usuarioConDni(@Param(value = "dni") int dni);
 	
