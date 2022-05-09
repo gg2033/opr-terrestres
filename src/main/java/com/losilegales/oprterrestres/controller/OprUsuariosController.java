@@ -159,7 +159,7 @@ public class OprUsuariosController {
 		 if (!m.matches()) {
 			 throw new UsuarioServiceException("Formato de correo incorrecto.");
 		 }
-		 //Cambiarlo mas adelante
+		 //TODO Cambiarlo mas adelante
 		 //Se lee: Si el usuario con ese correo existe y ademas no es el mismo usuario que te estoy pasando, tira el error.
 		 else if(usuarioRepository.usuarioConCorreo(usuario.getCorreo()) != null && !usuarioRepository.usuarioConCorreo(usuario.getCorreo()).equals(usuario)){
 			 throw new UsuarioServiceException("El correo que ha introducido [" + usuario.getCorreo() + "] ya esta registrado.");
@@ -227,7 +227,9 @@ public class OprUsuariosController {
 		Usuario usuarioModificado = usuarioRepository.findById(usuario.getIdUsuario()).get();
 
 		mapper.map(usuario, usuarioModificado);
+		//TODO Creo que ya no es necesario esta linea de abajo... verificar
 		usuarioModificado.setFechaModificacion(getFechaActual());
+		usuarioModificado.setContraseña(HashContraseña(usuario.getContraseña()));
 		
 		usuarioRepository.save(usuarioModificado);
 		return "Usuario con el id " + usuario.getIdUsuario() + " ha sido modificado correctamente.";
