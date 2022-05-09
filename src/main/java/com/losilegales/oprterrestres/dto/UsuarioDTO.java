@@ -6,9 +6,11 @@ import java.util.List;
 
 import javax.persistence.Column;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class UsuarioDTO {
 	private Integer idUsuario;
 	private String nombre;
@@ -29,23 +31,23 @@ public class UsuarioDTO {
 		super();
 	}
 
-	public UsuarioDTO(Integer idUsuario, String nombre, String apellido, Integer dni, String codigoUsuario,
-			String contraseña, String correo, String iataAeropuerto, Integer rolUsuario, String fechaCreacion,
-			String nombreCreador, String fechaModificacion, String nombreModificador, boolean activo) {
-		super();
-		this.idUsuario = idUsuario;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.dni = dni;
-		this.codigoUsuario = codigoUsuario;
-		this.contraseña = contraseña;
-		this.correo = correo;
-		this.iataAeropuerto = iataAeropuerto;
-		this.rolUsuario = rolUsuario;
-		this.fechaCreacion = fechaCreacion;
-		this.nombreCreador = nombreCreador;
-		this.fechaModificacion = fechaModificacion;
-		this.nombreModificador = nombreModificador;
-		this.activo = activo;
-	}
+//	public UsuarioDTO(Integer idUsuario, String nombre, String apellido, Integer dni, String codigoUsuario,
+//			String contraseña, String correo, String iataAeropuerto, Integer rolUsuario, String fechaCreacion,
+//			String nombreCreador, String fechaModificacion, String nombreModificador, boolean activo) {
+//		super();
+//		this.idUsuario = idUsuario;
+//		this.nombre = nombre;
+//		this.apellido = apellido;
+//		this.dni = dni;
+//		this.codigoUsuario = codigoUsuario;
+//		this.contraseña = contraseña;
+//		this.correo = correo;
+//		this.iataAeropuerto = iataAeropuerto;
+//		this.rolUsuario = rolUsuario;
+//		this.fechaCreacion = fechaCreacion;
+//		this.nombreCreador = nombreCreador;
+//		this.fechaModificacion = fechaModificacion;
+//		this.nombreModificador = nombreModificador;
+//		this.activo = activo;
+//	}
 }

@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Entity
 @Table(name="USUARIOS",schema="public")
 public class Usuario implements Serializable {
@@ -80,21 +83,22 @@ public class Usuario implements Serializable {
 		super();
 	}
 
-	public Usuario(String nombre, String apellido, String codigoUsuario, String contraseña, LocalDate fechaCreacion,
-			String nombreCreador, LocalDate fechaModificacion, String nombreModificador, boolean activo,
-			Integer rolUsuario) {
-		super();
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.codigoUsuario = codigoUsuario;
-		this.contraseña = contraseña;
-		this.fechaCreacion = fechaCreacion;
-		this.nombreCreador = nombreCreador;
-		this.fechaModificacion = fechaModificacion;
-		this.nombreModificador = nombreModificador;
-		this.activo = activo;
-		this.rolUsuario = rolUsuario;
-	}
+//	public Usuario(Integer id, String nombre, String apellido, String codigoUsuario, String contraseña, LocalDate fechaCreacion,
+//			String nombreCreador, LocalDate fechaModificacion, String nombreModificador, boolean activo,
+//			Integer rolUsuario) {
+//		super();
+//		this.idUsuario = id;
+//		this.nombre = nombre;
+//		this.apellido = apellido;
+//		this.codigoUsuario = codigoUsuario;
+//		this.contraseña = contraseña;
+//		this.fechaCreacion = fechaCreacion;
+//		this.nombreCreador = nombreCreador;
+//		this.fechaModificacion = fechaModificacion;
+//		this.nombreModificador = nombreModificador;
+//		this.activo = activo;
+//		this.rolUsuario = rolUsuario;
+//	}
 
 	public Integer getIdUsuario() {
 		return idUsuario;

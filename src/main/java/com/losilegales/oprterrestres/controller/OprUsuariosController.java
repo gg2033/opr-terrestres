@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.hash.Hashing;
+import com.losilegales.oprterrestres.config.AppConfig;
 import com.losilegales.oprterrestres.dto.UsuarioDTO;
 import com.losilegales.oprterrestres.entity.Usuario;
 import com.losilegales.oprterrestres.exceptions.UsuarioServiceException;
@@ -49,8 +51,8 @@ public class OprUsuariosController {
 	@Autowired
 	public RolUsuarioRepository rolUsuarioRepository;
 	
-	private Mapper mapper = new DozerBeanMapper();
-
+	private DozerBeanMapper mapper = AppConfig.dozerBeanMapper();
+	
 	//TODO Ver como usar el DTO para usuario
 	@GetMapping("/usuarios")
 	public List<UsuarioDTO> getUsuarios() {	
@@ -237,10 +239,10 @@ public class OprUsuariosController {
 //	}
 	
 	//TODO verificar
-	@GetMapping("/usuarioLogin")
-	public String logInUsuario(@RequestBody UsuarioDTO usuariodto) {
-		Usuario usuario = mapper.map(usuariodto, Usuario.class);
-		Usuario ulogin = usuarioRepository.usuarioLogin(usuario.getCodigoUsuario(), HashContraseña(usuario.getContraseña()));
+	@PostMapping("/usuarioLogin/{codigo_usuario}/{contrasena}/")
+	public String logInUsuario(@PathVariable String codigoUsuario, @PathVariable String contraseña) {
+//		Usuario usuario = mapper.map(usuariodto, Usuario.class);
+		Usuario ulogin = usuarioRepository.usuarioLogin(codigoUsuario, HashContraseña(contraseña));
 		
 		if(ulogin != null) {
 			return "Login exitoso.";

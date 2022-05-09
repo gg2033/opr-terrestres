@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://dozer.sourceforge.net
+      http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <mapping>
+        <class-a>com.losilegales.oprterrestres.dto.UsuarioDTO</class-a>
+        <class-b>com.losilegales.oprterrestres.entity.Usuario</class-b>
+        <field custom-converter="converter.StringLocalDateConverter">
+            <a>fechaCreacion</a>
+            <b>fechaCreacion</b>
+        </field>
+        <field custom-converter="converter.StringLocalDateConverter">
+            <a>fechaModificacion</a>
+            <b>fechaModificacion</b>
+        </field>
+    </mapping>
+</mappings>
