@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -238,10 +239,8 @@ public class OprUsuariosController {
 //		}
 //	}
 	
-	//TODO verificar
-	@PostMapping("/usuarioLogin/{codigo_usuario}/{contrasena}/")
-	public String logInUsuario(@PathVariable String codigoUsuario, @PathVariable String contraseña) {
-//		Usuario usuario = mapper.map(usuariodto, Usuario.class);
+	@GetMapping("/usuarioLogin")
+	public String logInUsuario(@RequestParam("codigoUsuario") String codigoUsuario, @RequestParam("contraseña") String contraseña) {
 		Usuario ulogin = usuarioRepository.usuarioLogin(codigoUsuario, HashContraseña(contraseña));
 		
 		if(ulogin != null) {
