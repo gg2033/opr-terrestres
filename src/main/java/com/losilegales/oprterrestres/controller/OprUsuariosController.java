@@ -153,6 +153,19 @@ public class OprUsuariosController {
 		 }
 	}
 	
+	private void verificarCorreoPUT(Usuario usuario) throws UsuarioServiceException{
+		 Pattern p = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+		 Matcher m = p.matcher(usuario.getCorreo());
+		 if (!m.matches()) {
+			 throw new UsuarioServiceException("Formato de correo incorrecto.");
+		 }
+		 //Cambiarlo mas adelante
+		 //Se lee: Si el usuario con ese correo existe y ademas no es el mismo usuario que te estoy pasando, tira el error.
+		 else if(usuarioRepository.usuarioConCorreo(usuario.getCorreo()) != null && !usuarioRepository.usuarioConCorreo(usuario.getCorreo()).equals(usuario)){
+			 throw new UsuarioServiceException("El correo que ha introducido [" + usuario.getCorreo() + "] ya esta registrado.");
+		 }
+	}
+	
 	//TODO verificar si es necesario implementar una verificacion para los DNI
 //	private void verificarDni(Usuario usuario) throws UsuarioServiceException
 	
@@ -206,7 +219,7 @@ public class OprUsuariosController {
 		setFechasUDTOtoU(usuariodto, usuario);
 		
 		verificarUsuarioExistente(usuario.getIdUsuario());
-		verificarCorreo(usuario);
+		verificarCorreoPUT(usuario);
 		verificarDatosTexto(usuario);
 		verificarRolUsuarioExistente(usuario);
 		verificarIata(usuario);
