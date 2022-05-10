@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -227,6 +228,7 @@ public class OprUsuariosController {
 	//TODO el mensaje final debe ser si se pudo modificar el usuario.
 	//TODO si puede cambiar cualquier dato, hay que verificar que e
 	@ResponseBody
+	@CrossOrigin
 	@PutMapping(value= "/usuario")
 	public UsuarioResponseTransfer modificarUsuario(@RequestBody UsuarioDTO usuariodto) throws UsuarioServiceException{
 		Usuario usuario = mapper.map(usuariodto, Usuario.class);
