@@ -39,11 +39,23 @@ import com.losilegales.oprterrestres.utils.OprConstants;
 import converter.LocalDateAndStringConverter;
 import converter.LocalDateAttributeConverter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping(OprConstants.BASE_ENDPOINT)
 @Tag(name = "Usuarios", description = "Endpoints la gestion de usuarios")
 public class OprUsuariosController {
+	
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public class UsuarioResponseTransfer {
+	    private String text;
+	    private Integer idUsuario;
+	    private String codigoUsuario;
+	}
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -120,9 +132,10 @@ public class OprUsuariosController {
 		return contraseñaSha256hex;
 	}
 	
+	@ResponseBody
 	//TODO ver si es bueno usar excepciones y si no cambiarlo
 	@PostMapping(value = "/usuario")
-	public String crearUsuario(@RequestBody UsuarioDTO usuariodto) throws UsuarioServiceException {
+	public UsuarioResponseTransfer crearUsuario(@RequestBody UsuarioDTO usuariodto) throws UsuarioServiceException {
 		Usuario usuario = mapper.map(usuariodto, Usuario.class);
 		setFechasUDTOtoU(usuariodto, usuario);
 		
@@ -138,7 +151,7 @@ public class OprUsuariosController {
 		usuario.setContraseña(HashContraseña(usuario.getContraseña()));
 
 		usuarioRepository.save(usuario);
-		return "Usuario creado correctamente. id: " + usuario.getIdUsuario() + " codigo_usuario: " + usuario.getCodigoUsuario();
+		return new UsuarioResponseTransfer("Usuario creado correctamente", usuario.getIdUsuario(), usuario.getCodigoUsuario());
 	}
 
 	private void verificarCorreo(Usuario usuario) throws UsuarioServiceException{
@@ -213,8 +226,9 @@ public class OprUsuariosController {
 
 	//TODO el mensaje final debe ser si se pudo modificar el usuario.
 	//TODO si puede cambiar cualquier dato, hay que verificar que e
+	@ResponseBody
 	@PutMapping(value= "/usuario")
-	public String modificarUsuario(@RequestBody UsuarioDTO usuariodto) throws UsuarioServiceException{
+	public UsuarioResponseTransfer modificarUsuario(@RequestBody UsuarioDTO usuariodto) throws UsuarioServiceException{
 		Usuario usuario = mapper.map(usuariodto, Usuario.class);
 		setFechasUDTOtoU(usuariodto, usuario);
 		
@@ -232,7 +246,7 @@ public class OprUsuariosController {
 		usuarioModificado.setContraseña(HashContraseña(usuario.getContraseña()));
 		
 		usuarioRepository.save(usuarioModificado);
-		return "Usuario con el id " + usuario.getIdUsuario() + " ha sido modificado correctamente.";
+		return new UsuarioResponseTransfer("Usuario ha sido modificado correctamente.", usuario.getIdUsuario(), usuario.getCodigoUsuario());
 	}
 	
 //	//TODO verificar
@@ -254,15 +268,20 @@ public class OprUsuariosController {
 //		}
 //	}
 	
+	@ResponseBody
 	@GetMapping("/usuarioLogin")
-	public String logInUsuario(@RequestParam("codigoUsuario") String codigoUsuario, @RequestParam("contraseña") String contraseña) {
+	public UsuarioResponseTransfer logInUsuario(@RequestParam("codigoUsuario") String codigoUsuario, @RequestParam("contraseña") String contraseña) {
 		Usuario ulogin = usuarioRepository.usuarioLogin(codigoUsuario, HashContraseña(contraseña));
-		
+		UsuarioResponseTransfer urf = new UsuarioResponseTransfer();
 		if(ulogin != null) {
-			return "Login exitoso.";
+			urf.setText("Login exitoso.");
+			urf.setIdUsuario(ulogin.getIdUsuario());
+			urf.setCodigoUsuario(ulogin.getCodigoUsuario());
+			return urf;
 		}
 		else {
-			return "Verifique los datos pasados.";
+			urf.setText("Verifique los datos pasados.");
+			return urf;
 		}
 	}
 }
