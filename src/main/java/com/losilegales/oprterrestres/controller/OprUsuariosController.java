@@ -99,7 +99,7 @@ public class OprUsuariosController {
 		setFechasUtoUDTO(usuario, udto);
 		return udto;
 	}
-	
+	//BORRARARARARARARA
 	private String generarCodigoUsuario(Usuario usuario) {
 		String apellido = usuario.getApellido();
 		String nombre = usuario.getNombre();
