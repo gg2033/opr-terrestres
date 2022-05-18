@@ -270,6 +270,7 @@ public class OprUsuariosController {
 //		}
 //	}
 	
+	//comentario
 	@ResponseBody
 	@GetMapping("/usuarioLogin")
 	public UsuarioResponseTransfer logInUsuario(@RequestParam("codigoUsuario") String codigoUsuario, @RequestParam("contraseña") String contraseña) {
