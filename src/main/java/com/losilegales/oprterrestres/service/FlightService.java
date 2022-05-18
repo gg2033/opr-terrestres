@@ -2,6 +2,7 @@ package com.losilegales.oprterrestres.service;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,14 @@ public class FlightService {
 	private VueloRepository flightRepository;
 	
 
+	public List<Vuelo> getVuelos(){
+		return flightRepository.findAll();
+	}
 	
 	public Vuelo insertFlight(Vuelo vueloRequest) {
 		vueloRequest.setCreado(new Date());
 		vueloRequest.setCreadoPor(vueloRequest.getCreadoPor());
+		vueloRequest.setActivo(true);
 		return flightRepository.save(vueloRequest);
 		
 	}

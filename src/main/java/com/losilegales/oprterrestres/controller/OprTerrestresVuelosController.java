@@ -1,9 +1,12 @@
 package com.losilegales.oprterrestres.controller;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +30,12 @@ public class OprTerrestresVuelosController {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@GetMapping("/vuelo")
+	public List<VueloDTO> getVuelos() {
+		return flightService.getVuelos().stream().map(e -> modelMapper.map(e, VueloDTO.class)).collect(Collectors.toList());
+		
+	}
 
 	@PostMapping("/vuelo")
 	public VueloDTO insertVuelo(@RequestBody VueloDTO vueloDto) {
