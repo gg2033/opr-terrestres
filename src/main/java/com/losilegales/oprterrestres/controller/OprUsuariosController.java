@@ -276,7 +276,7 @@ public class OprUsuariosController {
 	public UsuarioResponseTransfer logInUsuario(@RequestParam("codigoUsuario") String codigoUsuario, @RequestParam("contraseña") String contraseña) {
 		Usuario ulogin = usuarioRepository.usuarioLogin(codigoUsuario, HashContraseña(contraseña));
 		UsuarioResponseTransfer urf = new UsuarioResponseTransfer();
-		if(ulogin != null) {
+		if(ulogin != null && ulogin.getActivo()) {
 			urf.setText("Login exitoso.");
 			urf.setIdUsuario(ulogin.getIdUsuario());
 			urf.setCodigoUsuario(ulogin.getCodigoUsuario());

@@ -2,12 +2,16 @@ package com.losilegales.oprterrestres.dto;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
 @Data
 public class VueloDTO {
+	@JsonIgnore
 	private Integer idVuelo;
 	private Integer idPlanRuta;
 	private Integer idAerolinea;
@@ -21,14 +25,8 @@ public class VueloDTO {
 	private Integer  idAeropuertoSalida;
 	private Integer idAeropuertoLlegada;
 	private Integer idAeronave;
-	private Boolean activo;
-	private String creadoPor;
-	private String modificadoPor;
-
-	
-
-	
-	
+	private String codigoPlanRuta;
+	private String codigoPlanRutaEspecifica;
 	
 	
 }
