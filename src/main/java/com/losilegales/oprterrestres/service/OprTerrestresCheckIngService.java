@@ -22,13 +22,12 @@ import com.losilegales.oprterrestres.dto.CargaDTO;
 import com.losilegales.oprterrestres.dto.CheckInDTO;
 import com.losilegales.oprterrestres.dto.PasajeroDTO;
 import com.losilegales.oprterrestres.dto.TipoCarga;
+import com.losilegales.oprterrestres.dto.CheckIn.DatoEspecialPasajeroDTO;
 import com.losilegales.oprterrestres.entity.Carga;
 import com.losilegales.oprterrestres.entity.ClaseAsiento;
 import com.losilegales.oprterrestres.entity.CondicionEspecial;
-import com.losilegales.oprterrestres.entity.DietaEspecifica;
 import com.losilegales.oprterrestres.entity.RegistroClases;
 import com.losilegales.oprterrestres.entity.RegistroCondiciones;
-import com.losilegales.oprterrestres.entity.RegistroDietas;
 import com.losilegales.oprterrestres.entity.RegistroPasajeros;
 import com.losilegales.oprterrestres.entity.Vuelo;
 import com.losilegales.oprterrestres.repository.ClaseAsientoRepository;
@@ -142,6 +141,51 @@ public class OprTerrestresCheckIngService {
 
 	}
 
+	
+	public Optional<List<DatoEspecialPasajeroDTO>> getDatosEspecialesPorVuelo(int vuelo){
+		List<DatoEspecialPasajeroDTO> datosEspeciales = new ArrayList<DatoEspecialPasajeroDTO>();
+		
+		
+		DatoEspecialPasajeroDTO datoEspecialPasajero = new DatoEspecialPasajeroDTO();
+		
+		
+		ExcelResponse checkin = this.getDataCheckinJson(vuelo);
+		
+		int indicePNombre = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("primer_nombre");
+		int indiceSNombre = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("segundo_nombre");
+		int indicePAapellido = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("primer_apellido");
+		int indiceSApellido = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("segundo_apellido");
+		int indiceCondicion = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("condicion");
+		int indiceClase = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("clase");
+		int indiceAlimentacion = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("alimentacion");
+		int indiceAsiento = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("asiento");
+		for (Row pasajero : checkin.getTable().getRows()) {
+			boolean isEmptyField = false;
+			//check colums por cada fila.
+			for (Cell celda : pasajero.getC()) {
+				if(Objects.isNull(celda) || Objects.isNull(celda.getV()) || StringUtils.isEmpty(celda.getV().toString())){
+					isEmptyField=true;
+				}
+			}
+			if(!isEmptyField) {
+				datoEspecialPasajero.setAlimentacion(pasajero.getC().get(indiceAlimentacion).getV().toString());
+				datoEspecialPasajero.setAsiento(pasajero.getC().get(indiceAsiento).getV().toString());
+				datoEspecialPasajero.setClase(pasajero.getC().get(indiceClase).getV().toString());
+				datoEspecialPasajero.setCondicion(pasajero.getC().get(indiceCondicion).getV().toString());
+				
+				String pNombre = pasajero.getC().get(indicePNombre).getV().toString();
+				String sNombre= pasajero.getC().get(indiceSNombre).getV().toString();
+				String sApellido= pasajero.getC().get(indiceSApellido).getV().toString();
+				String pApellido= pasajero.getC().get(indicePAapellido).getV().toString();
+				
+				String nombreCompleto = pNombre+" "+sNombre+" "+pApellido+" "+sApellido;
+				datoEspecialPasajero.setNombreCompletoPasajero(nombreCompleto);
+				datosEspeciales.add(datoEspecialPasajero);	
+			}
+	}
+		
+		return Optional.of(datosEspeciales);
+	}
 	public Optional<Vuelo> checkValidationData(Map<String, List<CheckInDTO>> checkByVuelo) {
 		boolean isValidData = true;
 //		List<Object> checkByVueloRows = checkByVuelo.get(checkByVuelo)
@@ -216,83 +260,79 @@ public class OprTerrestresCheckIngService {
 //		int indiceAlimentacion = result.getTable().getRows().get(0).getC().stream().map(c -> c.getV().toString()).collect(Collectors.toList()).indexOf("alimentacion");
 
 		result = objectMapper.readValue(json, ExcelResponse.class);
-		int indice = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("cod_ruta_vuelo");
-		int indiceAlimentacion = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("alimentacion");
-		int indiceCondicion = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("condicion");
-		int indiceClase = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("clase");
-		result.getTable().getRows().stream().filter(row -> row.getC().get(0).getV().toString().equals(lote.toString())).collect(Collectors.toList());
-		
-		ArrayList<Row> vuelosValidos = new ArrayList<Row>();
-		for (Row rowValidar : result.getTable().getRows()) {
-			boolean isEmptyField = false;
-			//check colums por cada fila.
-			for (Cell celda : rowValidar.getC()) {
-				if(Objects.isNull(celda) || Objects.isNull(celda.getV()) || StringUtils.isEmpty(celda.getV().toString())){
-					isEmptyField=true;
-				}
-			}
-			if(!isEmptyField) {
-				vuelosValidos.add(rowValidar);
-			}
-			
-		}
+
+		return result;
+//		ArrayList<Row> vuelosValidos = new ArrayList<Row>();
+//		for (Row rowValidar : result.getTable().getRows()) {
+//			boolean isEmptyField = false;
+//			//check colums por cada fila.
+//			for (Cell celda : rowValidar.getC()) {
+//				if(Objects.isNull(celda) || Objects.isNull(celda.getV()) || StringUtils.isEmpty(celda.getV().toString())){
+//					isEmptyField=true;
+//				}
+//			}
+//			if(!isEmptyField) {
+//				vuelosValidos.add(rowValidar);
+//			}
+//			
+//		}
 		//		cod_ruta_vuelo
-		Map<Object, List<Row>> checkinByVuelo = vuelosValidos.stream()
-				.collect(Collectors.groupingBy(c -> c.getC().get(indice)));
-		
-		
-		
-		Boolean isValidData = false;
-		System.out.println(result);
-		for (List<Row> rowsByVuelo : checkinByVuelo.values()) {
-			int index = 0;
-			RegistroPasajeros regP = new RegistroPasajeros();
-			vuelo = vueloRepository.findByCodigo(rowsByVuelo.get(0).getC().get(indice).getV().toString());
-			regP.setPasajerosTotales(rowsByVuelo.size());
-			vueloRepository.save(vuelo.get());
-			
-			Map<Object, List<Row>> vueloByAlimentacion = rowsByVuelo.stream()
-					.collect(Collectors.groupingBy(c -> c.getC().get(indiceAlimentacion)));
-			
-			Map<Object, List<Row>> vueloByCondicion = rowsByVuelo.stream()
-					.collect(Collectors.groupingBy(c -> c.getC().get(indiceCondicion)));
-			
-			Map<Object, List<Row>> vueloByClase = rowsByVuelo.stream()
-					.collect(Collectors.groupingBy(c -> c.getC().get(indiceClase)));
-			
-//			for (List<Row> porAlimentacion : vueloByAlimentacion.values()) {
-//				RegistroDietas registroDietas = new RegistroDietas();
-//				registroDietas.setCantidadPasajeros(porAlimentacion.size());
-//				String alimentacion =porAlimentacion.get(0).getC().get(indiceAlimentacion).getV().toString();
-//				Optional<DietaEspecifica> dieta = dietaEspecificaRepository.findByNombre(alimentacion);
-//				if(dieta.isPresent()) {
-//					registroDietas.setDietaEspecifica(dieta.get());
+//		Map<Object, List<Row>> checkinByVuelo = vuelosValidos.stream()
+//				.collect(Collectors.groupingBy(c -> c.getC().get(indice)));
+//		
+//		
+//		
+//		Boolean isValidData = false;
+//		System.out.println(result);
+//		for (List<Row> rowsByVuelo : checkinByVuelo.values()) {
+//			int index = 0;
+//			RegistroPasajeros regP = new RegistroPasajeros();
+//			vuelo = vueloRepository.findByCodigo(rowsByVuelo.get(0).getC().get(indice).getV().toString());
+//			regP.setPasajerosTotales(rowsByVuelo.size());
+//			vueloRepository.save(vuelo.get());
+//			
+//			Map<Object, List<Row>> vueloByAlimentacion = rowsByVuelo.stream()
+//					.collect(Collectors.groupingBy(c -> c.getC().get(indiceAlimentacion)));
+//			
+//			Map<Object, List<Row>> vueloByCondicion = rowsByVuelo.stream()
+//					.collect(Collectors.groupingBy(c -> c.getC().get(indiceCondicion)));
+//			
+//			Map<Object, List<Row>> vueloByClase = rowsByVuelo.stream()
+//					.collect(Collectors.groupingBy(c -> c.getC().get(indiceClase)));
+//			
+////			for (List<Row> porAlimentacion : vueloByAlimentacion.values()) {
+////				RegistroDietas registroDietas = new RegistroDietas();
+////				registroDietas.setCantidadPasajeros(porAlimentacion.size());
+////				String alimentacion =porAlimentacion.get(0).getC().get(indiceAlimentacion).getV().toString();
+////				Optional<DietaEspecifica> dieta = dietaEspecificaRepository.findByNombre(alimentacion);
+////				if(dieta.isPresent()) {
+////					registroDietas.setDietaEspecifica(dieta.get());
+////				}
+////				
+////			}
+//			
+//			for (List<Row> porCondicion : vueloByCondicion.values()) {
+//				RegistroCondiciones registroCondiciones = new RegistroCondiciones();
+//				registroCondiciones.setCantidadPasajeros(porCondicion.size());
+//				String alimentacion =porCondicion.get(0).getC().get(indiceAlimentacion).getV().toString();
+//				Optional<CondicionEspecial> condicion = condicionEspecialRepository.findByNombre(alimentacion);
+//				if(condicion.isPresent()) {
+//					registroCondiciones.setIdCondicionEspecial(condicion.get());
 //				}
 //				
 //			}
-			
-			for (List<Row> porCondicion : vueloByCondicion.values()) {
-				RegistroCondiciones registroCondiciones = new RegistroCondiciones();
-				registroCondiciones.setCantidadPasajeros(porCondicion.size());
-				String alimentacion =porCondicion.get(0).getC().get(indiceAlimentacion).getV().toString();
-				Optional<CondicionEspecial> condicion = condicionEspecialRepository.findByNombre(alimentacion);
-				if(condicion.isPresent()) {
-					registroCondiciones.setIdCondicionEspecial(condicion.get());
-				}
-				
-			}
-			
-			for (List<Row> porClase : vueloByClase.values()) {
-				RegistroClases registroClases = new RegistroClases();
-				registroClases.setCantidadPasajeros(porClase.size());
-				String clase =porClase.get(0).getC().get(indiceClase).getV().toString();
-				Optional<ClaseAsiento> claseAsiento = claseAsientoRepository.findByNombre(clase);
-				if(claseAsiento.isPresent()) {
-					registroClases.setClaseAsiento(claseAsiento.get());
-				}
-				
-			}
-			
+//			
+//			for (List<Row> porClase : vueloByClase.values()) {
+//				RegistroClases registroClases = new RegistroClases();
+//				registroClases.setCantidadPasajeros(porClase.size());
+//				String clase =porClase.get(0).getC().get(indiceClase).getV().toString();
+//				Optional<ClaseAsiento> claseAsiento = claseAsientoRepository.findByNombre(clase);
+//				if(claseAsiento.isPresent()) {
+//					registroClases.setClaseAsiento(claseAsiento.get());
+//				}
+//				
+//			}
+//			
 			
 	
 //			RegistroCondiciones registroCondiciones = new RegistroCondiciones();
@@ -300,44 +340,44 @@ public class OprTerrestresCheckIngService {
 //			RegistroDietas registroDietas = new RegistroDietas();
 //			registroCondiciones.setCantidadPasajeros(lote);
 			
-			for (Row row : rowsByVuelo) {
-				for (Col column : result.getTable().getCols()) {
-					String contextNameValidate = column.getLabel();
-					String value = row.getC().get(index).getV().toString();
-//					codigo_pasajero	linea_aerea	cod_ruta_vuelo	fecha_partida	hora_partida	origen	destino	asiento	clase	tipo_documento	numero_documento	primer_apelllido	segundo_apellido	primer_nombre	segundo_nombre	nacionalidad	edad	sexo	alimentacion	condicion	comentarios
-					//validar cada celda.
-					switch (contextNameValidate) {
-					case "linea_aerea":
-						if ("SF".equals(value)) {
-							isValidData = false;
-							
-						}
-						break;
-					case "cod_ruta_vuelo":
-						
-						if (!vuelo.isPresent()) {
-							isValidData = false;
-						}
-						break;
-						
-					case "fecha_partida":
-						if (vuelo.get().getHorarioSalida().equals(objectMapper)) {
-							isValidData = false;
-						}
-						break;
-					default:
-						break;
-					}
-					
-					index++;
-					
-
-				}
-			}
+//			for (Row row : rowsByVuelo) {
+//				for (Col column : result.getTable().getCols()) {
+//					String contextNameValidate = column.getLabel();
+//					String value = row.getC().get(index).getV().toString();
+////					codigo_pasajero	linea_aerea	cod_ruta_vuelo	fecha_partida	hora_partida	origen	destino	asiento	clase	tipo_documento	numero_documento	primer_apelllido	segundo_apellido	primer_nombre	segundo_nombre	nacionalidad	edad	sexo	alimentacion	condicion	comentarios
+//					//validar cada celda.
+//					switch (contextNameValidate) {
+//					case "linea_aerea":
+//						if ("SF".equals(value)) {
+//							isValidData = false;
+//							
+//						}
+//						break;
+//					case "cod_ruta_vuelo":
+//						
+//						if (!vuelo.isPresent()) {
+//							isValidData = false;
+//						}
+//						break;
+//						
+//					case "fecha_partida":
+//						if (vuelo.get().getHorarioSalida().equals(objectMapper)) {
+//							isValidData = false;
+//						}
+//						break;
+//					default:
+//						break;
+//					}
+//					
+//					index++;
+//					
+//
+//				}
+//			}
 
 //			result.getTable().getRows().get(index).getC().get(index);
 			
-		}
+//		}
 		}catch (Exception e ) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
