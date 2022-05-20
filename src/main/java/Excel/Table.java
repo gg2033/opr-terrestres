@@ -1,12 +1,12 @@
 package Excel;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Data;
 @Data
 public class Table {
-    private ArrayList<Col> cols;
-    private ArrayList<Row> rows;
+    private List<Col> cols;
+    private List<Row> rows;
     private int parsedNumHeaders;
 
 }

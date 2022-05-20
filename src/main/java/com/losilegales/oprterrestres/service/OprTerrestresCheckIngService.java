@@ -182,7 +182,7 @@ public class OprTerrestresCheckIngService {
 				datoEspecialPasajero.setNombreCompletoPasajero(nombreCompleto);
 				datosEspeciales.add(datoEspecialPasajero);	
 			}
-	}
+		}
 		
 		return Optional.of(datosEspeciales);
 	}
@@ -257,8 +257,29 @@ public class OprTerrestresCheckIngService {
 			json = json.substring(0, json.length() - 2);
 	
 			ObjectMapper objectMapper = new ObjectMapper();
-	//			int indiceAlimentacion = result.getTable().getRows().get(0).getC().stream().map(c -> c.getV().toString()).collect(Collectors.toList()).indexOf("alimentacion");
 			result = objectMapper.readValue(json, ExcelResponse.class);
+			
+			
+			List<Row> lstValidCheckin = new ArrayList<Row>();
+			for (Row pasajero : result.getTable().getRows()) {
+				boolean isEmptyField = false;
+				//check colums por cada fila.
+				for (Cell celda : pasajero.getC()) {
+					if(Objects.isNull(celda) || Objects.isNull(celda.getV()) || StringUtils.isEmpty(celda.getV().toString())){
+						isEmptyField=true;
+					}
+				}
+				if(!isEmptyField) {
+					lstValidCheckin.add(pasajero);
+				}
+			}
+			
+			
+			
+			
+			List<Row> rows = lstValidCheckin.stream().filter(e -> Integer.parseInt(e.getC().get(0).getV().toString().subSequence(0, 1).toString()) ==lote).collect(Collectors.toList());
+			
+			result.getTable().setRows(rows);
 			return result;
 		}
 		catch(Exception e) {
