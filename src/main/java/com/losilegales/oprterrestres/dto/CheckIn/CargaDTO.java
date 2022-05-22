@@ -1,5 +1,12 @@
 package com.losilegales.oprterrestres.dto.CheckIn;
 
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import com.losilegales.oprterrestres.enums.TipoCarga;
 import com.losilegales.oprterrestres.enums.TipoTag;
 
@@ -13,16 +20,44 @@ public class CargaDTO {
 //	@Column(name = "id_carga")
 //	private Integer idCarga;
 	
-	private Integer peso;
+//	private Integer peso;
+//
+//	private String codigo;
+//	
+//	private String codigoPasajero;
+//
+//	private TipoCarga tipoCarga;
+//
+//	private TipoTag tagCarga;
+//	
+//	private String estadoCarga;
 
-	private String codigo;
-	
+	private int idCarga;
+
+	private int envio;
+
+	private String codigoCarga;
+
 	private String codigoPasajero;
 
-	private TipoCarga tipoCarga;
+	private String tipo;
 
-	private TipoTag tagCarga;
-	
+	private int peso;
+
+	private String tag;
+
+	private LocalDate fechaCreacion;
+
+	private String nombreCreador;
+
+	private LocalDate fechaModificacion;
+
+	private String nombreModificador;
+
+	private boolean activo;
+
 	private String estadoCarga;
+
+	private String codigoVuelo;
 
 }
