@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.losilegales.oprterrestres.dto.CheckIn.CargaDTO;
 import com.losilegales.oprterrestres.dto.CheckIn.DatoEspecialPasajeroDTO;
 import com.losilegales.oprterrestres.service.AeroNavesService;
 import com.losilegales.oprterrestres.service.OprTerrestresCheckIngService;
@@ -52,6 +53,18 @@ public class OprTerrestresController {
 		return data;
 
 	}
+	
+	@GetMapping("/cargaCheckIn/{codigoPasajero}")
+	@ResponseBody
+	@Validated
+	List<CargaDTO> getCheckin(@PathVariable String codigoPasajero) {
+		List<CargaDTO>  data = oprTerrestresCheckIngService.getDataEquipajeCheckin(codigoPasajero);
+
+		return data;
+
+	}
+	
+	
 		
 	@GetMapping("/aeronave/{codigoAvion}/{campo}")
 	@ResponseBody

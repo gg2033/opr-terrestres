@@ -11,6 +11,8 @@ public final class OprConstants {
 	public static final String CHECK_IN_JSON = "https://docs.google.com/spreadsheets/d/1Dx34WYiRO7-bLQrkX339jPKP6PtYY8-2rTMxVQIBfGU/gviz/tq?tqx=out:json&gid=0";
 	public static final String ENDPOINT_AERONAVES_JSON = "https://docs.google.com/spreadsheets/d/10KS3ai62T5_Y71pdkibZYHX9Vo7JKcw8IUqEymvGogg/gviz/tq?tqx=out:json&gid=0";
 	public static final String BASE_ENDPOINT = "/v1/losilegales";
+	public static final String CHECK_IN_EQUIPAJE = "https://docs.google.com/spreadsheets/d/1DIL6CoNqicnKlGQ9NO22Q8ylINPNt9zkijX8ddBMjq8/gviz/tq?tqx=out:json&gid=0";
+
 	
 	//Urls
 	public static final String ENDPOINT_RUTAS = "/rutas";

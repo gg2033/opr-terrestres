@@ -1,11 +1,8 @@
 package com.losilegales.oprterrestres.service;
 
-import java.io.IOException;
 import java.net.URI;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,18 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.losilegales.oprterrestres.dto.CargaDTO;
-import com.losilegales.oprterrestres.dto.CheckInDTO;
-import com.losilegales.oprterrestres.dto.PasajeroDTO;
-import com.losilegales.oprterrestres.dto.TipoCarga;
+import com.losilegales.oprterrestres.dto.CheckIn.CargaDTO;
 import com.losilegales.oprterrestres.dto.CheckIn.DatoEspecialPasajeroDTO;
 import com.losilegales.oprterrestres.entity.Carga;
-import com.losilegales.oprterrestres.entity.ClaseAsiento;
-import com.losilegales.oprterrestres.entity.CondicionEspecial;
-import com.losilegales.oprterrestres.entity.RegistroClases;
-import com.losilegales.oprterrestres.entity.RegistroCondiciones;
-import com.losilegales.oprterrestres.entity.RegistroPasajeros;
 import com.losilegales.oprterrestres.entity.Vuelo;
+import com.losilegales.oprterrestres.enums.TipoCarga;
+import com.losilegales.oprterrestres.enums.TipoTag;
+import com.losilegales.oprterrestres.repository.CargaRepository;
 import com.losilegales.oprterrestres.repository.ClaseAsientoRepository;
 import com.losilegales.oprterrestres.repository.CondicionEspecialRepository;
 import com.losilegales.oprterrestres.repository.DietaEspecificaRepository;
@@ -37,7 +29,6 @@ import com.losilegales.oprterrestres.repository.VueloRepository;
 import com.losilegales.oprterrestres.utils.OprConstants;
 
 import Excel.Cell;
-import Excel.Col;
 import Excel.ExcelResponse;
 import Excel.Row;
 
@@ -65,81 +56,83 @@ public class OprTerrestresCheckIngService {
 	@Autowired
 	@Qualifier("simpleRestTemplate")
 	private RestTemplate simpleRestTemplate;
+	@Autowired
+	private CargaRepository cargaRepository;
 
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public List<CheckInDTO> getDataCheckIn() {
-
-		List<CheckInDTO> checkInDataLst = null;
-		List<List<Object>> dataCheckIn;
-		boolean isDataValid = true;
-		try {
-			dataCheckIn = opTerrGoogleSheetService.getSpreadsheetValues(OprConstants.CHECK_IN);
-
-			checkInDataLst = dataCheckIn.stream().map(row -> {// cada checkin individual
-//			Equipaje de Mano	Alimentación	Condición
-				CheckInDTO checkInDto = new CheckInDTO();
-				checkInDto.setLineaAerea((String) row.get(0));
-				checkInDto.setVuelo((String) row.get(1));
-				checkInDto.setFecha((String) row.get(2));
-				checkInDto.setPartida((String) row.get(3));
-				checkInDto.setOrigen((String) row.get(4));
-				checkInDto.setDestino((String) row.get(5));
-				checkInDto.setTipoDocumento((String) row.get(6));
-				checkInDto.setNroDocumento((String) row.get(7));
-				checkInDto.setApellidos((String) row.get(8) + " " + (String) row.get(9));
-				checkInDto.setNombres((String) row.get(10) + " " + (String) row.get(11));
-				checkInDto.setNacionalidad((String) row.get(12));
-				checkInDto.setEdad((String) row.get(13));
-				checkInDto.setSexo((String) row.get(14));
-				List<CargaDTO> cargasDto = new ArrayList<CargaDTO>();
-
-				int base = 15;
-				for (int i = 0; i < 5; i++) {
-					CargaDTO carga = new CargaDTO();
-					PasajeroDTO pasajeroDto = new PasajeroDTO();
-					pasajeroDto.setNombre(checkInDto.getNombres());
-					if (StringUtils.isNotBlank((String) row.get(base + i))) {
-						carga.setPeso(Integer.parseInt((String) row.get(base + i)));
-					}
-
-					if (base + i == 20) {
-						carga.setTipoCarga(TipoCarga.DeMano);
-					} else {
-						carga.setTipoCarga(TipoCarga.Documentado);
-
-					}
-
-					cargasDto.add(carga);
-				}
-
-				// carga
-				checkInDto.setCarga(cargasDto);
-
-				checkInDto.setEquipajeMano((String) row.get(20));
-				// fin de carga
-				// datos de alimentacion
-				checkInDto.setAlimentacion((String) row.get(21));
-				checkInDto.setCondicion((String) row.get(22));
-
-				return checkInDto;
-
-			}).collect(Collectors.toList());
-
-			Map<String, List<CheckInDTO>> checkinByVuelo = checkInDataLst.stream()
-					.collect(Collectors.groupingBy(c -> c.getVuelo()));
-
-			Optional<Vuelo> vuelo = checkValidationData(checkinByVuelo); // checkinPorVuelo
-
-		} catch (IOException | GeneralSecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return checkInDataLst;
-
-	}
+//	public List<CheckInDTO> getDataCheckIn() {
+//
+//		List<CheckInDTO> checkInDataLst = null;
+//		List<List<Object>> dataCheckIn;
+//		boolean isDataValid = true;
+//		try {
+//			dataCheckIn = opTerrGoogleSheetService.getSpreadsheetValues(OprConstants.CHECK_IN);
+//
+//			checkInDataLst = dataCheckIn.stream().map(row -> {// cada checkin individual
+////			Equipaje de Mano	Alimentación	Condición
+//				CheckInDTO checkInDto = new CheckInDTO();
+//				checkInDto.setLineaAerea((String) row.get(0));
+//				checkInDto.setVuelo((String) row.get(1));
+//				checkInDto.setFecha((String) row.get(2));
+//				checkInDto.setPartida((String) row.get(3));
+//				checkInDto.setOrigen((String) row.get(4));
+//				checkInDto.setDestino((String) row.get(5));
+//				checkInDto.setTipoDocumento((String) row.get(6));
+//				checkInDto.setNroDocumento((String) row.get(7));
+//				checkInDto.setApellidos((String) row.get(8) + " " + (String) row.get(9));
+//				checkInDto.setNombres((String) row.get(10) + " " + (String) row.get(11));
+//				checkInDto.setNacionalidad((String) row.get(12));
+//				checkInDto.setEdad((String) row.get(13));
+//				checkInDto.setSexo((String) row.get(14));
+//				List<CargaDTO> cargasDto = new ArrayList<CargaDTO>();
+//
+//				int base = 15;
+//				for (int i = 0; i < 5; i++) {
+//					CargaDTO carga = new CargaDTO();
+//					PasajeroDTO pasajeroDto = new PasajeroDTO();
+//					pasajeroDto.setNombre(checkInDto.getNombres());
+//					if (StringUtils.isNotBlank((String) row.get(base + i))) {
+//						carga.setPeso(Integer.parseInt((String) row.get(base + i)));
+//					}
+//
+//					if (base + i == 20) {
+//						carga.setTipoCarga(TipoCarga.DE_MANO);
+//					} else {
+//						carga.setTipoCarga(TipoCarga.FACTURADO);
+//
+//					}
+//
+//					cargasDto.add(carga);
+//				}
+//
+//				// carga
+//				checkInDto.setCarga(cargasDto);
+//
+//				checkInDto.setEquipajeMano((String) row.get(20));
+//				// fin de carga
+//				// datos de alimentacion
+//				checkInDto.setAlimentacion((String) row.get(21));
+//				checkInDto.setCondicion((String) row.get(22));
+//
+//				return checkInDto;
+//
+//			}).collect(Collectors.toList());
+//
+//			Map<String, List<CheckInDTO>> checkinByVuelo = checkInDataLst.stream()
+//					.collect(Collectors.groupingBy(c -> c.getVuelo()));
+//
+//			Optional<Vuelo> vuelo = checkValidationData(checkinByVuelo); // checkinPorVuelo
+//
+//		} catch (IOException | GeneralSecurityException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		return checkInDataLst;
+//
+//	}
 
 	
 	public Optional<List<DatoEspecialPasajeroDTO>> getDatosEspecialesPorVuelo(int vuelo){
@@ -186,65 +179,60 @@ public class OprTerrestresCheckIngService {
 		
 		return Optional.of(datosEspeciales);
 	}
-	public Optional<Vuelo> checkValidationData(Map<String, List<CheckInDTO>> checkByVuelo) {
-		boolean isValidData = true;
-//		List<Object> checkByVueloRows = checkByVuelo.get(checkByVuelo)
-		Optional<Vuelo> vuelo = null;
-		for (List<CheckInDTO> checkin : checkByVuelo.values()) {
-			vuelo = vueloRepository.findByCodigo((String) checkin.get(0).getVuelo());
-			if (!vuelo.isPresent()) {
 
-//				vuelo.get().setCantPasajeros(checkin.size());
-//				List<Pasajero> pasajeros = new ArrayList<Pasajero>();
-
-				for (int i = 0; i < checkin.size(); i++) {
-					// check aerolinea debe ser SF
-					if ("SF".equals((String) checkin.get(i).getLineaAerea())) {
-						isValidData = false;
+	public List<CargaDTO> getDataEquipajeCheckin(String codigoVuelo) {
+		ExcelResponse result = new ExcelResponse();
+		URI uri;
+		List<CargaDTO> cargas = new ArrayList<CargaDTO>();
+		try {
+			uri = new URI(OprConstants.CHECK_IN_EQUIPAJE);
+	
+			String json = simpleRestTemplate.getForEntity(uri, String.class).getBody();
+			json = json.substring(47);
+			json = json.substring(0, json.length() - 2);
+	
+			ObjectMapper objectMapper = new ObjectMapper();
+			result = objectMapper.readValue(json, ExcelResponse.class);
+			
+			List<Row> lstValidCargaCheckin = new ArrayList<Row>();
+			for (Row cargaPasajero : result.getTable().getRows()) {
+				boolean isEmptyField = false;
+				//check colums por cada fila.
+				for (Cell celda : cargaPasajero.getC()) {
+					if(Objects.isNull(celda) || Objects.isNull(celda.getV()) || StringUtils.isEmpty(celda.getV().toString())){
+						isEmptyField=true;
 					}
-
-					// check vuelo, debe estar vuelo en db
-					if (!vuelo.isPresent()) {
-						isValidData = false;
-					}
-//					if ("SF".equals((String) checkin.get(i).getFecha())) {
-//							isValidData = false;
-//					}
-					// else if (i == 3) {// check partida coresponder vuelo
-					// isValidData = false;
-					// //
-					// } else if (i == 6) {// check TIPO DOCUMENTO DNI, pasaporte o cedula.
-					// isValidData = false;
-					//
-					// }
-					List<Carga> cargas = new ArrayList<Carga>();
-//					modelMapper.map(checkin.get(i).getCarga(), cargas);
-
-//					pasajeros.add(pasajero);
-
-					// -Por cada carga se debe guardar ID, peso, tipo ("Documentado" o "De mano") en
-					// estado se debe guardar "Check In
-
-					// save info. guardar cantidad de pasajeros en registro de vuelo.
-					// registro de carga
-					/*-Por cada carga se debe guardar ID, peso, tipo 
-					 * ("Documentado" o "De mano") en estado se debe guardar "Check In"*/
 				}
-
-//				vuelo.get().setPasajeros(pasajeros);
-//				if(!vuelo.isEmpty()) {
-//					vueloRepository.save(vuelo.get());
-//				}
+				if(!isEmptyField) {
+					lstValidCargaCheckin.add(cargaPasajero);
+				}
 			}
+			int indiceCodigoPasajero = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_pasajero");
+			
+			List<Row> cargasPorPasajero = lstValidCargaCheckin.stream().filter(e -> e.getC().get(indiceCodigoPasajero).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
+			
+			//guardar las cargas en la db.
+			for (Row row : cargasPorPasajero) {
+				CargaDTO carga = new CargaDTO();
+				carga.setCodigo(row.getC().get(0).getF());
+				carga.setCodigoPasajero(row.getC().get(1).getV().toString());
+				carga.setTipoCarga(TipoCarga.valueOf(row.getC().get(2).getV().toString()));
+				int peso = Integer.parseInt(row.getC().get(3).getV().toString().split("\\.")[0]);
+				carga.setPeso(peso);
+				carga.setTagCarga(TipoTag.fromString(row.getC().get(4).getV().toString()));
+				cargas.add(carga);
+				
+			}
+		
+			return cargas;
 		}
-
-		if (!isValidData) {
-//			emailService.sendConfirmationEmail("token", "emailSupervisor");
+		catch(Exception e) {
+			e.printStackTrace();
 		}
-
-		return vuelo;
+		
+		return cargas;
+			
 	}
-
 	public ExcelResponse getDataCheckinJson(Integer lote) {
 		Optional<Vuelo> vuelo = null;
 		ExcelResponse result = new ExcelResponse();
@@ -278,7 +266,12 @@ public class OprTerrestresCheckIngService {
 			
 			
 			List<Row> rows = lstValidCheckin.stream().filter(e -> Integer.parseInt(e.getC().get(0).getV().toString().subSequence(0, 1).toString()) ==lote).collect(Collectors.toList());
-			
+			Carga carga = new Carga();
+//			for (Row datosPasajeroCheckin : rows) {
+//				carga
+//			}
+			//seteo estado de carga al llegar al checkin.
+			cargaRepository.save(null);
 			result.getTable().setRows(rows);
 			return result;
 		}
