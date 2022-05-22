@@ -317,61 +317,61 @@ public class OprTerrestresCheckIngService {
 		}
 	}
 	
-//	private void persistirDatosCarga(ExcelResponse cargaData) {
-//		//19 columnas tiene el checkin
-//		List<String> nombreColumn = new ArrayList<String>(6);
-//		//Recorro el excel fila por columna y obtengo los nombres de las columnas
-//		for (Col c : cargaData.getTable().getCols()) {
-//			nombreColumn.add(c.getLabel());
-//		}
-//		
-//		int indice;
-//		//Agrego los datos de las filas a un objeto Checkin
-//		for(Row r : cargaData.getTable().getRows()) {
-//			indice = 0;
-//			Carga crga = new Carga();
-//			for(Cell c : r.getC()) {
-//				mapearDatosACarga(nombreColumn.get(indice), c, chck);
-//				indice++;
-//			}
-//			//Persisto el objeto Checkin y sigo con la siguiente fila
-//			chck.setCreadoPor("juan");
-//			chck.setActivo(true);
-//			chck.setCreado(getFechaActual());;
-//			chckr.save(chck);
-//		}
-//	}
+	private void persistirDatosCarga(ExcelResponse cargaData) {
+		//19 columnas tiene el checkin
+		List<String> nombreColumn = new ArrayList<String>(6);
+		//Recorro el excel fila por columna y obtengo los nombres de las columnas
+		for (Col c : cargaData.getTable().getCols()) {
+			nombreColumn.add(c.getLabel());
+		}
+		
+		int indice;
+		//Agrego los datos de las filas a un objeto Checkin
+		for(Row r : cargaData.getTable().getRows()) {
+			indice = 0;
+			Carga crga = new Carga();
+			for(Cell c : r.getC()) {
+				mapearDatosACarga(nombreColumn.get(indice), c, crga);
+				indice++;
+			}
+			//Persisto el objeto Checkin y sigo con la siguiente fila
+			crga.setNombreCreador("juan");
+			crga.setActivo(true);
+			crga.setFechaCreacion(getFechaActual());;
+			cargaRepository.save(crga);
+		}
+	}
 
-//	private void mapearDatosACheckin(String nombreColumn, Cell celda, Checkin crga) {
-//		switch(nombreColumn) {
-//			case("envio"):
-//				Integer envio = Integer.parseInt(celda.getF());
-//				crga.setEnvio(envio);
-//				break;
-//			case("codigo_equipaje"):
-//				Integer codigo_equipaje = Integer.parseInt(celda.getF());
-//				crga.setC(codigo_pasajero);
-//				break;
-//			case("codigo_pasajero"):
-//				String codigo_pasajero = celda.getV().toString();
-//				crga.setCodigoPasajero(codigo_pasajero);
-//				break;
-//			case("tipo"):
-//				String tipo = celda.getV().toString();
-//				crga.setCodigoVuelo(codig_vuelo);
-//				break;
-//			case("peso"):
-//				Integer peso = Integer.parseInt(celda.getF());
-//				crga.setFechaPartida(fecha_partida);
-//				break;
-//			case("tag"):
-//				String tag = celda.getV().toString();
-//				crga.setOrigen(origen);
-//				break;
-//			default:
-//				break;
-//		}
-//	}
+	private void mapearDatosACarga(String nombreColumn, Cell celda, Carga crga) {
+		switch(nombreColumn) {
+			case("envio"):
+				Integer envio = Integer.parseInt(celda.getF());
+				crga.setEnvio(envio);
+				break;
+			case("codigo_equipaje"):
+				Integer codigo_equipaje = Integer.parseInt(celda.getF());
+				crga.setCodigoCarga(codigo_equipaje.toString());
+				break;
+			case("codigo_pasajero"):
+				String codigo_pasajero = celda.getV().toString();
+				crga.setCodigoPasajero(codigo_pasajero);
+				break;
+			case("tipo"):
+				String tipo = celda.getV().toString();
+				crga.setTipo(tipo);
+				break;
+			case("peso"):
+				Integer peso = Integer.parseInt(celda.getF());
+				crga.setPeso(peso);
+				break;
+			case("tag"):
+				String tag = celda.getV().toString();
+				crga.setTag(tag);
+				break;
+			default:
+				break;
+		}
+	}
 	
 	private void mapearDatosACheckin(String nombreColumn, Cell celda, Checkin chck) {
 		switch(nombreColumn) {
