@@ -138,10 +138,6 @@ public class OprTerrestresCheckIngService {
 	public Optional<List<DatoEspecialPasajeroDTO>> getDatosEspecialesPorVuelo(int vuelo){
 		List<DatoEspecialPasajeroDTO> datosEspeciales = new ArrayList<DatoEspecialPasajeroDTO>();
 		
-		
-		DatoEspecialPasajeroDTO datoEspecialPasajero = new DatoEspecialPasajeroDTO();
-		
-		
 		ExcelResponse checkin = this.getDataCheckinJson(vuelo);
 		
 		int indicePNombre = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("primer_nombre");
@@ -161,6 +157,7 @@ public class OprTerrestresCheckIngService {
 				}
 			}
 			if(!isEmptyField) {
+				DatoEspecialPasajeroDTO datoEspecialPasajero = new DatoEspecialPasajeroDTO();
 				datoEspecialPasajero.setAlimentacion(pasajero.getC().get(indiceAlimentacion).getV().toString());
 				datoEspecialPasajero.setAsiento(pasajero.getC().get(indiceAsiento).getV().toString());
 				datoEspecialPasajero.setClase(pasajero.getC().get(indiceClase).getV().toString());
@@ -271,7 +268,7 @@ public class OprTerrestresCheckIngService {
 //				carga
 //			}
 			//seteo estado de carga al llegar al checkin.
-			cargaRepository.save(null);
+//			cargaRepository.save(null);
 			result.getTable().setRows(rows);
 			return result;
 		}
