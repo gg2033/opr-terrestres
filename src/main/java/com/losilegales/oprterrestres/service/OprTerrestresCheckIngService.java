@@ -147,12 +147,9 @@ public class OprTerrestresCheckIngService {
 	
 	public Optional<List<DatoEspecialPasajeroDTO>> getDatosEspecialesPorVuelo(String codigoVuelo){
 		List<DatoEspecialPasajeroDTO> datosEspeciales = new ArrayList<DatoEspecialPasajeroDTO>();
-		
-		
 		DatoEspecialPasajeroDTO datoEspecialPasajero = new DatoEspecialPasajeroDTO();
-		
-		
 		ExcelResponse checkin = this.registrarDataCheckinJson(codigoVuelo);
+
 		
 		int indicePNombre = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("primer_nombre");
 		int indiceSNombre = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("segundo_nombre");
@@ -171,6 +168,7 @@ public class OprTerrestresCheckIngService {
 				}
 			}
 			if(!isEmptyField) {
+				DatoEspecialPasajeroDTO datoEspecialPasajero = new DatoEspecialPasajeroDTO();
 				datoEspecialPasajero.setAlimentacion(pasajero.getC().get(indiceAlimentacion).getV().toString());
 				datoEspecialPasajero.setAsiento(pasajero.getC().get(indiceAsiento).getV().toString());
 				datoEspecialPasajero.setClase(pasajero.getC().get(indiceClase).getV().toString());
@@ -284,7 +282,7 @@ public class OprTerrestresCheckIngService {
 			}
 			
 			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_vuelo");
-			
+
 			List<Row> rows = lstValidCheckin.stream().filter(e -> e.getC().get(indiceCodigoVuelo).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
 
 			result.getTable().setRows(rows);
