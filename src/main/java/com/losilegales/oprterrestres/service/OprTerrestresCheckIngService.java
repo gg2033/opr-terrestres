@@ -145,14 +145,14 @@ public class OprTerrestresCheckIngService {
 //	}
 
 	
-	public Optional<List<DatoEspecialPasajeroDTO>> getDatosEspecialesPorVuelo(int vuelo){
+	public Optional<List<DatoEspecialPasajeroDTO>> getDatosEspecialesPorVuelo(String codigoVuelo){
 		List<DatoEspecialPasajeroDTO> datosEspeciales = new ArrayList<DatoEspecialPasajeroDTO>();
 		
 		
 		DatoEspecialPasajeroDTO datoEspecialPasajero = new DatoEspecialPasajeroDTO();
 		
 		
-		ExcelResponse checkin = this.getDataCheckinJson(vuelo);
+		ExcelResponse checkin = this.registrarDataCheckinJson(codigoVuelo);
 		
 		int indicePNombre = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("primer_nombre");
 		int indiceSNombre = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("segundo_nombre");
@@ -189,8 +189,12 @@ public class OprTerrestresCheckIngService {
 		
 		return Optional.of(datosEspeciales);
 	}
+	
+//	private List<Carga> getListaCargasPorVuelo(String cv){
+//		List<Checkin> lc = checkinRepository.fin
+//	}
 
-	public List<CargaDTO> getDataEquipajeCheckin(String codigoVuelo) {
+	public List<CargaDTO> registrarDataEquipajeCheckin(String codigoVuelo) {
 		ExcelResponse result = new ExcelResponse();
 		URI uri;
 		List<CargaDTO> cargas = new ArrayList<CargaDTO>();
@@ -217,22 +221,14 @@ public class OprTerrestresCheckIngService {
 					lstValidCargaCheckin.add(cargaPasajero);
 				}
 			}
-			int indiceCodigoPasajero = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_pasajero");
 			
-			List<Row> cargasPorPasajero = lstValidCargaCheckin.stream().filter(e -> e.getC().get(indiceCodigoPasajero).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
+			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_vuelo");
 			
-			//guardar las cargas en la db.
-			for (Row row : cargasPorPasajero) {
-				CargaDTO carga = new CargaDTO();
-				carga.setCodigo(row.getC().get(0).getF());
-				carga.setCodigoPasajero(row.getC().get(1).getV().toString());
-				carga.setTipoCarga(TipoCarga.valueOf(row.getC().get(2).getV().toString()));
-				int peso = Integer.parseInt(row.getC().get(3).getV().toString().split("\\.")[0]);
-				carga.setPeso(peso);
-				carga.setTagCarga(TipoTag.fromString(row.getC().get(4).getV().toString()));
-				cargas.add(carga);
-				
-			}
+			List<Row> rows = lstValidCargaCheckin.stream().filter(e -> e.getC().get(indiceCodigoVuelo).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
+
+			result.getTable().setRows(rows);
+			
+			persistirDatosCarga(result);
 		
 			return cargas;
 		}
@@ -243,7 +239,22 @@ public class OprTerrestresCheckIngService {
 		return cargas;
 			
 	}
-	public ExcelResponse getDataCheckinJson(Integer lote) {
+	
+	public List<Checkin> getCheckinPorVuelo(String codigoVuelo){
+		List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
+		return listaCheckin;
+	}
+	
+	public List<CargaDTO> getCargasPorVuelo(String codigoVuelo){
+		List<Carga> listaCargasPorVuelo =  cargaRepository.cargasPorVuelo(codigoVuelo);
+		List<CargaDTO> listaCargasDTO = new ArrayList<CargaDTO>(listaCargasPorVuelo.size());
+		for (Carga c : listaCargasPorVuelo) {
+			listaCargasDTO.add(modelMapper.map(c, CargaDTO.class));
+		}
+		return listaCargasDTO;
+	}
+	
+	public ExcelResponse registrarDataCheckinJson(String codigoVuelo) {
 		Optional<Vuelo> vuelo = null;
 		ExcelResponse result = new ExcelResponse();
 		URI uri;
@@ -272,17 +283,13 @@ public class OprTerrestresCheckIngService {
 				}
 			}
 			
+			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_vuelo");
 			
-			
-			
-			List<Row> rows = lstValidCheckin.stream().filter(e -> Integer.parseInt(e.getC().get(0).getV().toString().subSequence(0, 1).toString()) ==lote).collect(Collectors.toList());
-			Carga carga = new Carga();
-//			for (Row datosPasajeroCheckin : rows) {
-//				carga
-//			}
-			//seteo estado de carga al llegar al checkin.
-			cargaRepository.save(null);
+			List<Row> rows = lstValidCheckin.stream().filter(e -> e.getC().get(indiceCodigoVuelo).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
+
 			result.getTable().setRows(rows);
+			persistirDatosCheckin(result);
+			//crear una lista de checkins con el vuelo especificado, y devolverla
 			return result;
 		}
 		catch(Exception e) {
@@ -326,7 +333,7 @@ public class OprTerrestresCheckIngService {
 		}
 		
 		int indice;
-		//Agrego los datos de las filas a un objeto Checkin
+		//Agrego los datos de las filas a un objeto Carga
 		for(Row r : cargaData.getTable().getRows()) {
 			indice = 0;
 			Carga crga = new Carga();
@@ -334,10 +341,11 @@ public class OprTerrestresCheckIngService {
 				mapearDatosACarga(nombreColumn.get(indice), c, crga);
 				indice++;
 			}
-			//Persisto el objeto Checkin y sigo con la siguiente fila
+			//Persisto el objeto Carga y sigo con la siguiente fila
 			crga.setNombreCreador("juan");
 			crga.setActivo(true);
-			crga.setFechaCreacion(getFechaActual());;
+			crga.setFechaCreacion(getFechaActual());
+			crga.setEstadoCarga("En espera");
 			cargaRepository.save(crga);
 		}
 	}
@@ -368,6 +376,9 @@ public class OprTerrestresCheckIngService {
 				String tag = celda.getV().toString();
 				crga.setTag(tag);
 				break;
+			case("codigo_vuelo"):
+				String codigo_vuelo = celda.getV().toString();
+				crga.setCodigoVuelo(codigo_vuelo);
 			default:
 				break;
 		}

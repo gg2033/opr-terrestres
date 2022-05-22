@@ -38,7 +38,7 @@ public class Carga {
 	@Column(name = "tipo")
 	private String tipo;
 	
-	@Column(name = "peso")
+	@Column(name = "peso_kg")
 	private int peso;
 
 	@Column(name = "tag")
@@ -58,6 +58,12 @@ public class Carga {
 
 	@Column(name="activo")
 	private boolean activo;
+	
+	@Column(name = "estado_carga")
+	private String estadoCarga;
+	
+	@Column(name = "codigo_vuelo")
+	private String codigoVuelo;
 
 //	@Id
 //	@GeneratedValue(strategy = GenerationType.IDENTITY)
