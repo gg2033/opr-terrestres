@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,6 +41,8 @@ import Excel.ExcelResponse;
 import Excel.Row;
 import converter.LocalDateAttributeConverter;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 @Service
 public class OprTerrestresCheckIngService {
@@ -72,6 +75,23 @@ public class OprTerrestresCheckIngService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	
+	public List<JSONObject> getPasajerosSegunVuelo(String vuelo) {
+		List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(vuelo);
+		List<JSONObject> ret = new ArrayList<JSONObject>(listaCheckin.size());
+		HashMap<String, Object> pasajero = new HashMap<String, Object>();
+		for(Checkin p : listaCheckin) {
+			pasajero.put("nombre", p.getNombre());
+			pasajero.put("apellido", p.getApellido());
+			pasajero.put("clase", p.getClase());
+			pasajero.put("asiento", p.getAsiento());
+			pasajero.put("alimentacion", p.getAlimentacion());
+			pasajero.put("condicion", p.getCondicion());
+			JSONObject jsonPasajero= new JSONObject(pasajero);
+			ret.add(jsonPasajero);
+		}
+		return ret;
+	}
 //	public List<CheckInDTO> getDataCheckIn() {
 //
 //		List<CheckInDTO> checkInDataLst = null;
