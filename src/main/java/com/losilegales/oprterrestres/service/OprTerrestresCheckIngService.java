@@ -147,7 +147,7 @@ public class OprTerrestresCheckIngService {
 	
 	public Optional<List<DatoEspecialPasajeroDTO>> getDatosEspecialesPorVuelo(String codigoVuelo){
 		List<DatoEspecialPasajeroDTO> datosEspeciales = new ArrayList<DatoEspecialPasajeroDTO>();
-		DatoEspecialPasajeroDTO datoEspecialPasajero = new DatoEspecialPasajeroDTO();
+//		DatoEspecialPasajeroDTO datoEspecialPasajero = new DatoEspecialPasajeroDTO();
 		ExcelResponse checkin = this.registrarDataCheckinJson(codigoVuelo);
 
 		

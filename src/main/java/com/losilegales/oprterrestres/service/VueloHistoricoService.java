@@ -18,7 +18,7 @@ public class VueloHistoricoService {
 	
 	@Autowired
 	@Qualifier("simpleRestTemplate")
-	private RestTemplate simpleRestTemplate;
+	private RestTemplate simpleRestTemplate = new RestTemplate();
 	
 	private DozerBeanMapper mapper = AppConfig.dozerBeanMapper();
 	

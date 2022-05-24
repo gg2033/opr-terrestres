@@ -31,7 +31,7 @@ public class VueloHistoricoController {
 	
 	DozerBeanMapper mapper = AppConfig.dozerBeanMapper();
 	
-	VueloHistoricoService vueloHistoricoService;
+	VueloHistoricoService vueloHistoricoService = new VueloHistoricoService();
 
 	//TODO Ver como usar el DTO para usuario
 	@GetMapping("/vueloshistoricos")
