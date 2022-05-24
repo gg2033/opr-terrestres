@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.constraints.Size;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -93,6 +94,11 @@ public class OprTerrestresController {
 		
 		return ResponseEntity.ok(oprTerrestresCheckIngService.getDatosEspecialesPorVuelo(codigoVuelo));
 
+	}
+	
+	@GetMapping("/pasajeros/{vuelo}")
+	List<JSONObject> getPasajerosPorVuelo(@PathVariable String vuelo){
+		return oprTerrestresCheckIngService.getPasajerosSegunVuelo(vuelo);
 	}
 
 }
