@@ -98,7 +98,7 @@ public class OprTerrestresController {
 	
 	@GetMapping("/pasajeros/{vuelo}")
 	List<JSONObject> getPasajerosPorVuelo(@PathVariable String vuelo){
-		return oprTerrestresCheckIngService.getPasajerosSegunVuelo(vuelo);
+		return oprTerrestresCheckIngService.getPasajerosSegunVuelo(vuelo.replace("-", " "));
 	}
 
 }
