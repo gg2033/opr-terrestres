@@ -1,16 +1,22 @@
 package com.losilegales.oprterrestres.service;
 
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,6 +39,10 @@ import com.losilegales.oprterrestres.repository.CondicionEspecialRepository;
 import com.losilegales.oprterrestres.repository.DietaEspecificaRepository;
 import com.losilegales.oprterrestres.repository.VueloRepository;
 import com.losilegales.oprterrestres.utils.OprConstants;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import Excel.Cell;
 import Excel.Col;
@@ -71,6 +81,53 @@ public class OprTerrestresCheckIngService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	public boolean sobrepasaPesoAeronave(String codigoVuelo) throws UnirestException {
+//		List<Carga> cargas = cargaRepository.cargasPorVuelo(codigoVuelo);
+		//Obtener los vuelos
+		HttpResponse <JsonNode> response = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/flight/getAll").asJson();
+		
+		//Obtener de esa lista el vuelo con el codigo de vuelo pasado por parametro
+		JSONObject vuelo = new JSONObject();
+		String nombreAeronave = "";
+		Iterator<Object> itr = response.getBody().getArray().iterator();
+	    while(itr.hasNext() && vuelo.isNull("name")) {
+	    	JSONObject element = (JSONObject)itr.next();
+	    	if(element.get("code").equals(codigoVuelo)) {
+	    		vuelo = element;
+	    		nombreAeronave = element.getString("aircraft");
+	    		break;
+	    	}
+	    }
+	    
+		//Obtener las aeronaves
+	    HttpResponse <JsonNode> responseAeronave = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/flight/getAll").asJson();
+		
+	    //Obtener de esa lista la aeronave que figura en el el vuelo con el codigo de vuelo pasado por parametro
+		JSONObject aeronave = new JSONObject();
+		int capacidad = 0;
+		Iterator<Object> itrA = responseAeronave.getBody().getArray().iterator();
+	    while(itrA.hasNext() && aeronave.isNull("name")) {
+	    	JSONObject element = (JSONObject)itrA.next();
+	    	if(element.get("model").equals(nombreAeronave)) {
+	    		aeronave = element;
+	    	    //Obtener la capacidad de esa aeronave
+	    		capacidad = (int) element.get("weightTolerance");
+	    		break;
+	    	}
+	    }
+	    
+		
+		//Recorrer checkins y por cada uno obtener el codigo de pasajero
+		//Obtener todas las cargas con ese codigo de pasajero
+		//Recorrer esa lista de cargas para obtener el peso de cada una
+		//En cada una de estas iteraciones ir sumando en una variable el peso de las cargas
+		
+		//Comparar la suma de las cargas con la capacidad de la aeronave
+		//Si sobrepasa, enviar alerta (FALTA DEFINIR COMO HACER ESO)
+		//Si no sobrepasa, (FALTA DEFINIR QUE PASA ACA)
+		return true;
+	}
 
 //	public List<CheckInDTO> getDataCheckIn() {
 //

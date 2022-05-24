@@ -21,6 +21,7 @@ import com.losilegales.oprterrestres.entity.Checkin;
 import com.losilegales.oprterrestres.service.AeroNavesService;
 import com.losilegales.oprterrestres.service.OprTerrestresCheckIngService;
 import com.losilegales.oprterrestres.utils.OprConstants;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import Excel.ExcelResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,6 +48,10 @@ public class OprTerrestresController {
 //		return data;
 //
 //	}
+	@GetMapping("/pesoAeronave/{codigo_vuelo}")
+	void checkSobrepesoAeronave(@PathVariable String codigo_vuelo) throws UnirestException {
+		oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigo_vuelo);
+	}
 	
 	//Para cargar los checkin y cargas en la base de datos por vuelo
 	@PostMapping("/simularCheckin/{codigo_vuelo}")
