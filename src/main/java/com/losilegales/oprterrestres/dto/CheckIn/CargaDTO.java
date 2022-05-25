@@ -8,10 +8,7 @@ import lombok.Data;
 @Data
 public class CargaDTO {
 	
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@Column(name = "id_carga")
-//	private Integer idCarga;
+	private Integer idCarga;
 	
 	private Integer peso;
 

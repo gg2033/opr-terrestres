@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.losilegales.oprterrestres.dto.CheckIn.CargaDTO;
 import com.losilegales.oprterrestres.dto.CheckIn.DatoEspecialPasajeroDTO;
 import com.losilegales.oprterrestres.service.AeroNavesService;
+import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
 import com.losilegales.oprterrestres.service.OprTerrestresCheckIngService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 
@@ -33,6 +35,9 @@ public class OprTerrestresController {
 	public OprTerrestresCheckIngService oprTerrestresCheckIngService;
 	@Autowired
 	private AeroNavesService aeronavesService;
+	
+	@Autowired
+	private OprTerrestresCargaService oprTerrestresCargaService;
 	
 	// NO BORRAR
 //	@GetMapping("/vuelo")
@@ -64,6 +69,12 @@ public class OprTerrestresController {
 
 	}
 	
+	@PutMapping("/carga/{codigoVuelo}")
+	@ResponseBody
+	boolean cambiarEstadoCarga(@PathVariable String codigoVuelo) {
+		return oprTerrestresCargaService.cambiarEstadoCarga(codigoVuelo);
+
+	}
 	
 		
 	@GetMapping("/aeronave/{codigoAvion}/{campo}")
