@@ -20,6 +20,7 @@ import com.losilegales.oprterrestres.repository.CargaRepository;
 import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -35,7 +36,7 @@ public class OprTerrestresCargaController {
 	
 	@Autowired
 	private ModelMapper modelMapper;
-	
+	@Operation(summary = "Cambia el estado de las cargas a Despachada por vuelo.")
 	@PutMapping("/carga/{codigoVuelo}")
 	@ResponseBody
 	boolean cambiarEstadoCargaDespachada(@PathVariable String codigoVuelo) {
@@ -43,6 +44,7 @@ public class OprTerrestresCargaController {
 
 	}
 	
+	@Operation(summary = "Actualiza el estado de las cargas con el estado enviado.")
 	@PutMapping("/actualizarEstadoCarga/{estado}")
 	@ResponseBody
 	public boolean actualizarEstadoCarga(@RequestBody List<CargaDTO> cargas, @PathVariable String estado){
@@ -59,7 +61,7 @@ public class OprTerrestresCargaController {
 		
 	}
 	
-	//TODO implementar DTO
+	@Operation(summary = "Obtiene todas las cargas existentes de todos los vuelos.")
 	@GetMapping("/cargas")
 	public List<CargaDTO> getCargas() {	
 		List<Carga> cargas = cargaRepository.findAll();
@@ -70,7 +72,7 @@ public class OprTerrestresCargaController {
 		return cargasDTO;
 	}
 	
-	//TODO implementar DTO
+	@Operation(summary = "Obtiene todas las cargas por vuelo")
 	@GetMapping("/cargas/{codigo_vuelo}")
 	public List<CargaDTO> getCargasPorVuelo(@PathVariable String codigo_vuelo) {	
 		List<Carga> cargas = cargaRepository.cargasPorVuelo(codigo_vuelo);
