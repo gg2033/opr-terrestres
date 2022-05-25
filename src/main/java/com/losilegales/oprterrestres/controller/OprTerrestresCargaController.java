@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.dozer.DozerBeanMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.losilegales.oprterrestres.config.AppConfig;
 import com.losilegales.oprterrestres.dto.CheckIn.CargaDTO;
 import com.losilegales.oprterrestres.entity.Carga;
 import com.losilegales.oprterrestres.repository.CargaRepository;
+import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,24 +30,20 @@ public class OprTerrestresCargaController {
 	@Autowired
 	CargaRepository cargaRepository;
 	
-//	@Autowired
-//	CargaRepository checkInRepository;
+	@Autowired
+	OprTerrestresCargaService oprTerrestresCargaService;
 	
-	private DozerBeanMapper mapper = AppConfig.dozerBeanMapper();
+	@Autowired
+	private ModelMapper modelMapper;
 	
-	@GetMapping("/carga/{codigoVuelo}")
-	public List<CargaDTO> getCargaPorVuelo(String codigoVuelo){
-//		List<CheckIn> checkin = checkInRepository.findByCodigoVuelo(codigoVuelo);
-		List<Carga> cargas = new ArrayList<Carga>(); //checkin.getCargas();
-		List<CargaDTO> cargasDTO = new ArrayList<CargaDTO>();
-		for (Carga carga : cargas) {
-			cargasDTO.add(mapper.map(carga, CargaDTO.class));
-		}
-		return cargasDTO;
-		
+	@PutMapping("/carga/{codigoVuelo}")
+	@ResponseBody
+	boolean cambiarEstadoCargaDespachada(@PathVariable String codigoVuelo) {
+		return oprTerrestresCargaService.cambiarEstadoCargaDespachada(codigoVuelo);
+
 	}
 	
-	@PutMapping("/carga/{estado}")
+	@PutMapping("/actualizarEstadoCarga/{estado}")
 	@ResponseBody
 	public boolean actualizarEstadoCarga(@RequestBody List<CargaDTO> cargas, @PathVariable String estado){
 		for (CargaDTO cargaDTO : cargas) {
@@ -61,6 +57,30 @@ public class OprTerrestresCargaController {
 		
 		return true;
 		
+	}
+	
+	//TODO implementar DTO
+	@GetMapping("/cargas")
+	public List<CargaDTO> getCargas() {	
+		List<Carga> cargas = cargaRepository.findAll();
+		List<CargaDTO> cargasDTO = new ArrayList<CargaDTO>();
+		for (Carga carga : cargas) {
+			cargasDTO.add(modelMapper.map(carga, CargaDTO.class));
+		}
+		return cargasDTO;
+	}
+	
+	//TODO implementar DTO
+	@GetMapping("/cargas/{codigo_vuelo}")
+	public List<CargaDTO> getCargasPorVuelo(@PathVariable String codigo_vuelo) {	
+		List<Carga> cargas = cargaRepository.cargasPorVuelo(codigo_vuelo);
+		
+		List<CargaDTO> cargasDTO = new ArrayList<CargaDTO>();
+		for (Carga carga : cargas) {
+			cargasDTO.add(modelMapper.map(carga, CargaDTO.class));
+		}
+		return cargasDTO;
+
 	}
 
 }

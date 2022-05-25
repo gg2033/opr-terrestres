@@ -1,7 +1,11 @@
 package com.losilegales.oprterrestres.service;
 
 import java.net.URI;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,10 +25,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.losilegales.oprterrestres.dto.CheckIn.CargaDTO;
 import com.losilegales.oprterrestres.dto.CheckIn.DatoEspecialPasajeroDTO;
 import com.losilegales.oprterrestres.entity.Carga;
+import com.losilegales.oprterrestres.entity.Checkin;
 import com.losilegales.oprterrestres.entity.Vuelo;
 import com.losilegales.oprterrestres.enums.TipoCarga;
 import com.losilegales.oprterrestres.enums.TipoTag;
 import com.losilegales.oprterrestres.repository.CargaRepository;
+import com.losilegales.oprterrestres.repository.CheckinRepository;
 import com.losilegales.oprterrestres.repository.ClaseAsientoRepository;
 import com.losilegales.oprterrestres.repository.CondicionEspecialRepository;
 import com.losilegales.oprterrestres.repository.DietaEspecificaRepository;
@@ -31,9 +38,13 @@ import com.losilegales.oprterrestres.repository.VueloRepository;
 import com.losilegales.oprterrestres.utils.OprConstants;
 
 import Excel.Cell;
+import Excel.Col;
 import Excel.ExcelResponse;
 import Excel.Row;
+import converter.LocalDateAttributeConverter;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 @Service
 public class OprTerrestresCheckIngService {
@@ -62,10 +73,29 @@ public class OprTerrestresCheckIngService {
 	private RestTemplate simpleRestTemplate;
 	@Autowired
 	private CargaRepository cargaRepository;
+	@Autowired
+	private CheckinRepository checkinRepository;
 
 	@Autowired
 	private ModelMapper modelMapper;
 
+	
+	public List<JSONObject> getPasajerosSegunVuelo(String vuelo) {
+		List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(vuelo);
+		List<JSONObject> ret = new ArrayList<JSONObject>(listaCheckin.size());
+		HashMap<String, Object> pasajero = new HashMap<String, Object>();
+		for(Checkin p : listaCheckin) {
+			pasajero.put("nombre", p.getNombre());
+			pasajero.put("apellido", p.getApellido());
+			pasajero.put("clase", p.getClase());
+			pasajero.put("asiento", p.getAsiento());
+			pasajero.put("alimentacion", p.getAlimentacion());
+			pasajero.put("condicion", p.getCondicion());
+			JSONObject jsonPasajero= new JSONObject(pasajero);
+			ret.add(jsonPasajero);
+		}
+		return ret;
+	}
 //	public List<CheckInDTO> getDataCheckIn() {
 //
 //		List<CheckInDTO> checkInDataLst = null;
@@ -139,10 +169,11 @@ public class OprTerrestresCheckIngService {
 //	}
 
 	
-	public Optional<List<DatoEspecialPasajeroDTO>> getDatosEspecialesPorVuelo(int vuelo){
+	public Optional<List<DatoEspecialPasajeroDTO>> getDatosEspecialesPorVuelo(String codigoVuelo){
 		List<DatoEspecialPasajeroDTO> datosEspeciales = new ArrayList<DatoEspecialPasajeroDTO>();
-		
-		ExcelResponse checkin = this.getDataCheckinJson(vuelo);
+//		DatoEspecialPasajeroDTO datoEspecialPasajero = new DatoEspecialPasajeroDTO();
+		ExcelResponse checkin = this.registrarDataCheckinJson(codigoVuelo);
+
 		
 		int indicePNombre = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("primer_nombre");
 		int indiceSNombre = checkin.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("segundo_nombre");
@@ -180,8 +211,12 @@ public class OprTerrestresCheckIngService {
 		
 		return Optional.of(datosEspeciales);
 	}
+	
+//	private List<Carga> getListaCargasPorVuelo(String cv){
+//		List<Checkin> lc = checkinRepository.fin
+//	}
 
-	public List<CargaDTO> getDataEquipajeCheckin(String codigoVuelo) {
+	public List<CargaDTO> registrarDataEquipajeCheckin(String codigoVuelo) {
 		ExcelResponse result = new ExcelResponse();
 		URI uri;
 		List<CargaDTO> cargas = new ArrayList<CargaDTO>();
@@ -208,22 +243,14 @@ public class OprTerrestresCheckIngService {
 					lstValidCargaCheckin.add(cargaPasajero);
 				}
 			}
-			int indiceCodigoPasajero = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_pasajero");
 			
-			List<Row> cargasPorPasajero = lstValidCargaCheckin.stream().filter(e -> e.getC().get(indiceCodigoPasajero).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
+			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_vuelo");
 			
-			//guardar las cargas en la db.
-			for (Row row : cargasPorPasajero) {
-				CargaDTO carga = new CargaDTO();
-				carga.setCodigo(row.getC().get(0).getF());
-				carga.setCodigoPasajero(row.getC().get(1).getV().toString());
-				carga.setTipoCarga(TipoCarga.valueOf(row.getC().get(2).getV().toString()));
-				int peso = Integer.parseInt(row.getC().get(3).getV().toString().split("\\.")[0]);
-				carga.setPeso(peso);
-				carga.setTagCarga(TipoTag.fromString(row.getC().get(4).getV().toString()));
-				cargas.add(carga);
-				
-			}
+			List<Row> rows = lstValidCargaCheckin.stream().filter(e -> e.getC().get(indiceCodigoVuelo).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
+
+			result.getTable().setRows(rows);
+			
+			persistirDatosCarga(result);
 		
 			return cargas;
 		}
@@ -234,7 +261,22 @@ public class OprTerrestresCheckIngService {
 		return cargas;
 			
 	}
-	public ExcelResponse getDataCheckinJson(Integer lote) {
+	
+	public List<Checkin> getCheckinPorVuelo(String codigoVuelo){
+		List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
+		return listaCheckin;
+	}
+	
+	public List<CargaDTO> getCargasPorVuelo(String codigoVuelo){
+		List<Carga> listaCargasPorVuelo =  cargaRepository.cargasPorVuelo(codigoVuelo);
+		List<CargaDTO> listaCargasDTO = new ArrayList<CargaDTO>(listaCargasPorVuelo.size());
+		for (Carga c : listaCargasPorVuelo) {
+			listaCargasDTO.add(modelMapper.map(c, CargaDTO.class));
+		}
+		return listaCargasDTO;
+	}
+	
+	public ExcelResponse registrarDataCheckinJson(String codigoVuelo) {
 		Optional<Vuelo> vuelo = null;
 		ExcelResponse result = new ExcelResponse();
 		URI uri;
@@ -263,17 +305,13 @@ public class OprTerrestresCheckIngService {
 				}
 			}
 			
-			
-			
-			
-			List<Row> rows = lstValidCheckin.stream().filter(e -> Integer.parseInt(e.getC().get(0).getV().toString().subSequence(0, 1).toString()) ==lote).collect(Collectors.toList());
-			Carga carga = new Carga();
-//			for (Row datosPasajeroCheckin : rows) {
-//				carga
-//			}
-			//seteo estado de carga al llegar al checkin.
-//			cargaRepository.save(null);
+			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_vuelo");
+
+			List<Row> rows = lstValidCheckin.stream().filter(e -> e.getC().get(indiceCodigoVuelo).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
+
 			result.getTable().setRows(rows);
+			persistirDatosCheckin(result);
+			//crear una lista de checkins con el vuelo especificado, y devolverla
 			return result;
 		}
 		catch(Exception e) {
@@ -281,6 +319,179 @@ public class OprTerrestresCheckIngService {
 		}
 
 		return result;
+	}
+	
+	private void persistirDatosCheckin(ExcelResponse checkinData) {
+		//19 columnas tiene el checkin
+		List<String> nombreColumn = new ArrayList<String>(19);
+		//Recorro el excel fila por columna y obtengo los nombres de las columnas
+		for (Col c : checkinData.getTable().getCols()) {
+			nombreColumn.add(c.getLabel());
+		}
+		
+		int indice;
+		//Agrego los datos de las filas a un objeto Checkin
+		for(Row r : checkinData.getTable().getRows()) {
+			indice = 0;
+			Checkin chck = new Checkin();
+			for(Cell c : r.getC()) {
+				mapearDatosACheckin(nombreColumn.get(indice), c, chck);
+				indice++;
+			}
+			//Persisto el objeto Checkin y sigo con la siguiente fila
+			chck.setCreadoPor("juan");
+			chck.setActivo(true);
+			chck.setCreado(getFechaActual());;
+			checkinRepository.save(chck);
+		}
+	}
+	
+	private void persistirDatosCarga(ExcelResponse cargaData) {
+		//19 columnas tiene el checkin
+		List<String> nombreColumn = new ArrayList<String>(6);
+		//Recorro el excel fila por columna y obtengo los nombres de las columnas
+		for (Col c : cargaData.getTable().getCols()) {
+			nombreColumn.add(c.getLabel());
+		}
+		
+		int indice;
+		//Agrego los datos de las filas a un objeto Carga
+		for(Row r : cargaData.getTable().getRows()) {
+			indice = 0;
+			Carga crga = new Carga();
+			for(Cell c : r.getC()) {
+				mapearDatosACarga(nombreColumn.get(indice), c, crga);
+				indice++;
+			}
+			//Persisto el objeto Carga y sigo con la siguiente fila
+			crga.setNombreCreador("juan");
+			crga.setActivo(true);
+			crga.setFechaCreacion(getFechaActual());
+			crga.setEstadoCarga("En espera");
+			cargaRepository.save(crga);
+		}
+	}
+
+	private void mapearDatosACarga(String nombreColumn, Cell celda, Carga crga) {
+		switch(nombreColumn) {
+			case("envio"):
+				Integer envio = Integer.parseInt(celda.getF());
+				crga.setEnvio(envio);
+				break;
+			case("codigo_equipaje"):
+				Integer codigo_equipaje = Integer.parseInt(celda.getF());
+				crga.setCodigoCarga(codigo_equipaje.toString());
+				break;
+			case("codigo_pasajero"):
+				String codigo_pasajero = celda.getV().toString();
+				crga.setCodigoPasajero(codigo_pasajero);
+				break;
+			case("tipo"):
+				String tipo = celda.getV().toString();
+				crga.setTipo(tipo);
+				break;
+			case("peso"):
+				Integer peso = Integer.parseInt(celda.getF());
+				crga.setPeso(peso);
+				break;
+			case("tag"):
+				String tag = celda.getV().toString();
+				crga.setTag(tag);
+				break;
+			case("codigo_vuelo"):
+				String codigo_vuelo = celda.getV().toString();
+				crga.setCodigoVuelo(codigo_vuelo);
+			default:
+				break;
+		}
+	}
+	
+	private void mapearDatosACheckin(String nombreColumn, Cell celda, Checkin chck) {
+		switch(nombreColumn) {
+			case("envio"):
+				Integer envio = Integer.parseInt(celda.getF());
+				chck.setEnvio(envio);
+				break;
+			case("codigo_pasajero"):
+				String codigo_pasajero = celda.getV().toString();
+				chck.setCodigoPasajero(codigo_pasajero);
+				break;
+			case("linea_aerea"):
+				String linea_aerea = celda.getV().toString();
+				chck.setCompania(linea_aerea);
+				break;
+			case("codigo_vuelo"):
+				String codig_vuelo = celda.getV().toString();
+				chck.setCodigoVuelo(codig_vuelo);
+				break;
+			case("fecha_partida"):
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				LocalDate fecha_partida = LocalDate.parse(celda.getF().toString(), dtf);
+				chck.setFechaPartida(fecha_partida);
+				break;
+			case("origen"):
+				String origen = celda.getV().toString();
+				chck.setOrigen(origen);
+				break;
+			case("destino"):
+				String destino = celda.getV().toString();
+				chck.setDestino(destino);
+				break;
+			case("asiento"):
+				String asiento = celda.getV().toString();
+				chck.setAsiento(asiento);
+				break;
+			case("clase"):
+				String clase = celda.getV().toString();
+				chck.setClase(clase);
+				break;
+			case("tipo_documento"):
+				String tipo_documento = celda.getV().toString();
+				chck.setTipoDocumento(tipo_documento);
+				break;
+			case("numero_documento"):
+				Integer numero_documento = Integer.parseInt(celda.getF());
+				chck.setNumeroDocumento(numero_documento);
+				break;
+			case("primer_apelllido"):
+				String primer_apellido = celda.getV().toString();
+				chck.setApellido(primer_apellido);
+				break;
+			case("primer_nombre"):
+				String primer_nombre = celda.getV().toString();
+				chck.setNombre(primer_nombre);
+				break;
+			case("nacionalidad"):
+				String nacionalidad = celda.getV().toString();
+				chck.setNacionalidad(nacionalidad);
+				break;
+			case("edad"):
+				Integer edad = Integer.parseInt(celda.getF());
+				chck.setEdad(edad);
+				break;
+			case("sexo"):
+				char sexo = celda.getV().toString().charAt(0);
+				chck.setSexo(sexo);
+				break;
+			case("alimentacion"):
+				String alimentacion = celda.getV().toString();
+				chck.setAlimentacion(alimentacion);
+				break;
+			case("condicion"):
+				String condicion = celda.getV().toString();
+				chck.setCondicion(condicion);
+				break;
+			case("comentarios"):
+				String comentarios = celda.getV().toString();
+				chck.setComentario(comentarios);
+				break;
+			default:
+				break;
+		}
+	}
+	
+	private LocalDate getFechaActual() {
+		return new LocalDateAttributeConverter().convertToEntityAttribute(new Date(System.currentTimeMillis()));
 	}
 
 }

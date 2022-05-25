@@ -1,25 +1,35 @@
 package com.losilegales.oprterrestres.dto.CheckIn;
 
-import com.losilegales.oprterrestres.enums.TipoCarga;
-import com.losilegales.oprterrestres.enums.TipoTag;
-
 import lombok.Data;
 
 @Data
 public class CargaDTO {
-	
-	private Integer idCarga;
-	
-	private Integer peso;
+	private int idCarga;
 
-	private String codigo;
+	private int envio;
+	
+	private String codigoCarga;
 	
 	private String codigoPasajero;
+	
+	private String tipo;
+	
+	private int peso;
 
-	private TipoCarga tipoCarga;
+	private String tag;
+	
+	private String fechaCreacion;
+	
+	private String nombreCreador;
+	
+	private String fechaModificacion;
 
-	private TipoTag tagCarga;
+	private String nombreModificador;
+
+	private boolean activo;
 	
 	private String estadoCarga;
+	
+	private String codigoVuelo;
 
 }
