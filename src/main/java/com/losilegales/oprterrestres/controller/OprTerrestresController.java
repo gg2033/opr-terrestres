@@ -54,22 +54,36 @@ public class OprTerrestresController {
 //
 //	}
 	
+	String formatoCodigoVuelo(String codigoVuelo) {
+		StringBuilder sb = new StringBuilder(codigoVuelo);
+		for(int i=0; i < codigoVuelo.length(); i++) {
+	         if(Character.isDigit(codigoVuelo.charAt(i))) {
+	        	 sb.insert(i, " ");
+	        	 break;
+	         }
+		}
+		return sb.toString();
+	}
+	
 	//Para cargar los checkin y cargas en la base de datos por vuelo
 	@PostMapping("/simularCheckin/{codigo_vuelo}")
 	@ResponseBody
-	void getCheckin(@PathVariable String codigo_vuelo) {
-		oprTerrestresCheckIngService.registrarDataCheckinJson(codigo_vuelo);
-		oprTerrestresCheckIngService.registrarDataEquipajeCheckin(codigo_vuelo);
+	void getCheckin(@PathVariable String codigoVuelo) {
+		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
+		oprTerrestresCheckIngService.registrarDataCheckinJson(codigoVuelo);
+		oprTerrestresCheckIngService.registrarDataEquipajeCheckin(codigoVuelo);
 	}
 	
 	@GetMapping("/servicioCompras/{codigo_vuelo}")
 	public List<Checkin> getCheckinPorVuelo(String codigoVuelo){
+		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
 		List<Checkin> listaCheckin = oprTerrestresCheckinService.getCheckinPorVuelo(codigoVuelo);
 		return listaCheckin;
 	}
 	
 	@GetMapping("/equipajePorVuelo/{codigo_vuelo}")
 	public List<CargaDTO> getCargasPorVuelo(String codigoVuelo){
+		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
 		List<CargaDTO> listaCargas = oprTerrestresCheckinService.getCargasPorVuelo(codigoVuelo);
 		return listaCargas;
 	}
@@ -96,14 +110,15 @@ public class OprTerrestresController {
 	@GetMapping("/specialPassengerData/{vuelo}")
 	@ResponseBody
 	ResponseEntity<Optional<List<DatoEspecialPasajeroDTO>>> getDatosEspecialesPorVuelo(@PathVariable @NonNull String codigoVuelo) {
-		
+		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
 		return ResponseEntity.ok(oprTerrestresCheckIngService.getDatosEspecialesPorVuelo(codigoVuelo));
 
 	}
 	
 	@GetMapping("/pasajeros/{vuelo}")
-	List<JSONObject> getPasajerosPorVuelo(@PathVariable String vuelo){
-		return oprTerrestresCheckIngService.getPasajerosSegunVuelo(vuelo.replace("-", " "));
+	List<JSONObject> getPasajerosPorVuelo(@PathVariable String codigoVuelo){
+		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
+		return oprTerrestresCheckIngService.getPasajerosSegunVuelo(codigoVuelo.replace("-", " "));
 	}
 
 }
