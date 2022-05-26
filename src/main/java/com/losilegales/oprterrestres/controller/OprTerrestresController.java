@@ -3,16 +3,11 @@ package com.losilegales.oprterrestres.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.constraints.Size;
-
 import org.json.JSONObject;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,7 +22,6 @@ import com.losilegales.oprterrestres.service.OprTerrestresCheckIngService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-import Excel.ExcelResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NonNull;
 

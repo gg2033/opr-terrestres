@@ -1,17 +1,12 @@
 package com.losilegales.oprterrestres.service;
 
-import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,8 +28,6 @@ import com.losilegales.oprterrestres.dto.CheckIn.DatoEspecialPasajeroDTO;
 import com.losilegales.oprterrestres.entity.Carga;
 import com.losilegales.oprterrestres.entity.Checkin;
 import com.losilegales.oprterrestres.entity.Vuelo;
-import com.losilegales.oprterrestres.enums.TipoCarga;
-import com.losilegales.oprterrestres.enums.TipoTag;
 import com.losilegales.oprterrestres.repository.CargaRepository;
 import com.losilegales.oprterrestres.repository.CheckinRepository;
 import com.losilegales.oprterrestres.repository.ClaseAsientoRepository;
@@ -53,9 +45,6 @@ import Excel.Col;
 import Excel.ExcelResponse;
 import Excel.Row;
 import converter.LocalDateAttributeConverter;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 @Service
 public class OprTerrestresCheckIngService {
