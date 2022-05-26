@@ -1,10 +1,16 @@
 package com.losilegales.oprterrestres.service;
 
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +43,10 @@ import com.losilegales.oprterrestres.repository.CondicionEspecialRepository;
 import com.losilegales.oprterrestres.repository.DietaEspecificaRepository;
 import com.losilegales.oprterrestres.repository.VueloRepository;
 import com.losilegales.oprterrestres.utils.OprConstants;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import Excel.Cell;
 import Excel.Col;
@@ -78,6 +89,87 @@ public class OprTerrestresCheckIngService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	public boolean sobrepasaPesoAeronave(String codigoVuelo) throws UnirestException {
+		//Obtener los vuelos
+		try {
+		HttpResponse <JsonNode> response = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/flight/getAll").asJson();
+		
+		//Obtener de esa lista el vuelo con el codigo de vuelo pasado por parametro
+		JSONObject vuelo = new JSONObject();
+		String nombreAeronave = "";
+		Iterator<Object> itr = response.getBody().getArray().iterator();
+	    while(itr.hasNext() && vuelo.isNull("name")) {
+	    	JSONObject element = (JSONObject)itr.next();
+	    	if(element.get("code").equals(codigoVuelo)) {
+	    		vuelo = element;
+	    		nombreAeronave = element.getString("aircraft");
+	    		break;
+	    	}
+	    }
+	    
+		//Obtener las aeronaves
+	    HttpResponse <JsonNode> responseAeronave = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/aircraft/getAll").asJson();
+		
+	    //Obtener de esa lista la aeronave que figura en el el vuelo con el codigo de vuelo pasado por parametro
+		JSONObject aeronave = new JSONObject();
+		int capacidadEnToneladas = 0;
+		Iterator<Object> itrA = responseAeronave.getBody().getArray().iterator();
+	    while(itrA.hasNext() && aeronave.isNull("name")) {
+	    	JSONObject element = (JSONObject)itrA.next();
+	    	if(element.get("model").equals(nombreAeronave)) {
+	    		aeronave = element;
+	    	    //Obtener la capacidad de esa aeronave
+	    		capacidadEnToneladas = element.getInt("weightTolerance");
+	    		break;
+	    	}
+	    }
+	    //Codigo por si existe diferencia entre vuelos de pasajeros
+//		//Recorrer checkins y por cada uno obtener el codigo de pasajero
+//	    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
+//		//Obtener todas las cargas con ese codigo de pasajero
+//	    List<Carga> listaCargas = new LinkedList<Carga>();
+//	    for (Checkin p : listaCheckin) {
+//	    	String codigoPasajero = p.getCodigoPasajero();
+//	    	listaCargas.addAll(cargaRepository.cargasPorPasajero(codigoPasajero));
+//	    }
+	    
+	    List<Carga> listaCargas = cargaRepository.cargasPorVuelo(codigoVuelo);
+		//Recorrer esa lista de cargas para obtener el peso de cada una
+	    int pesoTotalCargasEnKG = getPesoSumadoCargas(listaCargas);
+		int pesoTotalPasajerosEnKG = getPesoPromedioPorPasajero(checkinRepository.checkinPorVuelo(codigoVuelo).size());
+		//Comparar la suma de las cargas con la capacidad de la aeronave
+		//Se multiplica por 1000 porque esta en toneladas
+	    if(pesoTotalCargasEnKG + pesoTotalPasajerosEnKG > capacidadEnToneladas*1000) {
+			//Si sobrepasa
+	    	return true;
+	    }
+	    else {
+	    	//Si no sobrepasa
+	    	return false;
+	    }
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	//TODO se podria recibir la lista de checkin, verificar cuales son mujeres y cuales hombres
+	//y sacar un promedio utilizando esos valores.
+	private int getPesoPromedioPorPasajero(int cantPasajeros) {
+		int pesoPromedio = 70;
+		int pesoPromedioPorPersona = cantPasajeros * 70;
+		return pesoPromedioPorPersona;
+	}
+
+	private int getPesoSumadoCargas(List<Carga> listaCargas) {
+		int suma = 0;
+		for (Carga c : listaCargas) {
+			suma += c.getPeso(); 
+		}
+		return suma;
+	}
 
 	
 	public List<JSONObject> getPasajerosSegunVuelo(String vuelo) {
