@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.constraints.Size;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -49,8 +50,18 @@ public class OprTerrestresController {
 //
 //	}
 	@GetMapping("/pesoAeronave/{codigo_vuelo}")
-	void checkSobrepesoAeronave(@PathVariable String codigo_vuelo) throws UnirestException {
-		System.out.println(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigo_vuelo));
+	JSONObject checkSobrepesoAeronave(@PathVariable String codigo_vuelo) throws UnirestException {
+		JSONObject response = new JSONObject();
+		if(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigo_vuelo)){
+			response.put("mensaje", "Si supera la capacidad maxima");
+			response.put("supera", true);
+			return response;
+		}
+		else {
+			response.put("mensaje", "No supera la capacidad maxima");
+			response.put("supera", false);
+			return response;
+		}
 	}
 	
 	//Para cargar los checkin y cargas en la base de datos por vuelo
