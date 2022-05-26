@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.constraints.Size;
 
+import org.json.JSONObject;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import com.losilegales.oprterrestres.service.AeroNavesService;
 import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
 import com.losilegales.oprterrestres.service.OprTerrestresCheckIngService;
 import com.losilegales.oprterrestres.utils.OprConstants;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import Excel.ExcelResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,6 +55,20 @@ public class OprTerrestresController {
 //		return data;
 //
 //	}
+	@GetMapping("/pesoAeronave/{codigo_vuelo}")
+	JSONObject checkSobrepesoAeronave(@PathVariable String codigo_vuelo) throws UnirestException {
+		JSONObject response = new JSONObject();
+		if(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigo_vuelo)){
+			response.put("mensaje", "Si supera la capacidad maxima");
+			response.put("supera", true);
+			return response;
+		}
+		else {
+			response.put("mensaje", "No supera la capacidad maxima");
+			response.put("supera", false);
+			return response;
+		}
+	}
 	
 	String formatoCodigoVuelo(String codigoVuelo) {
 		StringBuilder sb = new StringBuilder(codigoVuelo);
