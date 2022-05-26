@@ -19,6 +19,12 @@ public final class OprConstants {
 	
 	//formats date
 	public static final String  DATE_FORMAT = "yyyy-MM-dd HH:mm";
+	
+	//estados carga
+	public static final String ESTADO_CARGA_EN_ESPERA = "En espera";
+	public static final String ESTADO_CARGA_CARGADA = "Cargada";
+	public static final String ESTADO_CARGA_DESPACHADA = "Despachada";
+	
 
 }
 

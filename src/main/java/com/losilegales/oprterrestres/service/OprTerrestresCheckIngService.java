@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.repository.CrudRepository;
@@ -51,9 +54,13 @@ import Excel.ExcelResponse;
 import Excel.Row;
 import converter.LocalDateAttributeConverter;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 @Service
 public class OprTerrestresCheckIngService {
+	
+	private static final Logger LOGGER=LoggerFactory.getLogger(OprTerrestresCheckIngService.class);
 
 	@Autowired
 	private EmailService emailService;
@@ -164,6 +171,23 @@ public class OprTerrestresCheckIngService {
 		return suma;
 	}
 
+	
+	public List<JSONObject> getPasajerosSegunVuelo(String vuelo) {
+		List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(vuelo);
+		List<JSONObject> ret = new ArrayList<JSONObject>(listaCheckin.size());
+		HashMap<String, Object> pasajero = new HashMap<String, Object>();
+		for(Checkin p : listaCheckin) {
+			pasajero.put("nombre", p.getNombre());
+			pasajero.put("apellido", p.getApellido());
+			pasajero.put("clase", p.getClase());
+			pasajero.put("asiento", p.getAsiento());
+			pasajero.put("alimentacion", p.getAlimentacion());
+			pasajero.put("condicion", p.getCondicion());
+			JSONObject jsonPasajero= new JSONObject(pasajero);
+			ret.add(jsonPasajero);
+		}
+		return ret;
+	}
 //	public List<CheckInDTO> getDataCheckIn() {
 //
 //		List<CheckInDTO> checkInDataLst = null;
