@@ -81,6 +81,7 @@ public class OprTerrestresCheckIngService {
 
 	
 	public List<JSONObject> getPasajerosSegunVuelo(String vuelo) {
+		LOGGER.info("MOSTRANDO DATOS DE PASAJEROS");
 		List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(vuelo);
 		List<JSONObject> ret = new ArrayList<JSONObject>(listaCheckin.size());
 		HashMap<String, Object> pasajero = new HashMap<String, Object>();
