@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -83,8 +84,8 @@ public class OprTerrestresCheckIngService {
 	private ModelMapper modelMapper;
 	
 	public boolean sobrepasaPesoAeronave(String codigoVuelo) throws UnirestException {
-//		List<Carga> cargas = cargaRepository.cargasPorVuelo(codigoVuelo);
 		//Obtener los vuelos
+		try {
 		HttpResponse <JsonNode> response = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/flight/getAll").asJson();
 		
 		//Obtener de esa lista el vuelo con el codigo de vuelo pasado por parametro
@@ -101,32 +102,66 @@ public class OprTerrestresCheckIngService {
 	    }
 	    
 		//Obtener las aeronaves
-	    HttpResponse <JsonNode> responseAeronave = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/flight/getAll").asJson();
+	    HttpResponse <JsonNode> responseAeronave = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/aircraft/getAll").asJson();
 		
 	    //Obtener de esa lista la aeronave que figura en el el vuelo con el codigo de vuelo pasado por parametro
 		JSONObject aeronave = new JSONObject();
-		int capacidad = 0;
+		int capacidadEnToneladas = 0;
 		Iterator<Object> itrA = responseAeronave.getBody().getArray().iterator();
 	    while(itrA.hasNext() && aeronave.isNull("name")) {
 	    	JSONObject element = (JSONObject)itrA.next();
 	    	if(element.get("model").equals(nombreAeronave)) {
 	    		aeronave = element;
 	    	    //Obtener la capacidad de esa aeronave
-	    		capacidad = (int) element.get("weightTolerance");
+	    		capacidadEnToneladas = element.getInt("weightTolerance");
 	    		break;
 	    	}
 	    }
+	    //Codigo por si existe diferencia entre vuelos de pasajeros
+//		//Recorrer checkins y por cada uno obtener el codigo de pasajero
+//	    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
+//		//Obtener todas las cargas con ese codigo de pasajero
+//	    List<Carga> listaCargas = new LinkedList<Carga>();
+//	    for (Checkin p : listaCheckin) {
+//	    	String codigoPasajero = p.getCodigoPasajero();
+//	    	listaCargas.addAll(cargaRepository.cargasPorPasajero(codigoPasajero));
+//	    }
 	    
-		
-		//Recorrer checkins y por cada uno obtener el codigo de pasajero
-		//Obtener todas las cargas con ese codigo de pasajero
+	    List<Carga> listaCargas = cargaRepository.cargasPorVuelo(codigoVuelo);
 		//Recorrer esa lista de cargas para obtener el peso de cada una
-		//En cada una de estas iteraciones ir sumando en una variable el peso de las cargas
-		
+	    int pesoTotalCargasEnKG = getPesoSumadoCargas(listaCargas);
+		int pesoTotalPasajerosEnKG = getPesoPromedioPorPasajero(checkinRepository.checkinPorVuelo(codigoVuelo).size());
 		//Comparar la suma de las cargas con la capacidad de la aeronave
-		//Si sobrepasa, enviar alerta (FALTA DEFINIR COMO HACER ESO)
-		//Si no sobrepasa, (FALTA DEFINIR QUE PASA ACA)
-		return true;
+		//Se multiplica por 1000 porque esta en toneladas
+	    if(pesoTotalCargasEnKG + pesoTotalPasajerosEnKG > capacidadEnToneladas*1000) {
+			//Si sobrepasa
+	    	return true;
+	    }
+	    else {
+	    	//Si no sobrepasa
+	    	return false;
+	    }
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	//TODO se podria recibir la lista de checkin, verificar cuales son mujeres y cuales hombres
+	//y sacar un promedio utilizando esos valores.
+	private int getPesoPromedioPorPasajero(int cantPasajeros) {
+		int pesoPromedio = 70;
+		int pesoPromedioPorPersona = cantPasajeros * 70;
+		return pesoPromedioPorPersona;
+	}
+
+	private int getPesoSumadoCargas(List<Carga> listaCargas) {
+		int suma = 0;
+		for (Carga c : listaCargas) {
+			suma += c.getPeso(); 
+		}
+		return suma;
 	}
 
 //	public List<CheckInDTO> getDataCheckIn() {

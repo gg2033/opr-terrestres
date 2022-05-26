@@ -50,7 +50,7 @@ public class OprTerrestresController {
 //	}
 	@GetMapping("/pesoAeronave/{codigo_vuelo}")
 	void checkSobrepesoAeronave(@PathVariable String codigo_vuelo) throws UnirestException {
-		oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigo_vuelo);
+		System.out.println(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigo_vuelo));
 	}
 	
 	//Para cargar los checkin y cargas en la base de datos por vuelo
