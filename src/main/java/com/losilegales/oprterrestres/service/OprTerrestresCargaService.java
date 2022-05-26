@@ -19,7 +19,7 @@ public class OprTerrestresCargaService {
 	public boolean cambiarEstadoCargaDespachada(String codigoVuelo) {
 		
 		List<Carga> cargasPorVuelo = cargaRepository.findByCodigoVuelo(codigoVuelo);
-		cargaRepository.cambioEstadoCargasDespachada(codigoVuelo, OprConstants.ESTADO_CARGA_CARGADA);
+		cargaRepository.cambioEstadoCargasDespachada(codigoVuelo, OprConstants.ESTADO_CARGA_DESPACHADA);
 			
 		return true;
 		
