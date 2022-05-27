@@ -40,7 +40,7 @@ public class OprTerrestresCargaController {
 	@PutMapping("/carga/{codigoVuelo}/{estado}")
 	@ResponseBody
 	boolean cambiarEstadoCargasPorVuelo(@PathVariable String codigoVuelo, @PathVariable String estado) {
-		return oprTerrestresCargaService.cambiarEstadoCargaDespachada(codigoVuelo, estado);
+		return oprTerrestresCargaService.cambiarEstadoCargasVuelo(codigoVuelo, estado);
 
 	}
 	

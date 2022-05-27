@@ -16,10 +16,10 @@ public class OprTerrestresCargaService {
 	@Autowired
 	private CargaRepository cargaRepository;
 	@Transactional
-	public boolean cambiarEstadoCargaDespachada(String codigoVuelo) {
+	public boolean cambiarEstadoCargasVuelo(String codigoVuelo, String estado) {
 		
 		List<Carga> cargasPorVuelo = cargaRepository.findByCodigoVuelo(codigoVuelo);
-		cargaRepository.cambioEstadoCargasDespachada(codigoVuelo, OprConstants.ESTADO_CARGA_DESPACHADA);
+		cargaRepository.cambioEstadoCargasVuelo(codigoVuelo, estado);
 			
 		return true;
 		
