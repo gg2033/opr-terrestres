@@ -20,7 +20,6 @@ import com.losilegales.oprterrestres.service.AeroNavesService;
 import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
 import com.losilegales.oprterrestres.service.OprTerrestresCheckIngService;
 import com.losilegales.oprterrestres.utils.OprConstants;
-import com.mashape.unirest.http.exceptions.UnirestException;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NonNull;
@@ -49,20 +48,20 @@ public class OprTerrestresController {
 //		return data;
 //
 //	}
-	@GetMapping("/pesoAeronave/{codigo_vuelo}")
-	JSONObject checkSobrepesoAeronave(@PathVariable String codigo_vuelo) throws UnirestException {
-		JSONObject response = new JSONObject();
-		if(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigo_vuelo)){
-			response.put("mensaje", "Si supera la capacidad maxima");
-			response.put("supera", true);
-			return response;
-		}
-		else {
-			response.put("mensaje", "No supera la capacidad maxima");
-			response.put("supera", false);
-			return response;
-		}
-	}
+//	@GetMapping("/pesoAeronave/{codigo_vuelo}")
+//	JSONObject checkSobrepesoAeronave(@PathVariable String codigo_vuelo) throws UnirestException {
+//		JSONObject response = new JSONObject();
+//		if(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigo_vuelo)){
+//			response.put("mensaje", "Si supera la capacidad maxima");
+//			response.put("supera", true);
+//			return response;
+//		}
+//		else {
+//			response.put("mensaje", "No supera la capacidad maxima");
+//			response.put("supera", false);
+//			return response;
+//		}
+//	}
 	
 	String formatoCodigoVuelo(String codigoVuelo) {
 		StringBuilder sb = new StringBuilder(codigoVuelo);
@@ -119,9 +118,9 @@ public class OprTerrestresController {
 	
 	@GetMapping("/specialPassengerData/{vuelo}")
 	@ResponseBody
-	ResponseEntity<Optional<List<DatoEspecialPasajeroDTO>>> getDatosEspecialesPorVuelo(@PathVariable @NonNull String codigoVuelo) {
-		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
-		return ResponseEntity.ok(oprTerrestresCheckIngService.getDatosEspecialesPorVuelo(codigoVuelo));
+	ResponseEntity<Optional<List<DatoEspecialPasajeroDTO>>> getDatosEspecialesPorVuelo(@PathVariable @NonNull String vuelo) {
+		vuelo = formatoCodigoVuelo(vuelo);
+		return ResponseEntity.ok(oprTerrestresCheckIngService.getDatosEspecialesPorVuelo(vuelo));
 
 	}
 	
