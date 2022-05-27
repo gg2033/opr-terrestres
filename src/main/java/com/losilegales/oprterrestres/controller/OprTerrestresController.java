@@ -20,6 +20,7 @@ import com.losilegales.oprterrestres.service.AeroNavesService;
 import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
 import com.losilegales.oprterrestres.service.OprTerrestresCheckIngService;
 import com.losilegales.oprterrestres.utils.OprConstants;
+import com.losilegales.oprterrestres.utils.OprUtils;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,10 +51,11 @@ public class OprTerrestresController {
 //
 //	}
 	@SuppressWarnings("unchecked")
-	@GetMapping("/pesoAeronave/{codigo_vuelo}")
-	org.json.simple.JSONObject checkSobrepesoAeronave(@PathVariable String codigo_vuelo) throws UnirestException {
+	@GetMapping("/pesoAeronave/{codigoVuelo}")
+	org.json.simple.JSONObject checkSobrepesoAeronave(@PathVariable String codigoVuelo) throws UnirestException {
+		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
 		org.json.simple.JSONObject response = new org.json.simple.JSONObject();
-		if(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigo_vuelo)){
+		if(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigoVuelo)){
 			response.put("mensaje", "Si supera la capacidad maxima");
 			response.put("supera", true);
 			return response;
@@ -65,36 +67,25 @@ public class OprTerrestresController {
 		}
 	}
 	
-	String formatoCodigoVuelo(String codigoVuelo) {
-		StringBuilder sb = new StringBuilder(codigoVuelo);
-		for(int i=0; i < codigoVuelo.length(); i++) {
-	         if(Character.isDigit(codigoVuelo.charAt(i))) {
-	        	 sb.insert(i, " ");
-	        	 break;
-	         }
-		}
-		return sb.toString();
-	}
-	
 	//Para cargar los checkin y cargas en la base de datos por vuelo
 	@PostMapping("/simularCheckin/{codigo_vuelo}")
 	@ResponseBody
 	void getCheckin(@PathVariable String codigoVuelo) {
-		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
+		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
 		oprTerrestresCheckIngService.registrarDataCheckinJson(codigoVuelo);
 		oprTerrestresCheckIngService.registrarDataEquipajeCheckin(codigoVuelo);
 	}
 	
 	@GetMapping("/servicioCompras/{codigo_vuelo}")
 	public List<Checkin> getCheckinPorVuelo(String codigoVuelo){
-		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
+		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
 		List<Checkin> listaCheckin = oprTerrestresCheckinService.getCheckinPorVuelo(codigoVuelo);
 		return listaCheckin;
 	}
 	
 	@GetMapping("/equipajePorVuelo/{codigo_vuelo}")
 	public List<CargaDTO> getCargasPorVuelo(String codigoVuelo){
-		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
+		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
 		List<CargaDTO> listaCargas = oprTerrestresCheckinService.getCargasPorVuelo(codigoVuelo);
 		return listaCargas;
 	}
@@ -121,7 +112,7 @@ public class OprTerrestresController {
 	@GetMapping("/specialPassengerData/{vuelo}")
 	@ResponseBody
 	ResponseEntity<Optional<List<DatoEspecialPasajeroDTO>>> getDatosEspecialesPorVuelo(@PathVariable @NonNull String vuelo) {
-		vuelo = formatoCodigoVuelo(vuelo);
+		vuelo = OprUtils.formatoCodigoVuelo(vuelo);
 		return ResponseEntity.ok(oprTerrestresCheckIngService.getDatosEspecialesPorVuelo(vuelo));
 	}
 	
@@ -133,7 +124,7 @@ public class OprTerrestresController {
 //	}
 	@GetMapping("/pasajeros/{codigoVuelo}")
 	List<org.json.simple.JSONObject> getPasajerosPorVuelo(@PathVariable String codigoVuelo){
-		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
+		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
 		return oprTerrestresCheckIngService.getPasajerosSegunVuelo(codigoVuelo);
 	}
 
