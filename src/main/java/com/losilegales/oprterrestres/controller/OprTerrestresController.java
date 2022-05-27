@@ -49,9 +49,10 @@ public class OprTerrestresController {
 //		return data;
 //
 //	}
+	@SuppressWarnings("unchecked")
 	@GetMapping("/pesoAeronave/{codigo_vuelo}")
-	JSONObject checkSobrepesoAeronave(@PathVariable String codigo_vuelo) throws UnirestException {
-		JSONObject response = new JSONObject();
+	org.json.simple.JSONObject checkSobrepesoAeronave(@PathVariable String codigo_vuelo) throws UnirestException {
+		org.json.simple.JSONObject response = new org.json.simple.JSONObject();
 		if(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigo_vuelo)){
 			response.put("mensaje", "Si supera la capacidad maxima");
 			response.put("supera", true);
@@ -122,13 +123,18 @@ public class OprTerrestresController {
 	ResponseEntity<Optional<List<DatoEspecialPasajeroDTO>>> getDatosEspecialesPorVuelo(@PathVariable @NonNull String codigoVuelo) {
 		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
 		return ResponseEntity.ok(oprTerrestresCheckIngService.getDatosEspecialesPorVuelo(codigoVuelo));
-
 	}
 	
-	@GetMapping("/pasajeros/{vuelo}")
-	List<JSONObject> getPasajerosPorVuelo(@PathVariable String codigoVuelo){
+//	@GetMapping("/pasajeros/{codigoVuelo}")
+//	@ResponseBody
+//	String getPasajerosPorVuelo(@PathVariable String codigoVuelo){
+////		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
+//		return "Hola mundo";
+//	}
+	@GetMapping("/pasajeros/{codigoVuelo}")
+	List<org.json.simple.JSONObject> getPasajerosPorVuelo(@PathVariable String codigoVuelo){
 		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
-		return oprTerrestresCheckIngService.getPasajerosSegunVuelo(codigoVuelo.replace("-", " "));
+		return oprTerrestresCheckIngService.getPasajerosSegunVuelo(codigoVuelo);
 	}
 
 }

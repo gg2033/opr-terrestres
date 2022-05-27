@@ -161,10 +161,10 @@ public class OprTerrestresCheckIngService {
 	}
 
 	
-	public List<JSONObject> getPasajerosSegunVuelo(String vuelo) {
+	public List<org.json.simple.JSONObject> getPasajerosSegunVuelo(String vuelo) {
 		LOGGER.info("MOSTRANDO DATOS DE PASAJEROS");
 		List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(vuelo);
-		List<JSONObject> ret = new ArrayList<JSONObject>(listaCheckin.size());
+		List<org.json.simple.JSONObject> ret = new ArrayList<org.json.simple.JSONObject>(listaCheckin.size());
 		HashMap<String, Object> pasajero = new HashMap<String, Object>();
 		for(Checkin p : listaCheckin) {
 			pasajero.put("nombre", p.getNombre());
@@ -173,7 +173,7 @@ public class OprTerrestresCheckIngService {
 			pasajero.put("asiento", p.getAsiento());
 			pasajero.put("alimentacion", p.getAlimentacion());
 			pasajero.put("condicion", p.getCondicion());
-			JSONObject jsonPasajero= new JSONObject(pasajero);
+			org.json.simple.JSONObject jsonPasajero= new org.json.simple.JSONObject(pasajero);
 			ret.add(jsonPasajero);
 		}
 		return ret;
