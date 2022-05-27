@@ -2,14 +2,13 @@ package com.losilegales.oprterrestres.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +36,7 @@ public class OprTerrestresCargaController {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	@CrossOrigin
 	@Operation(summary = "Cambia el estado de todas las cargas del vuelo al estado enviado. {estado} opciones: {'En espera', 'Cargada', 'Despachada'}")
 	@PutMapping("/carga/{codigoVuelo}/{estado}")
 	@ResponseBody
