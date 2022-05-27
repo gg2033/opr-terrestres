@@ -120,9 +120,9 @@ public class OprTerrestresController {
 	
 	@GetMapping("/specialPassengerData/{vuelo}")
 	@ResponseBody
-	ResponseEntity<Optional<List<DatoEspecialPasajeroDTO>>> getDatosEspecialesPorVuelo(@PathVariable @NonNull String codigoVuelo) {
-		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
-		return ResponseEntity.ok(oprTerrestresCheckIngService.getDatosEspecialesPorVuelo(codigoVuelo));
+	ResponseEntity<Optional<List<DatoEspecialPasajeroDTO>>> getDatosEspecialesPorVuelo(@PathVariable @NonNull String vuelo) {
+		vuelo = formatoCodigoVuelo(vuelo);
+		return ResponseEntity.ok(oprTerrestresCheckIngService.getDatosEspecialesPorVuelo(vuelo));
 	}
 	
 //	@GetMapping("/pasajeros/{codigoVuelo}")

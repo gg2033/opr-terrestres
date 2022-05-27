@@ -36,30 +36,30 @@ public class OprTerrestresCargaController {
 	
 	@Autowired
 	private ModelMapper modelMapper;
-	@Operation(summary = "Cambia el estado de las cargas a Despachada por vuelo.")
-	@PutMapping("/carga/{codigoVuelo}")
+	@Operation(summary = "Cambia el estado de todas las cargas del vuelo al estado enviado. {estado} opciones: {'En espera', 'Cargada', 'Despachada'}")
+	@PutMapping("/carga/{codigoVuelo}/{estado}")
 	@ResponseBody
-	boolean cambiarEstadoCargaDespachada(@PathVariable String codigoVuelo) {
-		return oprTerrestresCargaService.cambiarEstadoCargaDespachada(codigoVuelo);
+	boolean cambiarEstadoCargasPorVuelo(@PathVariable String codigoVuelo, @PathVariable String estado) {
+		return oprTerrestresCargaService.cambiarEstadoCargasVuelo(codigoVuelo, estado);
 
 	}
 	
-	@Operation(summary = "Actualiza el estado de las cargas con el estado enviado.")
-	@PutMapping("/actualizarEstadoCarga/{estado}")
-	@ResponseBody
-	public boolean actualizarEstadoCarga(@RequestBody List<CargaDTO> cargas, @PathVariable String estado){
-		for (CargaDTO cargaDTO : cargas) {
-			Optional<Carga> carga = cargaRepository.findById(cargaDTO.getIdCarga());
-			if(carga.isPresent()) {
-				carga.get().setEstadoCarga(estado);
-				cargaRepository.save(carga.get());
-			}
-		
-		}
-		
-		return true;
-		
-	}
+//	@Operation(summary = "Actualiza el estado de las cargas con el estado enviado.")
+//	@PutMapping("/actualizarEstadoCarga/{estado}")
+//	@ResponseBody
+//	public boolean actualizarEstadoCarga(@PathVariable String estado){
+////		for (CargaDTO cargaDTO : cargas) {
+////			Optional<Carga> carga = cargaRepository.findById(cargaDTO.getIdCarga());
+////			if(carga.isPresent()) {
+////				carga.get().setEstadoCarga(estado);
+////				cargaRepository.save(carga.get());
+////			}
+////		
+////		}
+//		
+//		return true;
+//		
+//	}
 	
 	@Operation(summary = "Obtiene todas las cargas existentes de todos los vuelos.")
 	@GetMapping("/cargas")

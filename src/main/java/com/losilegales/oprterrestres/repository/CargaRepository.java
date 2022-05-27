@@ -21,7 +21,7 @@ public interface CargaRepository extends JpaRepository<Carga, Integer>{
 	
 	@Query(value = "UPDATE cargas set estado_carga = :estado WHERE codigo_vuelo = :codigo_vuelo", nativeQuery = true)
 	@Modifying(clearAutomatically = true)
-	void cambioEstadoCargasDespachada(@Param(value = "codigo_vuelo") String codigoVuelo, @Param(value = "estado") String estado);
+	void cambioEstadoCargasVuelo(@Param(value = "codigo_vuelo") String codigoVuelo, @Param(value = "estado") String estado);
 	
 	List<Carga> findByCodigoVuelo(String codigoVuelo);
 
