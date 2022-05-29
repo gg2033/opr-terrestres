@@ -409,7 +409,7 @@ public class OprTerrestresCheckIngService {
 	
 	private void persistirDatosCheckin(ExcelResponse checkinData) {
 		//19 columnas tiene el checkin
-		checkinRepository.truncateTabla();
+//		checkinRepository.truncateTabla();
 		List<String> nombreColumn = new ArrayList<String>(19);
 		//Recorro el excel fila por columna y obtengo los nombres de las columnas
 		for (Col c : checkinData.getTable().getCols()) {
@@ -435,7 +435,7 @@ public class OprTerrestresCheckIngService {
 	
 	private void persistirDatosCarga(ExcelResponse cargaData) {
 		//19 columnas tiene el checkin
-		cargaRepository.truncateTabla();
+//		cargaRepository.truncateTabla();
 		List<String> nombreColumn = new ArrayList<String>(6);
 		//Recorro el excel fila por columna y obtengo los nombres de las columnas
 		for (Col c : cargaData.getTable().getCols()) {
