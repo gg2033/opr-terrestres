@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import com.losilegales.oprterrestres.dto.CheckIn.CargaDTO;
 import com.losilegales.oprterrestres.entity.Carga;
 import com.losilegales.oprterrestres.repository.CargaRepository;
 import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
+import com.losilegales.oprterrestres.service.ReportService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 import com.losilegales.oprterrestres.utils.OprUtils;
 
@@ -30,6 +32,9 @@ public class OprTerrestresCargaController {
 	
 	@Autowired
 	CargaRepository cargaRepository;
+	
+	@Autowired
+	ReportService reportService;
 	
 	@Autowired
 	OprTerrestresCargaService oprTerrestresCargaService;
@@ -87,5 +92,20 @@ public class OprTerrestresCargaController {
 		return cargasDTO;
 
 	}
+	
+
+	@Operation(summary = "Reporte de Carga de todos los vuelos")
+	@GetMapping("/employee/records/report")
+	public ResponseEntity<byte[]> getEmployeeRecordReport() {
+		return reportService.reporteCarga();
+	}
+	
+	@Operation(summary = "Reporte de Carga por vuelo")
+	@GetMapping("/employee/records/report2/{codigoVuelo}")
+	public ResponseEntity<byte[]> getEmployeeRecordReport(@PathVariable String codigoVuelo) {
+		return reportService.reporteCargaPorVuelo(codigoVuelo);
+	}
+	
+	
 
 }
