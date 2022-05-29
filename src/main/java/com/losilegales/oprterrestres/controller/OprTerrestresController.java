@@ -68,7 +68,7 @@ public class OprTerrestresController {
 	}
 	
 	//Para cargar los checkin y cargas en la base de datos por vuelo
-	@PostMapping("/simularCheckin/{codigo_vuelo}")
+	@PostMapping("/simularCheckin/{codigoVuelo}")
 	@ResponseBody
 	void getCheckin(@PathVariable String codigoVuelo) {
 		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
