@@ -18,4 +18,7 @@ public interface CheckinRepository extends JpaRepository<Checkin, Integer> {
 	@Query(value="SELECT * from checkin WHERE codigo_vuelo = :codigo_vuelo limit 1", nativeQuery = true)
 	Checkin checkinUnicoPorVuelo(@Param(value = "codigo_vuelo") String codigoVuelo);
 
+	@Query(value = "TRUNCATE TABLE checkin RESTART IDENTITY", nativeQuery = true)
+	void truncateTabla();
+
 }

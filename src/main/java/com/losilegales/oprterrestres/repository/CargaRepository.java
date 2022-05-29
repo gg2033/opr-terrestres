@@ -34,4 +34,7 @@ public interface CargaRepository extends JpaRepository<Carga, Integer>{
 	@Query(value = "select COUNT ( DISTINCT codigo_vuelo ) AS cantidad from cargas",  nativeQuery = true)
 	Integer cantidadVuelos();
 
+	@Query(value = "TRUNCATE TABLE carga RESTART IDENTITY;", nativeQuery = true)
+	void truncateTabla();
+
 }
