@@ -124,9 +124,10 @@ public class OprTerrestresCheckIngService {
 //	    }
 	    
 	    List<Carga> listaCargas = cargaRepository.cargasPorVuelo(codigoVuelo);
+	    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
 		//Recorrer esa lista de cargas para obtener el peso de cada una
 	    int pesoTotalCargasEnKG = getPesoSumadoCargas(listaCargas);
-		int pesoTotalPasajerosEnKG = getPesoPromedioPorPasajero(checkinRepository.checkinPorVuelo(codigoVuelo).size());
+		int pesoTotalPasajerosEnKG = getPesoPromedioPorPasajero(listaCheckin);
 		//Comparar la suma de las cargas con la capacidad de la aeronave
 		//Se multiplica por 1000 porque esta en toneladas
 	    if(pesoTotalCargasEnKG + pesoTotalPasajerosEnKG > capacidadEnToneladas*1000) {
@@ -146,9 +147,12 @@ public class OprTerrestresCheckIngService {
 
 	//TODO se podria recibir la lista de checkin, verificar cuales son mujeres y cuales hombres
 	//y sacar un promedio utilizando esos valores.
-	private int getPesoPromedioPorPasajero(int cantPasajeros) {
-		int pesoPromedio = 70;
-		int pesoPromedioPorPersona = cantPasajeros * 70;
+	private int getPesoPromedioPorPasajero(List<Checkin> pasajeros) {
+		int pesoPromedioM = 75;
+		int pesoPromedioF = 65;
+		int cantPersonasM = (int) pasajeros.stream().filter(x -> (x.getSexo() == 'M' || x.getSexo() == 'm')).count();
+		int cantPersonasF = (int) pasajeros.stream().filter(x -> (x.getSexo() == 'F' || x.getSexo() == 'f')).count();
+		int pesoPromedioPorPersona = cantPersonasM * pesoPromedioM + cantPersonasF * pesoPromedioF;
 		return pesoPromedioPorPersona;
 	}
 
