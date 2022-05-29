@@ -79,9 +79,57 @@ public class OprTerrestresCheckIngService {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	public boolean sobrepasaPesoAeronave(String codigoVuelo) throws UnirestException {
+	@SuppressWarnings("unchecked")
+	public org.json.simple.JSONObject sobrepasaPesoAeronave(String codigoVuelo) throws UnirestException {
+		org.json.simple.JSONObject ret = new org.json.simple.JSONObject();
 		//Obtener los vuelos
 		try {
+			int capacidadEnToneladas = capacidadAeronaveEnToneladas(codigoVuelo);
+		    //Codigo por si existe diferencia entre vuelos de pasajeros
+	//		//Recorrer checkins y por cada uno obtener el codigo de pasajero
+	//	    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
+	//		//Obtener todas las cargas con ese codigo de pasajero
+	//	    List<Carga> listaCargas = new LinkedList<Carga>();
+	//	    for (Checkin p : listaCheckin) {
+	//	    	String codigoPasajero = p.getCodigoPasajero();
+	//	    	listaCargas.addAll(cargaRepository.cargasPorPasajero(codigoPasajero));
+	//	    }
+		    
+		    List<Carga> listaCargas = cargaRepository.cargasPorVuelo(codigoVuelo);
+		    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
+			//Recorrer esa lista de cargas para obtener el peso de cada una
+		    int pesoTotalCargasEnKG = getPesoSumadoCargas(listaCargas);
+			int pesoTotalPasajerosEnKG = getPesoPromedioPorPasajero(listaCheckin);
+			//Comparar la suma de las cargas con la capacidad de la aeronave
+			//Se multiplica por 1000 porque esta en toneladas
+		    if(pesoTotalCargasEnKG + pesoTotalPasajerosEnKG > capacidadEnToneladas*1000) {
+				//Si sobrepasa
+				ret.put("mensaje", "Si supera la capacidad maxima");
+				ret.put("sobrecarga", true);
+				ret.put("cantidadPasajeros", listaCheckin.size());
+				ret.put("pesoKG", pesoTotalCargasEnKG + pesoTotalPasajerosEnKG);
+		    	return ret;
+		    }
+		    else {
+		    	//Si no sobrepasa
+				ret.put("mensaje", "No supera la capacidad maxima");
+				ret.put("sobrecarga", false);
+				ret.put("cantidadPasajeros", listaCheckin.size());
+				ret.put("pesoKG", pesoTotalCargasEnKG + pesoTotalPasajerosEnKG);
+		    	return ret;
+		    }
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		ret.put("mensaje", "Hubo un error");
+		ret.put("sobrecarga", null);
+		ret.put("cantidadPasajeros", null);
+		ret.put("pesoKG", null);
+		return ret;
+	}
+
+	private int capacidadAeronaveEnToneladas(String codigoVuelo) throws UnirestException {
 		HttpResponse <JsonNode> response = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/flight/getAll").asJson();
 		
 		//Obtener de esa lista el vuelo con el codigo de vuelo pasado por parametro
@@ -113,36 +161,7 @@ public class OprTerrestresCheckIngService {
 	    		break;
 	    	}
 	    }
-	    //Codigo por si existe diferencia entre vuelos de pasajeros
-//		//Recorrer checkins y por cada uno obtener el codigo de pasajero
-//	    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
-//		//Obtener todas las cargas con ese codigo de pasajero
-//	    List<Carga> listaCargas = new LinkedList<Carga>();
-//	    for (Checkin p : listaCheckin) {
-//	    	String codigoPasajero = p.getCodigoPasajero();
-//	    	listaCargas.addAll(cargaRepository.cargasPorPasajero(codigoPasajero));
-//	    }
-	    
-	    List<Carga> listaCargas = cargaRepository.cargasPorVuelo(codigoVuelo);
-	    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
-		//Recorrer esa lista de cargas para obtener el peso de cada una
-	    int pesoTotalCargasEnKG = getPesoSumadoCargas(listaCargas);
-		int pesoTotalPasajerosEnKG = getPesoPromedioPorPasajero(listaCheckin);
-		//Comparar la suma de las cargas con la capacidad de la aeronave
-		//Se multiplica por 1000 porque esta en toneladas
-	    if(pesoTotalCargasEnKG + pesoTotalPasajerosEnKG > capacidadEnToneladas*1000) {
-			//Si sobrepasa
-	    	return true;
-	    }
-	    else {
-	    	//Si no sobrepasa
-	    	return false;
-	    }
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+		return capacidadEnToneladas;
 	}
 
 	//TODO se podria recibir la lista de checkin, verificar cuales son mujeres y cuales hombres
