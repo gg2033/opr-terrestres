@@ -13,8 +13,11 @@ import com.losilegales.oprterrestres.entity.Carga;
 @Repository
 public interface CargaRepository extends JpaRepository<Carga, Integer>{
 	
-	@Query(value = "SELECT * from cargas WHERE codigo_vuelo = :codigo_vuelo", nativeQuery = true)
+	@Query(value = "SELECT * from cargas WHERE codigo_vuelo = :codigo_vuelo AND activo = true", nativeQuery = true)
 	List<Carga> cargasPorVuelo(@Param(value = "codigo_vuelo") String codigoVuelo);
+	
+	@Query(value = "SELECT * from cargas WHERE codigo_vuelo = :codigo_vuelo", nativeQuery = true)
+	List<Carga> cargasGeneralesPorVuelo(@Param(value = "codigo_vuelo") String codigoVuelo);
 
 	@Query(value = "SELECT * from cargas WHERE codigo_pasajero = :codigo_pasajero", nativeQuery = true)
 	Collection<? extends Carga> cargasPorPasajero(@Param(value = "codigo_pasajero")String codigoPasajero);
