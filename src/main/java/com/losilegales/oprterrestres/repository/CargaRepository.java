@@ -25,4 +25,7 @@ public interface CargaRepository extends JpaRepository<Carga, Integer>{
 	
 	List<Carga> findByCodigoVuelo(String codigoVuelo);
 
+	@Query(value = "TRUNCATE TABLE carga RESTART IDENTITY;", nativeQuery = true)
+	void truncateTabla();
+
 }
