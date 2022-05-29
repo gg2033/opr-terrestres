@@ -46,7 +46,8 @@ public class OprTerrestresCargaController {
 	@PutMapping("/carga/{codigoVuelo}/{estado}")
 	@ResponseBody
 	boolean cambiarEstadoCargasPorVuelo(@PathVariable String codigoVuelo, @PathVariable String estado) {
-		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
+		//TODO descomentar esto cuando se arregle el problema de el codigo de vuelo para cargas en DB
+//		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
 		return oprTerrestresCargaService.cambiarEstadoCargasVuelo(codigoVuelo, estado);
 
 	}
@@ -82,7 +83,8 @@ public class OprTerrestresCargaController {
 	@Operation(summary = "Obtiene todas las cargas por vuelo")
 	@GetMapping("/cargas/{codigoVuelo}")
 	public List<CargaDTO> getCargasPorVuelo(@PathVariable String codigoVuelo) {
-		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
+		//TODO descomentar esto cuando se arregle el problema de el codigo de vuelo para cargas en DB
+//		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
 		List<Carga> cargas = cargaRepository.cargasPorVuelo(codigoVuelo);
 		
 		List<CargaDTO> cargasDTO = new ArrayList<CargaDTO>();
