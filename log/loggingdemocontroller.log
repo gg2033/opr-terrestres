@@ -1,193 +1,96 @@
-2022-05-29 00:04:47.092  INFO 13684 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-05-29 00:04:47.172  WARN 13684 --- [http-nio-8080-exec-2] o.s.web.servlet.PageNotFound             : Request method 'GET' not supported
-2022-05-29 00:05:47.745  INFO 13540 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 13540 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
-2022-05-29 00:05:47.749  INFO 13540 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
-2022-05-29 00:05:50.401  INFO 13540 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-05-29 00:05:50.401  INFO 13540 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
-2022-05-29 00:05:50.645  INFO 13540 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-05-29 00:05:50.974  INFO 13540 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-05-29 00:05:51.113  INFO 13540 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
-2022-05-29 00:05:51.437  INFO 13540 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-05-29 00:05:51.619  INFO 13540 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-05-29 00:05:53.840  INFO 13540 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-05-29 00:05:53.923  INFO 13540 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
-2022-05-29 00:05:55.668  INFO 13540 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-05-29 00:05:56.844  INFO 13540 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
-2022-05-29 00:05:56.854  WARN 13540 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
-2022-05-29 00:05:56.857  INFO 13540 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
-2022-05-29 00:05:56.938  INFO 13540 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
-2022-05-29 00:05:56.940  INFO 13540 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
-2022-05-29 00:05:56.941  INFO 13540 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:05:57.001  INFO 13540 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:05:57.006  INFO 13540 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:05:57.077  INFO 13540 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:05:58.611  INFO 13540 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 11.532 seconds (JVM running for 12.595)
-2022-05-29 00:06:56.295  INFO 13540 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-05-29 00:06:57.998  WARN 13540 --- [http-nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 0, SQLState: 02000
-2022-05-29 00:06:58.000 ERROR 13540 --- [http-nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : La consulta no retornó ningún resultado.
-2022-05-29 00:06:58.709  WARN 13540 --- [http-nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 0, SQLState: 42P01
-2022-05-29 00:06:58.710 ERROR 13540 --- [http-nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : ERROR: relation "carga" does not exist
-2022-05-29 00:12:20.916  INFO 9324 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 9324 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
-2022-05-29 00:12:20.920  INFO 9324 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
-2022-05-29 00:12:23.789  INFO 9324 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-05-29 00:12:23.790  INFO 9324 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
-2022-05-29 00:12:24.050  INFO 9324 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-05-29 00:12:24.374  INFO 9324 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-05-29 00:12:24.511  INFO 9324 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
-2022-05-29 00:12:24.811  INFO 9324 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-05-29 00:12:25.005  INFO 9324 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-05-29 00:12:27.308  INFO 9324 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-05-29 00:12:27.357  INFO 9324 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
-2022-05-29 00:12:29.004  INFO 9324 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-05-29 00:12:30.084  INFO 9324 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
-2022-05-29 00:12:30.094  WARN 9324 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
-2022-05-29 00:12:30.101  INFO 9324 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
-2022-05-29 00:12:30.196  INFO 9324 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
-2022-05-29 00:12:30.197  INFO 9324 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
-2022-05-29 00:12:30.199  INFO 9324 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:12:30.260  INFO 9324 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:12:30.264  INFO 9324 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:12:30.318  INFO 9324 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:12:32.055  INFO 9324 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 11.901 seconds (JVM running for 12.658)
-2022-05-29 00:13:50.535  INFO 9324 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-05-29 00:13:52.188  WARN 9324 --- [http-nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 0, SQLState: 02000
-2022-05-29 00:13:52.189 ERROR 9324 --- [http-nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : La consulta no retornó ningún resultado.
-2022-05-29 00:13:52.910  WARN 9324 --- [http-nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 0, SQLState: 42P01
-2022-05-29 00:13:52.912 ERROR 9324 --- [http-nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : ERROR: relation "carga" does not exist
-2022-05-29 00:16:07.999  INFO 14776 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 14776 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
-2022-05-29 00:16:08.003  INFO 14776 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
-2022-05-29 00:16:10.823  INFO 14776 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-05-29 00:16:10.824  INFO 14776 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
-2022-05-29 00:16:11.112  INFO 14776 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-05-29 00:16:11.390  INFO 14776 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-05-29 00:16:11.461  INFO 14776 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
-2022-05-29 00:16:11.717  INFO 14776 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-05-29 00:16:11.892  INFO 14776 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-05-29 00:16:14.084  INFO 14776 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-05-29 00:16:14.123  INFO 14776 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
-2022-05-29 00:16:15.591  INFO 14776 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-05-29 00:16:16.723  INFO 14776 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
-2022-05-29 00:16:16.733  WARN 14776 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
-2022-05-29 00:16:16.738  INFO 14776 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
-2022-05-29 00:16:16.823  INFO 14776 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
-2022-05-29 00:16:16.825  INFO 14776 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
-2022-05-29 00:16:16.827  INFO 14776 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:16:16.893  INFO 14776 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:16:16.899  INFO 14776 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:16:16.957  INFO 14776 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:16:18.498  INFO 14776 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 11.198 seconds (JVM running for 12.047)
-2022-05-29 00:16:42.183  INFO 14776 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-05-29 00:21:30.152  INFO 6116 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 6116 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
-2022-05-29 00:21:30.156  INFO 6116 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
-2022-05-29 00:21:32.635  INFO 6116 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-05-29 00:21:32.635  INFO 6116 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
-2022-05-29 00:21:32.897  INFO 6116 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-05-29 00:21:33.193  INFO 6116 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-05-29 00:21:33.338  INFO 6116 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
-2022-05-29 00:21:33.718  INFO 6116 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-05-29 00:21:33.910  INFO 6116 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-05-29 00:21:36.132  INFO 6116 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-05-29 00:21:36.181  INFO 6116 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
-2022-05-29 00:21:37.938  INFO 6116 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-05-29 00:21:39.003  INFO 6116 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
-2022-05-29 00:21:39.012  WARN 6116 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
-2022-05-29 00:21:39.014  INFO 6116 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
-2022-05-29 00:21:39.085  INFO 6116 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
-2022-05-29 00:21:39.086  INFO 6116 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
-2022-05-29 00:21:39.087  INFO 6116 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:21:39.151  INFO 6116 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:21:39.155  INFO 6116 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:21:39.204  INFO 6116 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:21:40.650  INFO 6116 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 11.136 seconds (JVM running for 11.936)
-2022-05-29 00:22:00.363  INFO 6116 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-05-29 00:22:38.803  INFO 13344 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 13344 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
-2022-05-29 00:22:38.812  INFO 13344 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
-2022-05-29 00:22:41.821  INFO 13344 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-05-29 00:22:41.822  INFO 13344 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
-2022-05-29 00:22:42.054  INFO 13344 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-05-29 00:22:42.418  INFO 13344 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-05-29 00:22:42.536  INFO 13344 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
-2022-05-29 00:22:42.902  INFO 13344 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-05-29 00:22:43.143  INFO 13344 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-05-29 00:22:45.353  INFO 13344 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-05-29 00:22:45.404  INFO 13344 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
-2022-05-29 00:22:47.259  INFO 13344 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-05-29 00:22:48.507  INFO 13344 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
-2022-05-29 00:22:48.516  WARN 13344 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
-2022-05-29 00:22:48.520  INFO 13344 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
-2022-05-29 00:22:48.608  INFO 13344 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
-2022-05-29 00:22:48.611  INFO 13344 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
-2022-05-29 00:22:48.612  INFO 13344 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:22:48.693  INFO 13344 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:22:48.705  INFO 13344 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:22:48.761  INFO 13344 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:22:50.453  INFO 13344 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 12.539 seconds (JVM running for 13.923)
-2022-05-29 00:23:04.863  INFO 13344 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-05-29 00:28:52.318  INFO 18220 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 18220 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
-2022-05-29 00:28:52.327  INFO 18220 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
-2022-05-29 00:28:55.490  INFO 18220 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-05-29 00:28:55.491  INFO 18220 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
-2022-05-29 00:28:55.731  INFO 18220 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-05-29 00:28:56.154  INFO 18220 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-05-29 00:28:56.273  INFO 18220 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
-2022-05-29 00:28:56.622  INFO 18220 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-05-29 00:28:56.853  INFO 18220 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-05-29 00:28:59.081  INFO 18220 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-05-29 00:28:59.136  INFO 18220 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
-2022-05-29 00:29:01.110  INFO 18220 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-05-29 00:29:02.369  INFO 18220 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
-2022-05-29 00:29:02.378  WARN 18220 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
-2022-05-29 00:29:02.381  INFO 18220 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
-2022-05-29 00:29:02.469  INFO 18220 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
-2022-05-29 00:29:02.471  INFO 18220 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
-2022-05-29 00:29:02.472  INFO 18220 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:29:02.542  INFO 18220 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:29:02.556  INFO 18220 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:29:02.621  INFO 18220 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:29:04.431  INFO 18220 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 12.989 seconds (JVM running for 14.327)
-2022-05-29 00:29:50.201  INFO 18220 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-05-29 00:39:40.074  INFO 5100 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 5100 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
-2022-05-29 00:39:40.085  INFO 5100 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
-2022-05-29 00:39:43.403  INFO 5100 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-05-29 00:39:43.404  INFO 5100 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
-2022-05-29 00:39:43.645  INFO 5100 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-05-29 00:39:44.023  INFO 5100 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-05-29 00:39:44.106  INFO 5100 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
-2022-05-29 00:39:44.445  INFO 5100 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-05-29 00:39:44.680  INFO 5100 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-05-29 00:39:46.926  INFO 5100 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-05-29 00:39:47.002  INFO 5100 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
-2022-05-29 00:39:48.860  INFO 5100 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-05-29 00:39:50.230  INFO 5100 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
-2022-05-29 00:39:50.238  WARN 5100 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
-2022-05-29 00:39:50.242  INFO 5100 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
-2022-05-29 00:39:50.319  INFO 5100 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
-2022-05-29 00:39:50.321  INFO 5100 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
-2022-05-29 00:39:50.322  INFO 5100 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:39:50.404  INFO 5100 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:39:50.413  INFO 5100 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:39:50.459  INFO 5100 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:39:52.297  INFO 5100 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 13.363 seconds (JVM running for 14.681)
-2022-05-29 00:39:59.316  INFO 5100 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-05-29 00:42:37.284  INFO 6876 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 6876 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
-2022-05-29 00:42:37.289  INFO 6876 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
-2022-05-29 00:42:39.763  INFO 6876 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2022-05-29 00:42:39.763  INFO 6876 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
-2022-05-29 00:42:40.027  INFO 6876 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2022-05-29 00:42:40.328  INFO 6876 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2022-05-29 00:42:40.439  INFO 6876 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
-2022-05-29 00:42:40.784  INFO 6876 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2022-05-29 00:42:40.992  INFO 6876 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2022-05-29 00:42:43.192  INFO 6876 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2022-05-29 00:42:43.247  INFO 6876 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
-2022-05-29 00:42:44.978  INFO 6876 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2022-05-29 00:42:46.073  INFO 6876 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
-2022-05-29 00:42:46.081  WARN 6876 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
-2022-05-29 00:42:46.084  INFO 6876 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
-2022-05-29 00:42:46.167  INFO 6876 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
-2022-05-29 00:42:46.169  INFO 6876 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
-2022-05-29 00:42:46.170  INFO 6876 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:42:46.232  INFO 6876 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:42:46.236  INFO 6876 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:42:46.293  INFO 6876 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
-2022-05-29 00:42:47.832  INFO 6876 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 11.292 seconds (JVM running for 12.063)
+2022-05-30 09:45:34.061  INFO 17268 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 17268 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
+2022-05-30 09:45:34.079  INFO 17268 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
+2022-05-30 09:45:37.102  INFO 17268 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-05-30 09:45:37.103  INFO 17268 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
+2022-05-30 09:45:37.442  INFO 17268 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-05-30 09:45:37.772  INFO 17268 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-05-30 09:45:37.903  INFO 17268 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
+2022-05-30 09:45:38.264  INFO 17268 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-05-30 09:45:38.473  INFO 17268 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-05-30 09:45:41.484  INFO 17268 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-05-30 09:45:41.540  INFO 17268 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2022-05-30 09:45:43.497  INFO 17268 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-05-30 09:45:44.618  INFO 17268 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
+2022-05-30 09:45:44.630  WARN 17268 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2022-05-30 09:45:44.632  INFO 17268 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
+2022-05-30 09:45:44.728  INFO 17268 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2022-05-30 09:45:44.730  INFO 17268 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2022-05-30 09:45:44.735  INFO 17268 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:45:44.805  INFO 17268 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:45:44.808  INFO 17268 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:45:44.864  INFO 17268 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:45:47.062  INFO 17268 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 13.76 seconds (JVM running for 35.819)
+2022-05-30 09:45:57.462  INFO 17268 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-05-30 09:46:00.118  WARN 17268 --- [http-nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 0, SQLState: 22001
+2022-05-30 09:46:00.120 ERROR 17268 --- [http-nio-8080-exec-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : ERROR: value too long for type character varying(30)
+2022-05-30 09:50:21.738  INFO 17608 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 17608 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
+2022-05-30 09:50:21.747  INFO 17608 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
+2022-05-30 09:50:25.121  INFO 17608 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-05-30 09:50:25.123  INFO 17608 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
+2022-05-30 09:50:25.472  INFO 17608 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-05-30 09:50:25.858  INFO 17608 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-05-30 09:50:26.007  INFO 17608 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
+2022-05-30 09:50:26.436  INFO 17608 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-05-30 09:50:26.700  INFO 17608 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-05-30 09:50:29.555  INFO 17608 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-05-30 09:50:29.648  INFO 17608 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2022-05-30 09:50:31.822  INFO 17608 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-05-30 09:50:33.650  INFO 17608 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
+2022-05-30 09:50:33.663  WARN 17608 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2022-05-30 09:50:33.669  INFO 17608 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
+2022-05-30 09:50:33.789  INFO 17608 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2022-05-30 09:50:33.791  INFO 17608 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2022-05-30 09:50:33.792  INFO 17608 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:50:33.876  INFO 17608 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:50:33.891  INFO 17608 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:50:33.959  INFO 17608 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:50:36.707  INFO 17608 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 15.904 seconds (JVM running for 17.309)
+2022-05-30 09:50:59.589  INFO 17608 --- [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-05-30 09:55:29.044  WARN 17608 --- [http-nio-8080-exec-3] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 0, SQLState: 22001
+2022-05-30 09:55:29.050 ERROR 17608 --- [http-nio-8080-exec-3] o.h.engine.jdbc.spi.SqlExceptionHelper   : ERROR: value too long for type character varying(30)
+2022-05-30 09:56:55.058  INFO 9964 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 9964 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
+2022-05-30 09:56:55.062  INFO 9964 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
+2022-05-30 09:56:57.905  INFO 9964 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-05-30 09:56:57.907  INFO 9964 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
+2022-05-30 09:56:58.195  INFO 9964 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-05-30 09:56:58.549  INFO 9964 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-05-30 09:56:58.672  INFO 9964 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
+2022-05-30 09:56:59.021  INFO 9964 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-05-30 09:56:59.237  INFO 9964 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-05-30 09:57:02.429  INFO 9964 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-05-30 09:57:02.488  INFO 9964 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2022-05-30 09:57:04.308  INFO 9964 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-05-30 09:57:05.464  INFO 9964 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
+2022-05-30 09:57:05.475  WARN 9964 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2022-05-30 09:57:05.484  INFO 9964 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
+2022-05-30 09:57:05.565  INFO 9964 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2022-05-30 09:57:05.567  INFO 9964 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2022-05-30 09:57:05.568  INFO 9964 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:57:05.640  INFO 9964 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:57:05.645  INFO 9964 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:57:05.737  INFO 9964 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 09:57:07.785  INFO 9964 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 13.382 seconds (JVM running for 14.285)
+2022-05-30 09:57:16.105  INFO 9964 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-05-30 19:07:19.293  INFO 15556 --- [main] c.l.o.OprTerrestresApplication           : Starting OprTerrestresApplication using Java 17.0.2 on DESKTOP-8HOA9NJ with PID 15556 (C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres\target\classes started by Usuario in C:\Users\Usuario\Desktop\repoPrincipal\opr-terrestres)
+2022-05-30 19:07:19.303  INFO 15556 --- [main] c.l.o.OprTerrestresApplication           : No active profile set, falling back to 1 default profile: "default"
+2022-05-30 19:07:23.312  INFO 15556 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-05-30 19:07:23.313  INFO 15556 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.62]
+2022-05-30 19:07:24.200  INFO 15556 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-05-30 19:07:24.849  INFO 15556 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-05-30 19:07:25.029  INFO 15556 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.8.Final
+2022-05-30 19:07:25.620  INFO 15556 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-05-30 19:07:25.948  INFO 15556 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-05-30 19:07:28.364  INFO 15556 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-05-30 19:07:28.455  INFO 15556 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2022-05-30 19:07:30.780  INFO 15556 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-05-30 19:07:32.315  INFO 15556 --- [main] org.dozer.config.GlobalSettings          : Trying to find Dozer configuration file: dozer.properties
+2022-05-30 19:07:32.327  WARN 15556 --- [main] org.dozer.config.GlobalSettings          : Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2022-05-30 19:07:32.332  INFO 15556 --- [main] org.dozer.DozerInitializer               : Initializing Dozer. Version: 5.5.0, Thread Name: main
+2022-05-30 19:07:32.448  INFO 15556 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2022-05-30 19:07:32.450  INFO 15556 --- [main] org.dozer.jmx.JMXPlatformImpl            : Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2022-05-30 19:07:32.454  INFO 15556 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 19:07:32.533  INFO 15556 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 19:07:32.547  INFO 15556 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 19:07:32.698  INFO 15556 --- [main] org.dozer.DozerBeanMapper                : Initializing a new instance of dozer bean mapper.
+2022-05-30 19:07:35.682  INFO 15556 --- [main] c.l.o.OprTerrestresApplication           : Started OprTerrestresApplication in 18.191 seconds (JVM running for 37.39)
+2022-05-30 19:07:43.780  INFO 15556 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
