@@ -58,17 +58,18 @@ public class OprTerrestresController {
 	@GetMapping("/pesoAeronave/{codigoVuelo}")
 	org.json.simple.JSONObject checkSobrepesoAeronave(@PathVariable String codigoVuelo) throws UnirestException {
 		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
-		org.json.simple.JSONObject response = new org.json.simple.JSONObject();
-		if(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigoVuelo)){
-			response.put("mensaje", "Si supera la capacidad maxima");
-			response.put("supera", true);
-			return response;
-		}
-		else {
-			response.put("mensaje", "No supera la capacidad maxima");
-			response.put("supera", false);
-			return response;
-		}
+		return oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigoVuelo);
+//		org.json.simple.JSONObject response = new org.json.simple.JSONObject();
+//		if(oprTerrestresCheckIngService.sobrepasaPesoAeronave(codigoVuelo)){
+//			response.put("mensaje", "Si supera la capacidad maxima");
+//			response.put("supera", true);
+//			return response;
+//		}
+//		else {
+//			response.put("mensaje", "No supera la capacidad maxima");
+//			response.put("supera", false);
+//			return response;
+//		}
 	}
 	
 	
@@ -80,7 +81,7 @@ public class OprTerrestresController {
 	}
 	
 	//Para cargar los checkin y cargas en la base de datos por vuelo
-	@PostMapping("/simularCheckin/{codigo_vuelo}")
+	@PostMapping("/simularCheckin/{codigoVuelo}")
 	@ResponseBody
 	void getCheckin(@PathVariable String codigoVuelo) {
 		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
