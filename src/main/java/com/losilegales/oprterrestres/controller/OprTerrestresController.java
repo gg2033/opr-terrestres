@@ -3,7 +3,6 @@ package com.losilegales.oprterrestres.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +16,14 @@ import com.losilegales.oprterrestres.dto.CheckIn.CargaDTO;
 import com.losilegales.oprterrestres.dto.CheckIn.DatoEspecialPasajeroDTO;
 import com.losilegales.oprterrestres.entity.Checkin;
 import com.losilegales.oprterrestres.service.AeroNavesService;
+import com.losilegales.oprterrestres.service.LogService;
 import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
 import com.losilegales.oprterrestres.service.OprTerrestresCheckIngService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 import com.losilegales.oprterrestres.utils.OprUtils;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NonNull;
 
@@ -40,6 +41,9 @@ public class OprTerrestresController {
 	
 	@Autowired
 	private OprTerrestresCargaService oprTerrestresCargaService;
+	
+	@Autowired
+	LogService logService;
 	
 	// NO BORRAR
 //	@GetMapping("/vuelo")
@@ -65,6 +69,14 @@ public class OprTerrestresController {
 			response.put("supera", false);
 			return response;
 		}
+	}
+	
+	
+	@GetMapping("/logs/{fecha}")
+	@Hidden
+	public String verLogs(@PathVariable String fecha) {
+		return logService.readLog(fecha);
+
 	}
 	
 	//Para cargar los checkin y cargas en la base de datos por vuelo
