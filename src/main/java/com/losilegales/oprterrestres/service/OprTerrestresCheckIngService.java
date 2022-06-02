@@ -129,9 +129,20 @@ public class OprTerrestresCheckIngService {
 		return ret;
 	}
 
+	private String getCodigoVueloFormatoActualizado(String codigoVuelo) {
+		StringBuilder sb = new StringBuilder(codigoVuelo);
+		for(int i=0; i < codigoVuelo.length(); i++) {
+	         if(Character.isWhitespace(codigoVuelo.charAt(i))) {
+	        	 sb.replace(i, i+1, "-");
+	        	 break;
+	         }
+		}
+		return sb.toString();
+		
+	}
 	private int capacidadAeronaveEnToneladas(String codigoVuelo) throws UnirestException {
 		HttpResponse <JsonNode> response = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/flight/getAll").asJson();
-		
+		codigoVuelo = getCodigoVueloFormatoActualizado(codigoVuelo);
 		//Obtener de esa lista el vuelo con el codigo de vuelo pasado por parametro
 		JSONObject vuelo = new JSONObject();
 		String nombreAeronave = "";
