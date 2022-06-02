@@ -1,48 +1,45 @@
 package com.losilegales.oprterrestres.service;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
 
 import lombok.NoArgsConstructor;
 
 @Component
 @NoArgsConstructor
 public class EmailService {
+
+	@Autowired
+	@Qualifier("simpleRestTemplate")
+	private RestTemplate simpleRestTemplate;
+
+	@Value("${com.ilegals.email.apikey}")
+	private String apiKey;
+
+	@Value("${com.ilegals.email.domain}")
+	private String domain;
 	
-	 private final static String EMAIL_CONFIRMATION_SUBJECT = "Confirm your udeesa account";
+	public void sendEmail(String to, String asunto, String contenido) {
+		try {
+			HttpResponse<JsonNode> request = Unirest
+					.post("https://api.mailgun.net/v3/" + domain
+							+ "/messages")
+					.basicAuth("api", apiKey)
+					.queryString("from", "TheIlegals Notification Notificaciones@TheIlegals.com").queryString("to", to)
+					.queryString("subject", asunto).queryString("text", contenido).asJson();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-	    @Autowired
-	    private JavaMailSender javaMailSender;
-
-	    public void sendConfirmationEmail(String token, String email) {
-	        // build email
-	        // send message
-	        String message = "Welcome to Udeesa, test token" + token;
-	        String from = "no-reply@udeesa.org";
-	        send(email, from, message);
-	    }
-
-	    @Async
-	    private void send(String to, String from, String email) {
-	        try {
-	            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-	            MimeMessageHelper helper =
-	                    new MimeMessageHelper(mimeMessage, "utf-8");
-	            helper.setFrom(from);
-	            helper.setTo(to);
-	            helper.setSubject(EMAIL_CONFIRMATION_SUBJECT);
-	            helper.setText(email);
-	            javaMailSender.send(mimeMessage);
-	        } catch (MessagingException e) {
-//	            LOGGER.error("failed to send email", e);
-	            throw new IllegalStateException("failed to send email");
-	        }
-	    }
+	}
 
 }

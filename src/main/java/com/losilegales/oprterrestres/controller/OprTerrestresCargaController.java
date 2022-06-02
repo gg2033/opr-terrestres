@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,11 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.losilegales.oprterrestres.dto.CheckIn.CargaDTO;
 import com.losilegales.oprterrestres.entity.Carga;
 import com.losilegales.oprterrestres.repository.CargaRepository;
+import com.losilegales.oprterrestres.service.EmailService;
 import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
 import com.losilegales.oprterrestres.service.ReportService;
 import com.losilegales.oprterrestres.utils.OprConstants;
-import com.losilegales.oprterrestres.utils.OprUtils;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -32,6 +34,9 @@ public class OprTerrestresCargaController {
 	
 	@Autowired
 	CargaRepository cargaRepository;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@Autowired
 	ReportService reportService;
@@ -72,6 +77,7 @@ public class OprTerrestresCargaController {
 	@Operation(summary = "Obtiene todas las cargas existentes de todos los vuelos.")
 	@GetMapping("/cargas")
 	public List<CargaDTO> getCargas() {	
+		
 		List<Carga> cargas = cargaRepository.findAll();
 		List<CargaDTO> cargasDTO = new ArrayList<CargaDTO>();
 		for (Carga carga : cargas) {
@@ -95,6 +101,12 @@ public class OprTerrestresCargaController {
 
 	}
 	
+	@Hidden
+	@PostMapping("/email")
+	public void sendEmail() {
+		emailService.sendEmail("gfgustavo2015@gmail.com", "vuelo cancelado", "mi contenido");
+	}
+
 
 	@Operation(summary = "Reporte de Carga de todos los vuelos")
 	@GetMapping("/employee/records/report")
