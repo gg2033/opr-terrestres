@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.losilegales.oprterrestres.dto.NotificacionDTO;
 import com.losilegales.oprterrestres.dto.CheckIn.CargaDTO;
 import com.losilegales.oprterrestres.entity.Carga;
 import com.losilegales.oprterrestres.repository.CargaRepository;
@@ -101,10 +103,10 @@ public class OprTerrestresCargaController {
 
 	}
 	
-	@Hidden
 	@PostMapping("/email")
-	public void sendEmail() {
-		emailService.sendEmail("gfgustavo2015@gmail.com", "vuelo cancelado", "mi contenido");
+	@Operation(summary = "Envio de notificacion")
+	public void sendEmail(@RequestBody NotificacionDTO notificacion) {
+		emailService.sendEmail(notificacion.getTo(), notificacion.getSubject(), notificacion.getContent());
 	}
 
 
