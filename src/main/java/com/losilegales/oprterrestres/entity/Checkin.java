@@ -24,6 +24,9 @@ public class Checkin {
 	@Column(name="id_checkin")
 	private int idCheckin;
 	
+	@Column(name = "codigo")
+	private String codigo;
+	
 	@Column(name="envio")
 	private int envio;
 	
