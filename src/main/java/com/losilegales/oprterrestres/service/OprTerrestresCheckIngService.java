@@ -141,17 +141,17 @@ public class OprTerrestresCheckIngService {
 		
 	}
 	private int capacidadAeronaveEnToneladas(String codigoVuelo) throws UnirestException {
-		HttpResponse <JsonNode> response = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/flight/getAll").asJson();
-		codigoVuelo = getCodigoVueloFormatoActualizado(codigoVuelo);
+		HttpResponse <JsonNode> response = Unirest.get("https://proyecto-icarus.herokuapp.com/vuelos").asJson();
+//		codigoVuelo = getCodigoVueloFormatoActualizado(codigoVuelo);
 		//Obtener de esa lista el vuelo con el codigo de vuelo pasado por parametro
 		JSONObject vuelo = new JSONObject();
 		String nombreAeronave = "";
 		Iterator<Object> itr = response.getBody().getArray().iterator();
 	    while(itr.hasNext() && vuelo.isNull("name")) {
 	    	JSONObject element = (JSONObject)itr.next();
-	    	if(element.get("code").equals(codigoVuelo)) {
+	    	if(element.get("idvuelo").equals(codigoVuelo)) {
 	    		vuelo = element;
-	    		nombreAeronave = element.getString("aircraft");
+	    		nombreAeronave = element.getString("modeloaeronave");
 	    		break;
 	    	}
 	    }
