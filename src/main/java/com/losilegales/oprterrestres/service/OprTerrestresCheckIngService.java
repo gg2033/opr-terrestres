@@ -360,7 +360,7 @@ public class OprTerrestresCheckIngService {
 				}
 			}
 			
-			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_vuelo");
+			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo");
 			
 			List<Row> rows = lstValidCargaCheckin.stream().filter(e -> e.getC().get(indiceCodigoVuelo).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
 
@@ -421,7 +421,7 @@ public class OprTerrestresCheckIngService {
 				}
 			}
 			
-			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_vuelo");
+			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo");
 
 			List<Row> rows = lstValidCheckin.stream().filter(e -> e.getC().get(indiceCodigoVuelo).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
 
