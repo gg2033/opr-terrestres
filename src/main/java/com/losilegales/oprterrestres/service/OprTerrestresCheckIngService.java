@@ -519,6 +519,9 @@ public class OprTerrestresCheckIngService {
 			case("codigo_vuelo"):
 				String codigo_vuelo = celda.getV().toString();
 				crga.setCodigoVuelo(codigo_vuelo);
+			case("codigo"):
+				String codigo = celda.getV().toString();
+				crga.setCodigo(codigo);
 			default:
 				break;
 		}
@@ -603,6 +606,9 @@ public class OprTerrestresCheckIngService {
 				String comentarios = celda.getV().toString();
 				chck.setComentario(comentarios);
 				break;
+			case("codigo"):
+				String codigo = celda.getV().toString();
+				chck.setCodigo(codigo);
 			default:
 				break;
 		}
