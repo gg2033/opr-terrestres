@@ -33,7 +33,7 @@ public class EmailService {
 					.post("https://api.mailgun.net/v3/" + domain
 							+ "/messages")
 					.basicAuth("api", apiKey)
-					.queryString("from", "TheIlegals Notification Notificaciones@TheIlegals.com").queryString("to", to)
+					.queryString("from", "TheIlegals Notification app259139432@heroku.com").queryString("to", to)
 					.queryString("subject", asunto).queryString("text", contenido).asJson();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
