@@ -141,17 +141,17 @@ public class OprTerrestresCheckIngService {
 		
 	}
 	private int capacidadAeronaveEnToneladas(String codigoVuelo) throws UnirestException {
-		HttpResponse <JsonNode> response = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/flight/getAll").asJson();
-		codigoVuelo = getCodigoVueloFormatoActualizado(codigoVuelo);
+		HttpResponse <JsonNode> response = Unirest.get("https://proyecto-icarus.herokuapp.com/vuelos").asJson();
+//		codigoVuelo = getCodigoVueloFormatoActualizado(codigoVuelo);
 		//Obtener de esa lista el vuelo con el codigo de vuelo pasado por parametro
 		JSONObject vuelo = new JSONObject();
 		String nombreAeronave = "";
 		Iterator<Object> itr = response.getBody().getArray().iterator();
 	    while(itr.hasNext() && vuelo.isNull("name")) {
 	    	JSONObject element = (JSONObject)itr.next();
-	    	if(element.get("code").equals(codigoVuelo)) {
+	    	if(element.get("idvuelo").equals(codigoVuelo)) {
 	    		vuelo = element;
-	    		nombreAeronave = element.getString("aircraft");
+	    		nombreAeronave = element.getString("modeloaeronave");
 	    		break;
 	    	}
 	    }
@@ -360,7 +360,7 @@ public class OprTerrestresCheckIngService {
 				}
 			}
 			
-			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_vuelo");
+			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo");
 			
 			List<Row> rows = lstValidCargaCheckin.stream().filter(e -> e.getC().get(indiceCodigoVuelo).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
 
@@ -421,7 +421,7 @@ public class OprTerrestresCheckIngService {
 				}
 			}
 			
-			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo_vuelo");
+			int indiceCodigoVuelo = result.getTable().getCols().stream().map(c -> c.getLabel()).collect(Collectors.toList()).indexOf("codigo");
 
 			List<Row> rows = lstValidCheckin.stream().filter(e -> e.getC().get(indiceCodigoVuelo).getV().toString().equals(codigoVuelo)).collect(Collectors.toList());
 
@@ -519,6 +519,11 @@ public class OprTerrestresCheckIngService {
 			case("codigo_vuelo"):
 				String codigo_vuelo = celda.getV().toString();
 				crga.setCodigoVuelo(codigo_vuelo);
+				break;
+			case("codigo"):
+				String codigo = celda.getV().toString();
+				crga.setCodigo(codigo);
+				break;
 			default:
 				break;
 		}
@@ -543,7 +548,7 @@ public class OprTerrestresCheckIngService {
 				chck.setCodigoVuelo(codig_vuelo);
 				break;
 			case("fecha_partida"):
-				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss");
 				LocalDate fecha_partida = LocalDate.parse(celda.getF().toString(), dtf);
 				chck.setFechaPartida(fecha_partida);
 				break;
@@ -602,6 +607,10 @@ public class OprTerrestresCheckIngService {
 			case("comentarios"):
 				String comentarios = celda.getV().toString();
 				chck.setComentario(comentarios);
+				break;
+			case("codigo"):
+				String codigo = celda.getV().toString();
+				chck.setCodigo(codigo);
 				break;
 			default:
 				break;

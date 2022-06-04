@@ -25,6 +25,9 @@ public class Carga {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_carga")
 	private int idCarga;
+	
+	@Column(name = "codigo")
+	private String codigo;
 
 	@Column(name = "envio")
 	private int envio;
