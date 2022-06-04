@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import com.losilegales.oprterrestres.dto.CheckIn.CargaPorTagDTO;
 import com.losilegales.oprterrestres.dto.CheckIn.CargaPorTipoReporteDTO;
-import com.losilegales.oprterrestres.entity.Carga;
 import com.losilegales.oprterrestres.repository.CargaRepository;
 import com.losilegales.oprterrestres.repository.VueloRepository;
 
@@ -40,12 +39,12 @@ public class ReportService {
 	@Autowired
 	CargaRepository cargaRepository;
 	
-	public ResponseEntity<byte[]> reporteCarga(){
+	public ResponseEntity<byte[]> reporteCarga(String fechaHora){
 		try {
 			// create carga data
 //			Employee emp1 = new Employee(1, "AAA", "BBB", "A city");
 //			Employee emp2 = new Employee(2, "XXX", "ZZZ", "B city");
-			List<Object[]> cargasPorTag = cargaRepository.cantidadCargasPorTag();
+			List<Object[]> cargasPorTag = cargaRepository.cantidadCargasPorTag(fechaHora);
 			Integer cantidadVuelos = cargaRepository.cantidadVuelos();
 			List<CargaPorTagDTO> cargaLst = new ArrayList<CargaPorTagDTO>();
 			for (Object[] objects : cargasPorTag) {

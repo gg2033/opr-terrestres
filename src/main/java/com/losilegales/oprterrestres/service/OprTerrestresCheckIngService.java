@@ -366,7 +366,7 @@ public class OprTerrestresCheckIngService {
 
 			result.getTable().setRows(rows);
 			
-			persistirDatosCarga(result);
+			persistirDatosCarga(result, codigoVuelo);
 		
 			return cargas;
 		}
@@ -463,7 +463,7 @@ public class OprTerrestresCheckIngService {
 		}
 	}
 	
-	private void persistirDatosCarga(ExcelResponse cargaData) {
+	private void persistirDatosCarga(ExcelResponse cargaData, String codigoVuelo) {
 		//19 columnas tiene el checkin
 //		cargaRepository.truncateTabla();
 		List<String> nombreColumn = new ArrayList<String>(6);
@@ -486,6 +486,7 @@ public class OprTerrestresCheckIngService {
 			crga.setActivo(true);
 			crga.setFechaCreacion(getFechaActual());
 			crga.setEstadoCarga("En espera");
+			crga.setFechaHoraVuelo(null);
 			cargaRepository.save(crga);
 		}
 	}

@@ -1,6 +1,7 @@
 package com.losilegales.oprterrestres.repository;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,8 +29,8 @@ public interface CargaRepository extends JpaRepository<Carga, Integer>{
 	
 	List<Carga> findByCodigoVuelo(String codigoVuelo);
 	
-	@Query(value = "select tag as tag, count(*) as cantidad from cargas group by tag",  nativeQuery = true)
-	List<Object[]> cantidadCargasPorTag();
+	@Query(value = "select tag as tag, count(*) as cantidad from cargas  where fecha_hora_vuelo > :fechaHora group by tag",  nativeQuery = true)
+	List<Object[]> cantidadCargasPorTag(@Param(value="fechaHora") Date fechaHora);
 	
 	@Query(value = "select tag as tag, count(*) as cantidad from cargas where codigo_vuelo = :codigoVuelo group by tag",  nativeQuery = true)
 	List<Object[]> cantidadTipoCargasPorVuelo(@Param(value="codigoVuelo") String codigoVuelo);
