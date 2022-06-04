@@ -106,7 +106,7 @@ public class OprTerrestresCargaController {
 	@PostMapping("/email")
 	@Operation(summary = "Envio de notificacion")
 	public void sendEmail(@RequestBody NotificacionDTO notificacion) {
-		emailService.sendEmail(notificacion.getTo(), notificacion.getSubject(), notificacion.getContent());
+		emailService.sendSimpleEmail(notificacion.getTo(), notificacion.getSubject(), notificacion.getContent());
 	}
 
 
