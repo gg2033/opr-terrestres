@@ -12,8 +12,8 @@ import com.losilegales.oprterrestres.entity.Checkin;
 @Repository
 public interface CheckinRepository extends JpaRepository<Checkin, Integer> {
 	
-	@Query(value="SELECT * from checkin WHERE codigo_vuelo = :codigo_vuelo AND activo = true", nativeQuery = true)
-	List<Checkin> checkinPorVuelo(@Param(value = "codigo_vuelo") String codigoVuelo);
+	@Query(value="SELECT * from checkin WHERE codigo = :codigo AND activo = true", nativeQuery = true)
+	List<Checkin> checkinPorVuelo(@Param(value = "codigo") String codigo);
 	
 	@Query(value="SELECT * from checkin WHERE codigo_vuelo = :codigo_vuelo", nativeQuery = true)
 	List<Checkin> checkinGeneralesPorVuelo(@Param(value = "codigo_vuelo") String codigoVuelo);
