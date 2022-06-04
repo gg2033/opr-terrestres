@@ -25,7 +25,6 @@ import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
 import com.losilegales.oprterrestres.service.ReportService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -103,25 +102,29 @@ public class OprTerrestresCargaController {
 
 	}
 	
+	@Operation(summary = "Reporte de Carga de todos los vuelos desde una fecha. Formato fecha: yyyy-MM-dd HH:mm")
+	@GetMapping("/report/carga/fecha/{sinceDate}")
+	public ResponseEntity<byte[]> getAllCargasSinceDate(@PathVariable String sinceDate) {
+		return reportService.reporteCargaVueloDesdeFecha(sinceDate);
+	}
+	
+	@Operation(summary = "Reporte de Carga de un codigo de vuelo,  desde una fecha. Formato fecha: yyyy-MM-dd HH:mm")
+	@GetMapping("/report/carga/{codigoVuelo}/{sinceDate}")
+	public ResponseEntity<byte[]> getAllCargasByCodigoVueloFechaHora(@PathVariable String codigoVuelo, @PathVariable String sinceDate) {
+		return reportService.reportePorCodigoFechaVuelo(codigoVuelo, sinceDate);
+	}
+	
+	
+	@Operation(summary = "Reporte de Carga por vuelo")
+	@GetMapping("/report/carga/{codigoVuelo}")
+	public ResponseEntity<byte[]> getAllCargaByCodigoVuelo(@PathVariable String codigoVuelo) {
+		return reportService.reporteCargaPorVuelo(codigoVuelo);
+	}
+	
 	@PostMapping("/email")
 	@Operation(summary = "Envio de notificacion")
 	public void sendEmail(@RequestBody NotificacionDTO notificacion) {
 		emailService.sendSimpleEmail(notificacion.getTo(), notificacion.getSubject(), notificacion.getContent());
 	}
-
-
-	@Operation(summary = "Reporte de Carga de todos los vuelos")
-	@GetMapping("/employee/records/report")
-	public ResponseEntity<byte[]> getEmployeeRecordReport() {
-		return reportService.reporteCarga();
-	}
-	
-	@Operation(summary = "Reporte de Carga por vuelo")
-	@GetMapping("/employee/records/report2/{codigoVuelo}")
-	public ResponseEntity<byte[]> getEmployeeRecordReport(@PathVariable String codigoVuelo) {
-		return reportService.reporteCargaPorVuelo(codigoVuelo);
-	}
-	
-	
 
 }

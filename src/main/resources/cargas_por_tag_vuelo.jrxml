@@ -5,12 +5,13 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="ReportTitle" class="java.lang.String"/>
 	<parameter name="Author" class="java.lang.String"/>
+	<parameter name="FECHA_DESDE" class="java.lang.String"/>
 	<parameter name="CODIGO_VUELO" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="tipo" class="java.lang.String">
-		<fieldDescription><![CDATA[tipo]]></fieldDescription>
+	<field name="tag" class="java.lang.String">
+		<fieldDescription><![CDATA[tag]]></fieldDescription>
 	</field>
 	<field name="cantidad" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[cantidad]]></fieldDescription>
@@ -21,7 +22,7 @@
 				<reportElement x="0" y="0" width="515" height="1" uuid="4125b6c6-79a3-47ee-9119-fea863bbb878"/>
 			</line>
 			<textField isBlankWhenNull="true" bookmarkLevel="1">
-				<reportElement x="171" y="10" width="171" height="30" uuid="6f54deb1-ee66-4be4-9ff8-30172545fdfa"/>
+				<reportElement x="181" y="14" width="166" height="30" uuid="6f54deb1-ee66-4be4-9ff8-30172545fdfa"/>
 				<textElement textAlignment="Center">
 					<font size="22"/>
 				</textElement>
@@ -29,18 +30,26 @@
 				<anchorNameExpression><![CDATA["Title"]]></anchorNameExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="40" width="515" height="20" uuid="07666bf6-6c63-475d-8336-bc9f4b57baa1"/>
+				<reportElement x="181" y="46" width="166" height="20" uuid="07666bf6-6c63-475d-8336-bc9f4b57baa1"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Author}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="452" y="1" width="100" height="20" uuid="78efbf0d-6eb5-4972-af6d-f285033271e6"/>
+				<textFieldExpression><![CDATA[$P{FECHA_DESDE}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="371" y="1" width="72" height="20" uuid="4ff69944-a9b7-457b-952a-786cebb444c4"/>
+				<reportElement x="316" y="1" width="128" height="13" uuid="00c6cc2e-48b3-4706-a036-6ff8431021f2"/>
+				<text><![CDATA[Fecha de analisis posterior a :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="352" y="46" width="100" height="20" uuid="71824591-0ba4-40ec-8f33-49dc149f5994"/>
 				<text><![CDATA[Codigo Vuelo: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="443" y="1" width="112" height="20" uuid="e924f899-fa22-469c-9fe5-9158c1921958"/>
+				<reportElement x="452" y="46" width="100" height="20" uuid="1bf37305-e81d-474c-b201-d82773f39ea2"/>
 				<textFieldExpression><![CDATA[$P{CODIGO_VUELO}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -48,46 +57,46 @@
 	<columnHeader>
 		<band height="23">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="3" width="535" height="15" backcolor="#70A9A9" uuid="76d01ef3-163d-471d-80e1-1bcaffd5dd8c"/>
+				<reportElement mode="Opaque" x="0" y="3" width="535" height="15" backcolor="#70A9A9" uuid="d1cc743b-ca2a-4f1a-b239-113749b0d21b"/>
 				<box>
 					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
 				</box>
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="414" y="3" width="121" height="15" uuid="26284c60-0465-4187-9cde-132e29381f2e"/>
+				<reportElement x="414" y="3" width="121" height="15" uuid="16380cdf-c28a-4a85-90a6-9748855dd758"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Tipo carga]]></text>
+				<text><![CDATA[Tipo Carga]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="3" width="136" height="15" uuid="6f9570a5-6268-427c-94fa-cd01e492b14b"/>
+				<reportElement x="0" y="3" width="136" height="15" uuid="1b971146-0a0d-4c0c-9a7b-868db3381733"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Cantidad]]></text>
+				<text><![CDATA[Porcentaje]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="16">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="535" height="14" backcolor="#E5ECF9" uuid="d39d4e75-5ee5-4146-b91b-8dee64ef2c8c"/>
+				<reportElement mode="Opaque" x="0" y="0" width="535" height="14" backcolor="#E5ECF9" uuid="ee245aa6-385b-4013-93eb-abbebdd302cc"/>
 				<box>
 					<bottomPen lineWidth="0.25" lineColor="#CCCCCC"/>
 				</box>
 				<text><![CDATA[]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="414" y="0" width="121" height="15" uuid="97a62ca1-56c0-46ad-9b97-ff0e49c5d987"/>
+				<reportElement x="414" y="0" width="121" height="15" uuid="38ff48f3-8dec-4c63-a76d-16c900ab167c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{tag}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="136" height="15" uuid="310342b9-70b8-4783-b594-7daca445ddec"/>
+				<reportElement x="0" y="0" width="136" height="15" uuid="ac705cf1-8f12-4506-b660-6734e841660e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
@@ -97,17 +106,17 @@
 		<band height="200">
 			<barChart>
 				<chart evaluationTime="Report">
-					<reportElement x="0" y="0" width="555" height="200" uuid="ad380238-9697-44c9-9ac4-21e38fc18a8e"/>
+					<reportElement x="0" y="0" width="555" height="200" uuid="8c2de6da-6238-4800-825c-c4a3f3340993"/>
 					<chartTitle>
-						<titleExpression><![CDATA["Carga por vuelo. Cantidades"]]></titleExpression>
+						<titleExpression><![CDATA["Reportes de Cargas"]]></titleExpression>
 					</chartTitle>
 					<chartSubtitle/>
 					<chartLegend/>
 				</chart>
 				<categoryDataset>
 					<categorySeries>
-						<seriesExpression><![CDATA[$F{tipo}]]></seriesExpression>
-						<categoryExpression><![CDATA[$F{tipo}]]></categoryExpression>
+						<seriesExpression><![CDATA[$F{tag}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{tag}]]></categoryExpression>
 						<valueExpression><![CDATA[$F{cantidad}]]></valueExpression>
 					</categorySeries>
 				</categoryDataset>
@@ -128,15 +137,15 @@
 		<band height="400" splitType="Stretch">
 			<pieChart>
 				<chart evaluationTime="Report">
-					<reportElement x="63" y="0" width="435" height="300" uuid="b29110fd-6b0b-47a4-aca4-9a03768510b0"/>
+					<reportElement x="32" y="67" width="483" height="300" uuid="b29110fd-6b0b-47a4-aca4-9a03768510b0"/>
 					<chartTitle>
-						<titleExpression><![CDATA["Cargas por Vuelo"]]></titleExpression>
+						<titleExpression><![CDATA["Reportes de Cargas"]]></titleExpression>
 					</chartTitle>
 					<chartSubtitle/>
 					<chartLegend/>
 				</chart>
 				<pieDataset>
-					<keyExpression><![CDATA[$F{tipo}]]></keyExpression>
+					<keyExpression><![CDATA[$F{tag}]]></keyExpression>
 					<valueExpression><![CDATA[$F{cantidad}]]></valueExpression>
 				</pieDataset>
 				<piePlot>

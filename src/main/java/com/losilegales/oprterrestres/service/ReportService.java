@@ -2,7 +2,9 @@ package com.losilegales.oprterrestres.service;
 
 import java.io.FileInputStream;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +41,12 @@ public class ReportService {
 	@Autowired
 	CargaRepository cargaRepository;
 	
-	public ResponseEntity<byte[]> reporteCarga(String fechaHora){
+	
+	public ResponseEntity<byte[]> reporteCargaVueloDesdeFecha(String fechaHora){
 		try {
-			// create carga data
-//			Employee emp1 = new Employee(1, "AAA", "BBB", "A city");
-//			Employee emp2 = new Employee(2, "XXX", "ZZZ", "B city");
-			List<Object[]> cargasPorTag = cargaRepository.cantidadCargasPorTag(fechaHora);
+			Date fechaHoraDesde = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(fechaHora);
+			List<Object[]> cargasPorTag = cargaRepository.cantidadCargasPorTag(fechaHoraDesde);
+		
 			Integer cantidadVuelos = cargaRepository.cantidadVuelos();
 			List<CargaPorTagDTO> cargaLst = new ArrayList<CargaPorTagDTO>();
 			for (Object[] objects : cargasPorTag) {
@@ -59,6 +61,8 @@ public class ReportService {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("ReportTitle", "Reportes de Cargas");
 			parameters.put("Author", "Cargas");
+			parameters.put("FECHA_DESDE", fechaHora);
+			
 //			empParams.put("cargaData", new JRBeanCollectionDataSource(cargaLst));
 			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(
 					cargaLst);
@@ -69,7 +73,58 @@ public class ReportService {
 							JasperCompileManager.compileReport(
 									new FileInputStream("src/main/resources/cargas_por_tag.jrxml")
 									) // path of the jasper report
-							, null // dynamic parameters
+							, parameters // dynamic parameters
+							, beanColDataSource 
+							
+					);
+
+			HttpHeaders headers = new HttpHeaders();
+			//set the PDF format
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.setContentDispositionFormData("filename", "carga-reporte.pdf");
+			//create the report in PDF format
+			return new ResponseEntity<byte[]>
+					(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
+
+		} catch(Exception e) {
+			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+	
+	public ResponseEntity<byte[]> reportePorCodigoFechaVuelo(String codigoVuelo, String fechaHora){
+		try {
+			Date fechaHoraDesde = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(fechaHora);
+			List<Object[]> cargasPorTag = cargaRepository.cantidadCargasPorTagCodigoFechaVuelo(codigoVuelo, fechaHoraDesde);
+		
+			Integer cantidadVuelos = cargaRepository.cantidadVuelos();
+			List<CargaPorTagDTO> cargaLst = new ArrayList<CargaPorTagDTO>();
+			for (Object[] objects : cargasPorTag) {
+				BigInteger cantidadCargaPorTag = (BigInteger) objects[1];
+				int promedioCargaPorVuelo = (cantidadCargaPorTag.intValue()/cantidadVuelos);
+				CargaPorTagDTO cargaTag = new CargaPorTagDTO(String.valueOf(objects[0]), promedioCargaPorVuelo);
+				cargaLst.add(cargaTag);
+			}
+			
+
+			//dynamic parameters required for report
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("ReportTitle", "Reportes de Cargas");
+			parameters.put("Author", "Cargas");
+			parameters.put("FECHA_DESDE", fechaHora);
+			parameters.put("CODIGO_VUELO", codigoVuelo);
+//			empParams.put("cargaData", new JRBeanCollectionDataSource(cargaLst));
+			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(
+					cargaLst);
+			
+			JasperPrint empReport =
+					JasperFillManager.fillReport
+				   (
+							JasperCompileManager.compileReport(
+									new FileInputStream("src/main/resources/cargas_por_tag_vuelo.jrxml")
+									) // path of the jasper report
+							, parameters // dynamic parameters
 							, beanColDataSource 
 							
 					);
@@ -106,6 +161,7 @@ public class ReportService {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("ReportTitle", "Reportes de Cargas");
 			parameters.put("Author", "Cargas");
+			parameters.put("CODIGO_VUELO", codigoVuelo);
 			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(
 					cargaLst);
 			
@@ -115,7 +171,7 @@ public class ReportService {
 							JasperCompileManager.compileReport(
 									new FileInputStream("src/main/resources/cargas_reporte_por_vuelo.jrxml")
 									) // path of the jasper report
-							, null // dynamic parameters
+							, parameters // dynamic parameters
 							, beanColDataSource 
 							
 					);

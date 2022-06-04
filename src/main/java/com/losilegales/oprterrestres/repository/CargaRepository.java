@@ -17,7 +17,7 @@ public interface CargaRepository extends JpaRepository<Carga, Integer>{
 	@Query(value = "SELECT * from cargas WHERE codigo = :codigo AND activo = true", nativeQuery = true)
 	List<Carga> cargasPorVuelo(@Param(value = "codigo") String codigo);
 	
-	@Query(value = "SELECT * from cargas WHERE codigo_vuelo = :codigo_vuelo", nativeQuery = true)
+	@Query(value = "SELECT * from cargas WHERE codigo = :codigo_vuelo", nativeQuery = true)
 	List<Carga> cargasGeneralesPorVuelo(@Param(value = "codigo_vuelo") String codigoVuelo);
 
 	@Query(value = "SELECT * from cargas WHERE codigo_pasajero = :codigo_pasajero", nativeQuery = true)
@@ -29,8 +29,11 @@ public interface CargaRepository extends JpaRepository<Carga, Integer>{
 	
 	List<Carga> findByCodigoVuelo(String codigoVuelo);
 	
-	@Query(value = "select tag as tag, count(*) as cantidad from cargas  where fecha_hora_vuelo > :fechaHora group by tag",  nativeQuery = true)
+	@Query(value = "select tag as tag, count(*) as cantidad from cargas  where fecha_partida > :fechaHora group by tag",  nativeQuery = true)
 	List<Object[]> cantidadCargasPorTag(@Param(value="fechaHora") Date fechaHora);
+	
+	@Query(value = "select tag as tag, count(*) as cantidad from cargas  where codigo_vuelo = :codigoVuelo and fecha_partida > :fechaHora group by tag",  nativeQuery = true)
+	List<Object[]> cantidadCargasPorTagCodigoFechaVuelo(@Param(value="codigoVuelo") String codigoVuelo, @Param(value="fechaHora") Date fechaHora);
 	
 	@Query(value = "select tag as tag, count(*) as cantidad from cargas where codigo_vuelo = :codigoVuelo group by tag",  nativeQuery = true)
 	List<Object[]> cantidadTipoCargasPorVuelo(@Param(value="codigoVuelo") String codigoVuelo);

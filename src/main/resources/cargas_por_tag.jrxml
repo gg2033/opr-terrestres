@@ -5,6 +5,7 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="ReportTitle" class="java.lang.String"/>
 	<parameter name="Author" class="java.lang.String"/>
+	<parameter name="FECHA_DESDE" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -20,7 +21,7 @@
 				<reportElement x="0" y="0" width="515" height="1" uuid="4125b6c6-79a3-47ee-9119-fea863bbb878"/>
 			</line>
 			<textField isBlankWhenNull="true" bookmarkLevel="1">
-				<reportElement x="0" y="10" width="515" height="30" uuid="6f54deb1-ee66-4be4-9ff8-30172545fdfa"/>
+				<reportElement x="181" y="14" width="166" height="30" uuid="6f54deb1-ee66-4be4-9ff8-30172545fdfa"/>
 				<textElement textAlignment="Center">
 					<font size="22"/>
 				</textElement>
@@ -28,12 +29,20 @@
 				<anchorNameExpression><![CDATA["Title"]]></anchorNameExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="40" width="515" height="20" uuid="07666bf6-6c63-475d-8336-bc9f4b57baa1"/>
+				<reportElement x="181" y="46" width="166" height="20" uuid="07666bf6-6c63-475d-8336-bc9f4b57baa1"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Author}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="452" y="1" width="100" height="20" uuid="78efbf0d-6eb5-4972-af6d-f285033271e6"/>
+				<textFieldExpression><![CDATA[$P{FECHA_DESDE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="316" y="1" width="128" height="13" uuid="00c6cc2e-48b3-4706-a036-6ff8431021f2"/>
+				<text><![CDATA[Fecha de analisis posterior a :]]></text>
+			</staticText>
 		</band>
 	</title>
 	<columnHeader>

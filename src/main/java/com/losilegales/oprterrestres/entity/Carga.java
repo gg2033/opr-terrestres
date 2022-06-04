@@ -64,7 +64,7 @@ public class Carga {
 	@Column(name = "codigo_vuelo")
 	private String codigoVuelo;
 	
-	@Column(name = "fecha_hora_vuelo")
+	@Column(name = "fecha_partida")
 	private Date fechaHoraVuelo;
 
 }
