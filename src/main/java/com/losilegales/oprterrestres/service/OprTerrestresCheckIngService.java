@@ -519,9 +519,11 @@ public class OprTerrestresCheckIngService {
 			case("codigo_vuelo"):
 				String codigo_vuelo = celda.getV().toString();
 				crga.setCodigoVuelo(codigo_vuelo);
+				break;
 			case("codigo"):
 				String codigo = celda.getV().toString();
 				crga.setCodigo(codigo);
+				break;
 			default:
 				break;
 		}
@@ -546,7 +548,7 @@ public class OprTerrestresCheckIngService {
 				chck.setCodigoVuelo(codig_vuelo);
 				break;
 			case("fecha_partida"):
-				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss");
 				LocalDate fecha_partida = LocalDate.parse(celda.getF().toString(), dtf);
 				chck.setFechaPartida(fecha_partida);
 				break;
@@ -609,6 +611,7 @@ public class OprTerrestresCheckIngService {
 			case("codigo"):
 				String codigo = celda.getV().toString();
 				chck.setCodigo(codigo);
+				break;
 			default:
 				break;
 		}
