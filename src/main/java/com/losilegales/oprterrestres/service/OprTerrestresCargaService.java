@@ -18,7 +18,7 @@ public class OprTerrestresCargaService {
 	@Transactional
 	public boolean cambiarEstadoCargasVuelo(String codigoVuelo, String estado) {
 		
-		List<Carga> cargasPorVuelo = cargaRepository.findByCodigoVuelo(codigoVuelo);
+		List<Carga> cargasPorVuelo = cargaRepository.cargasPorVuelo(codigoVuelo);
 		cargaRepository.cambioEstadoCargasVuelo(codigoVuelo, estado);
 			
 		return true;

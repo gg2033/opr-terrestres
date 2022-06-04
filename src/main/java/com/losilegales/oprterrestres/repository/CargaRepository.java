@@ -22,9 +22,10 @@ public interface CargaRepository extends JpaRepository<Carga, Integer>{
 	@Query(value = "SELECT * from cargas WHERE codigo_pasajero = :codigo_pasajero", nativeQuery = true)
 	Collection<? extends Carga> cargasPorPasajero(@Param(value = "codigo_pasajero")String codigoPasajero);
 	
-	@Query(value = "UPDATE cargas set estado_carga = :estado WHERE codigo_vuelo = :codigo_vuelo", nativeQuery = true)
+	@Query(value = "UPDATE cargas set estado_carga = :estado WHERE codigo = :codigo", nativeQuery = true)
 	@Modifying(clearAutomatically = true)
-	void cambioEstadoCargasVuelo(@Param(value = "codigo_vuelo") String codigoVuelo, @Param(value = "estado") String estado);
+	void cambioEstadoCargasVuelo(@Param(value = "codigo") String codigoVuelo, @Param(value = "estado") String estado);
+	
 	
 	List<Carga> findByCodigoVuelo(String codigoVuelo);
 	
