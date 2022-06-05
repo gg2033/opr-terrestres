@@ -35,7 +35,7 @@ public interface CargaRepository extends JpaRepository<Carga, Integer>{
 	@Query(value = "select tag as tag, count(*) as cantidad from cargas  where codigo_vuelo = :codigoVuelo and fecha_partida > :fechaHora group by tag",  nativeQuery = true)
 	List<Object[]> cantidadCargasPorTagCodigoFechaVuelo(@Param(value="codigoVuelo") String codigoVuelo, @Param(value="fechaHora") Date fechaHora);
 	
-	@Query(value = "select tag as tag, count(*) as cantidad from cargas where codigo_vuelo = :codigoVuelo group by tag",  nativeQuery = true)
+	@Query(value = "select tag as tag, count(*) as cantidad from cargas where codigo = :codigoVuelo group by tag",  nativeQuery = true)
 	List<Object[]> cantidadTipoCargasPorVuelo(@Param(value="codigoVuelo") String codigoVuelo);
 	
 	@Query(value = "select COUNT ( DISTINCT codigo_vuelo ) AS cantidad from cargas",  nativeQuery = true)
