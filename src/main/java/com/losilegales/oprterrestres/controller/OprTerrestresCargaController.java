@@ -58,23 +58,6 @@ public class OprTerrestresCargaController {
 
 	}
 	
-//	@Operation(summary = "Actualiza el estado de las cargas con el estado enviado.")
-//	@PutMapping("/actualizarEstadoCarga/{estado}")
-//	@ResponseBody
-//	public boolean actualizarEstadoCarga(@PathVariable String estado){
-////		for (CargaDTO cargaDTO : cargas) {
-////			Optional<Carga> carga = cargaRepository.findById(cargaDTO.getIdCarga());
-////			if(carga.isPresent()) {
-////				carga.get().setEstadoCarga(estado);
-////				cargaRepository.save(carga.get());
-////			}
-////		
-////		}
-//		
-//		return true;
-//		
-//	}
-	
 	@Operation(summary = "Obtiene todas las cargas existentes de todos los vuelos.")
 	@GetMapping("/cargas")
 	public List<CargaDTO> getCargas() {	

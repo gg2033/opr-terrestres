@@ -40,21 +40,6 @@ public class OpTerrGoogleSheetService  implements GoogleSheetsService {
         List<Object> headers = spreadSheetValues.remove(0);
         
         
-//        List<PasajeroDTO> pasajeros = new ArrayList<PasajeroDTO>();
-   
-//        List<Object> row = spreadSheetValues;
-
-        
-//        for ( List<Object> row : spreadSheetValues ) {
-//        	
-//        	
-//        	//buscar alternativa mejor.
-//        	pasajeroDto.setIdPasajero(Integer.parseInt((String) row.get(0)));
-//        	pasajeroDto.setNombre((String) row.get(1));
-//        	pasajeros.add(pasajeroDto);
-//        }
-        
-        
         return spreadSheetValues;
     }
 
