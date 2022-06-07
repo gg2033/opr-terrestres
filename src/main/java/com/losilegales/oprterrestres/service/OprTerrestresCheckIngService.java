@@ -212,77 +212,6 @@ public class OprTerrestresCheckIngService {
 		}
 		return ret;
 	}
-//	public List<CheckInDTO> getDataCheckIn() {
-//
-//		List<CheckInDTO> checkInDataLst = null;
-//		List<List<Object>> dataCheckIn;
-//		boolean isDataValid = true;
-//		try {
-//			dataCheckIn = opTerrGoogleSheetService.getSpreadsheetValues(OprConstants.CHECK_IN);
-//
-//			checkInDataLst = dataCheckIn.stream().map(row -> {// cada checkin individual
-////			Equipaje de Mano	Alimentación	Condición
-//				CheckInDTO checkInDto = new CheckInDTO();
-//				checkInDto.setLineaAerea((String) row.get(0));
-//				checkInDto.setVuelo((String) row.get(1));
-//				checkInDto.setFecha((String) row.get(2));
-//				checkInDto.setPartida((String) row.get(3));
-//				checkInDto.setOrigen((String) row.get(4));
-//				checkInDto.setDestino((String) row.get(5));
-//				checkInDto.setTipoDocumento((String) row.get(6));
-//				checkInDto.setNroDocumento((String) row.get(7));
-//				checkInDto.setApellidos((String) row.get(8) + " " + (String) row.get(9));
-//				checkInDto.setNombres((String) row.get(10) + " " + (String) row.get(11));
-//				checkInDto.setNacionalidad((String) row.get(12));
-//				checkInDto.setEdad((String) row.get(13));
-//				checkInDto.setSexo((String) row.get(14));
-//				List<CargaDTO> cargasDto = new ArrayList<CargaDTO>();
-//
-//				int base = 15;
-//				for (int i = 0; i < 5; i++) {
-//					CargaDTO carga = new CargaDTO();
-//					PasajeroDTO pasajeroDto = new PasajeroDTO();
-//					pasajeroDto.setNombre(checkInDto.getNombres());
-//					if (StringUtils.isNotBlank((String) row.get(base + i))) {
-//						carga.setPeso(Integer.parseInt((String) row.get(base + i)));
-//					}
-//
-//					if (base + i == 20) {
-//						carga.setTipoCarga(TipoCarga.DE_MANO);
-//					} else {
-//						carga.setTipoCarga(TipoCarga.FACTURADO);
-//
-//					}
-//
-//					cargasDto.add(carga);
-//				}
-//
-//				// carga
-//				checkInDto.setCarga(cargasDto);
-//
-//				checkInDto.setEquipajeMano((String) row.get(20));
-//				// fin de carga
-//				// datos de alimentacion
-//				checkInDto.setAlimentacion((String) row.get(21));
-//				checkInDto.setCondicion((String) row.get(22));
-//
-//				return checkInDto;
-//
-//			}).collect(Collectors.toList());
-//
-//			Map<String, List<CheckInDTO>> checkinByVuelo = checkInDataLst.stream()
-//					.collect(Collectors.groupingBy(c -> c.getVuelo()));
-//
-//			Optional<Vuelo> vuelo = checkValidationData(checkinByVuelo); // checkinPorVuelo
-//
-//		} catch (IOException | GeneralSecurityException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		return checkInDataLst;
-//
-//	}
 
 	
 	public Optional<List<DatoEspecialPasajeroDTO>> getDatosEspecialesPorVuelo(String codigoVuelo){
@@ -327,10 +256,6 @@ public class OprTerrestresCheckIngService {
 		
 		return Optional.of(datosEspeciales);
 	}
-	
-//	private List<Carga> getListaCargasPorVuelo(String cv){
-//		List<Checkin> lc = checkinRepository.fin
-//	}
 
 	public List<CargaDTO> registrarDataEquipajeCheckin(String codigoVuelo) {
 		ExcelResponse result = new ExcelResponse();
