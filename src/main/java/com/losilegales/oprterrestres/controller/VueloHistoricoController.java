@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,9 +17,11 @@ import com.losilegales.oprterrestres.entity.Usuario;
 import com.losilegales.oprterrestres.entity.VueloHistorico;
 import com.losilegales.oprterrestres.repository.UsuarioRepository;
 import com.losilegales.oprterrestres.repository.VueloHistoricoRepository;
+import com.losilegales.oprterrestres.service.ReportService;
 import com.losilegales.oprterrestres.service.VueloHistoricoService;
 import com.losilegales.oprterrestres.utils.OprConstants;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -28,6 +31,9 @@ public class VueloHistoricoController {
 
 	@Autowired
 	private VueloHistoricoRepository vueloHistoricoRepository;
+	
+	@Autowired
+	private ReportService reportService;
 	
 	DozerBeanMapper mapper = AppConfig.dozerBeanMapper();
 	
@@ -45,6 +51,13 @@ public class VueloHistoricoController {
 		    vhDTO.add(vueloHistoricoDTO);
 		}
 		return vhDTO;
+	}
+	
+	@Operation(summary = "Reporte de las aeronaves mas usadas")
+	@GetMapping("/reporte/topVuelos")
+	public ResponseEntity<byte[]> getTopVuelos() {
+		return reportService.getAeronavesMasUsadasTop3();
+		
 	}
 	
 }
