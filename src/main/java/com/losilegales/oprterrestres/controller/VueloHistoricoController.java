@@ -54,8 +54,8 @@ public class VueloHistoricoController {
 	}
 	
 	@Operation(summary = "Reporte de las aeronaves mas usadas")
-	@GetMapping("/reporte/topVuelos")
-	public ResponseEntity<byte[]> getTopVuelos() {
+	@GetMapping("/reporte/topAeronaves")
+	public ResponseEntity<byte[]> getTopAeronaves() {
 		return reportService.getAeronavesMasUsadasTop3();
 		
 	}
