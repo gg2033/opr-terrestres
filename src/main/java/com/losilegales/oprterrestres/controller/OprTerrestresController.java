@@ -45,15 +45,6 @@ public class OprTerrestresController {
 	@Autowired
 	LogService logService;
 	
-	// NO BORRAR
-//	@GetMapping("/vuelo")
-//	@ResponseBody
-//	List<CheckInDTO> registrarVuelo() {
-//		List<CheckInDTO> data = oprTerrestresCheckIngService.getDataCheckIn();
-//
-//		return data;
-//
-//	}
 	@SuppressWarnings("unchecked")
 	@GetMapping("/pesoAeronave/{codigoVuelo}")
 	org.json.simple.JSONObject checkSobrepesoAeronave(@PathVariable String codigoVuelo) throws UnirestException {
@@ -103,17 +94,6 @@ public class OprTerrestresController {
 		return listaCargas;
 	}
 	
-
-//	@GetMapping("/cargaCheckIn/{codigoPasajero}")
-//	@ResponseBody
-//	@Validated
-//	List<CargaDTO> getCheckin(@PathVariable String codigoPasajero) {
-//		List<CargaDTO>  data = oprTerrestresCheckIngService.getDataEquipajeCheckin(codigoPasajero);
-//
-//		return data;
-//
-//	}
-	
 		
 	@GetMapping("/aeronave/{codigoAvion}/{campo}")
 	@ResponseBody
@@ -129,12 +109,6 @@ public class OprTerrestresController {
 		return ResponseEntity.ok(oprTerrestresCheckIngService.getDatosEspecialesPorVuelo(vuelo));
 	}
 	
-//	@GetMapping("/pasajeros/{codigoVuelo}")
-//	@ResponseBody
-//	String getPasajerosPorVuelo(@PathVariable String codigoVuelo){
-////		codigoVuelo = formatoCodigoVuelo(codigoVuelo);
-//		return "Hola mundo";
-//	}
 	@GetMapping("/pasajeros/{codigoVuelo}")
 	List<org.json.simple.JSONObject> getPasajerosPorVuelo(@PathVariable String codigoVuelo){
 //		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
