@@ -1,10 +1,14 @@
 package com.losilegales.oprterrestres.dto.CheckIn;
 
+import javax.persistence.Column;
+
 import lombok.Data;
 
 @Data
 public class CargaDTO {
 	private int idCarga;
+
+	private String codigo;
 
 	private int envio;
 	
