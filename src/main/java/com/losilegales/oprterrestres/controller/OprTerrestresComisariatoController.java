@@ -33,7 +33,7 @@ public class OprTerrestresComisariatoController {
 	
 	//TODO Agregar throws de VerificacionComisariatoServiceException
 	@GetMapping("/comisariato/{codigo}")
-	public List<VerificacionComisariato> listaDeVerificacionPorVuelo(@PathVariable String codigo) {
+	public List<VerificacionComisariato> listaDeVerificacionPorVuelo(@PathVariable String codigo) throws VerificacionComisariatoServiceException {
 		//Verificaciones...
 		verificarCodigoExistenteGET(codigo);
 		
@@ -43,7 +43,7 @@ public class OprTerrestresComisariatoController {
 	//TODO Agregar throws de VerificacionComisariatoServiceException
 	@ResponseBody
 	@PostMapping("/comisariato")
-	public VerificacionComisariato persistirVerificacion(@RequestBody VerificacionComisariato vc) {
+	public VerificacionComisariato persistirVerificacion(@RequestBody VerificacionComisariato vc) throws VerificacionComisariatoServiceException {
 		//Verificaciones...
 		verificarDatosNullPOST(vc);
 		verificarCodigoExistentePOST(vc.getCodigo());
