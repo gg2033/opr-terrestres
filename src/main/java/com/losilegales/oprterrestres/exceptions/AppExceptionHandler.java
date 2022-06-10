@@ -68,4 +68,13 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler{
 		ErrorMessage errorMessage = new ErrorMessage(new Date(), errorMessageDescription);
 		return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@ExceptionHandler(value = {VerificacionComisariatoServiceException.class})
+	public ResponseEntity<Object> handleVerificacionComisariatoServiceException(VerificacionComisariatoServiceException ex, WebRequest request){
+		String errorMessageDescription = ex.getLocalizedMessage();
+		if(errorMessageDescription == null) errorMessageDescription = ex.toString();
+		
+		ErrorMessage errorMessage = new ErrorMessage(new Date(), errorMessageDescription);
+		return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

@@ -13,4 +13,7 @@ public interface VerificacionComisariatoRepository extends JpaRepository<Verific
 
 	@Query(value = "SELECT * FROM validaciones_comisariato WHERE codigo = :codigo AND activo = true", nativeQuery = true)
 	List<VerificacionComisariato> verificacionesPorVuelo(String codigo);
+
+	@Query(value = "SELECT * FROM validaciones_comisariato WHERE codigo = :codigo LIMIT 1", nativeQuery = true)
+	VerificacionComisariato existeVerificacionPorVuelo(String codigo);
 }

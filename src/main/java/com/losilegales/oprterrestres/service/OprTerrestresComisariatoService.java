@@ -31,4 +31,8 @@ public class OprTerrestresComisariatoService {
 		return vc;
 	}
 
+	public boolean existeVerificacacionPorVuelo(String codigo) { 
+		return verificacionComisariatoRepository.existeVerificacionPorVuelo(codigo) != null;
+	}
+
 }

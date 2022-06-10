@@ -30,19 +30,19 @@ public class VerificacionComisariato {
 	private String codigo;
 	
 	@Column(name = "ver_limpieza")
-	private boolean verificacionLimpieza;
+	private Boolean verificacionLimpieza;
 	
 	@Column(name= "ver_interna")
-	private boolean verificacionInterna;
+	private Boolean verificacionInterna;
 	
 	@Column(name= "ver_elementos_seguridad")
-	private boolean verificacionElementosSeguridad;
+	private Boolean verificacionElementosSeguridad;
 	
 	@Column(name= "ver_cartillas_bolsas")
-	private boolean verificacionCartillasBolsas;
+	private Boolean verificacionCartillasBolsas;
 	
 	@Column(name= "ver_insumos")
-	private boolean verificacionInsumos;
+	private Boolean verificacionInsumos;
 	
 	@Column(name="creado")
 	private LocalDate fechaCreacion;

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.losilegales.oprterrestres.entity.VerificacionComisariato;
+import com.losilegales.oprterrestres.exceptions.VerificacionComisariatoServiceException;
 import com.losilegales.oprterrestres.repository.VerificacionComisariatoRepository;
 import com.losilegales.oprterrestres.service.OprTerrestresComisariatoService;
 import com.losilegales.oprterrestres.utils.OprConstants;
@@ -30,19 +31,49 @@ public class OprTerrestresComisariatoController {
 	@Autowired
 	private OprTerrestresComisariatoService comisariatoService = new OprTerrestresComisariatoService();
 	
-	//TODO agregar verificaciones en el controller, no en el service / verificar codigo de vuelo existente
+	//TODO Agregar throws de VerificacionComisariatoServiceException
 	@GetMapping("/comisariato/{codigo}")
 	public List<VerificacionComisariato> listaDeVerificacionPorVuelo(@PathVariable String codigo) {
 		//Verificaciones...
+		verificarCodigoExistenteGET(codigo);
+		
 		return comisariatoService.listaDeVerificacionesPorVuelo(codigo);
 	}
 	
-	//TODO agregar verificacion de codigo existente y verificar datos no null
+	//TODO Agregar throws de VerificacionComisariatoServiceException
 	@ResponseBody
 	@PostMapping("/comisariato")
 	public VerificacionComisariato persistirVerificacion(@RequestBody VerificacionComisariato vc) {
 		//Verificaciones...
+		verificarDatosNullPOST(vc);
+		verificarCodigoExistentePOST(vc.getCodigo());
+		
 		return comisariatoService.persistirVerificacion(vc);
+	}
+	
+	
+	private void verificarCodigoExistenteGET(String codigo) throws VerificacionComisariatoServiceException {
+		if (!comisariatoService.existeVerificacacionPorVuelo(codigo)) {
+			throw new VerificacionComisariatoServiceException("La validacion de comisariato con el codigo ingresado [" + codigo + "] no existe.");
+		}
+	}
+	
+	private void verificarCodigoExistentePOST(String codigo) throws VerificacionComisariatoServiceException {
+		if (comisariatoService.existeVerificacacionPorVuelo(codigo)) {
+			throw new VerificacionComisariatoServiceException("La validacion de comisariato con el codigo ingresado [" + codigo + "] ya existe.");
+		}
+	}
+	
+	private void verificarDatosNullPOST(VerificacionComisariato vc) throws VerificacionComisariatoServiceException {
+		if (vc.getCodigo() == null ||
+			vc.getVerificacionCartillasBolsas() == null||
+			vc.getVerificacionElementosSeguridad() == null ||
+			vc.getVerificacionInsumos() == null ||
+			vc.getVerificacionInterna() == null ||
+			vc.getVerificacionLimpieza() == null
+			) {
+			throw new VerificacionComisariatoServiceException("Datos no rellenados en el body");
+		}
 	}
 
 }
