@@ -29,7 +29,7 @@ public class OprTerrestresComisariatoController {
 //	private DozerBeanMapper mapper = new DozerBeanMapper();
 	
 	@Autowired
-	private OprTerrestresComisariatoService comisariatoService = new OprTerrestresComisariatoService();
+	private OprTerrestresComisariatoService comisariatoService;
 	
 	//TODO Agregar throws de VerificacionComisariatoServiceException
 	@GetMapping("/comisariato/{codigo}")
