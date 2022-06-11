@@ -25,12 +25,6 @@ public class CargaTest {
 	
 	@Column(name = "codigo")
 	private String codigo;
-
-	@Column(name = "envio")
-	private int envio;
-	
-	@Column(name = "codigo_carga")
-	private String codigoCarga;
 	
 	@Column(name = "codigo_pasajero")
 	private String codigoPasajero;
@@ -64,4 +58,7 @@ public class CargaTest {
 	
 	@Column(name = "codigo_vuelo")
 	private String codigoVuelo;
+	
+	@Column(name = "fecha_partida")
+	private LocalDate fechaHoraVuelo;
 }
