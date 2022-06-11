@@ -2,6 +2,7 @@ package com.losilegales.oprterrestres.service;
 
 import java.net.URI;
 
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
-import org.json.JSONObject;
+//import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,11 +150,11 @@ public class OprTerrestresCheckIngService {
 		JSONObject vuelo = new JSONObject();
 		String nombreAeronave = "";
 		Iterator<Object> itr = response.getBody().getArray().iterator();
-	    while(itr.hasNext() && vuelo.isNull("name")) {
+	    while(itr.hasNext() && vuelo.get("name") == null) {
 	    	JSONObject element = (JSONObject)itr.next();
 	    	if(element.get("code").equals(codigoVuelo)) {
 	    		vuelo = element;
-	    		nombreAeronave = element.getString("aircraft");
+	    		nombreAeronave = String.valueOf(element.get("aircraft"));
 	    		break;
 	    	}
 	    }
@@ -165,12 +166,12 @@ public class OprTerrestresCheckIngService {
 		JSONObject aeronave = new JSONObject();
 		int capacidadEnToneladas = 0;
 		Iterator<Object> itrA = responseAeronave.getBody().getArray().iterator();
-	    while(itrA.hasNext() && aeronave.isNull("name")) {
+	    while(itrA.hasNext() && aeronave.get("name") == null) {
 	    	JSONObject element = (JSONObject)itrA.next();
 	    	if(element.get("model").equals(nombreAeronave)) {
 	    		aeronave = element;
 	    	    //Obtener la capacidad de esa aeronave
-	    		capacidadEnToneladas = element.getInt("weightTolerance");
+	    		capacidadEnToneladas = Integer.parseInt(String.valueOf(element.get("weightTolerance")));
 	    		break;
 	    	}
 	    }
