@@ -1,6 +1,7 @@
 package com.losilegales.oprterrestres.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,7 +38,7 @@ public class CheckinTest {
 	private String codigoVuelo;
 	
 	@Column(name="fecha_partida")
-	private LocalDate fechaPartida;
+	private LocalDateTime fechaPartida;
 	
 	@Column(name="origen")
 	private String origen;

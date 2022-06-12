@@ -5,9 +5,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import org.json.JSONArray;
 //import org.json.simple.JSONObject;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +43,42 @@ public class AutomatizacionCheckinCargaService {
 
 	private String ultimoAsiento = "";
 	private String estadoDeVueloParaCheckin = "confirmado";
+	private Iterator<Object> iteradorAeronaves;
+	private JSONArray arrayAeronaves;
+	private Set<String> conjuntoCodigosDeCheckin;
 	
 	public void ejecutarAutomatizacion() {
+		arrayAeronaves = getArrayAeronaves();
+		iteradorAeronaves = getIteradorAeronaves();
+		conjuntoCodigosDeCheckin = getConjuntoCodigosDeCheckin();
 		crearCheckinConVuelos(conseguirVuelos());
 	}
 	
+	private Set<String> getConjuntoCodigosDeCheckin() {
+		Set<String> set = new HashSet<String>();
+		List<CheckinTest> lista = getListaCheckinTest();
+		for (CheckinTest ct : lista) {
+			set.add(ct.getCodigo());
+		}
+		return set;
+	}
+	
+	private JSONArray getArrayAeronaves() {
+		try {
+			String urlVuelos = "https://proyecto-icarus.herokuapp.com/aeronaves";
+			HttpResponse<JsonNode> res = Unirest.get(urlVuelos).asJson();
+			return res.getBody().getArray();
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private Iterator<Object> getIteradorAeronaves() {
+		return arrayAeronaves.iterator();
+	}
+
 	public List<DatosGeneradorCheckin> conseguirVuelos (){
 		List<DatosGeneradorCheckin> listaGeneradora = new ArrayList<DatosGeneradorCheckin>();
 		try {
@@ -53,7 +87,7 @@ public class AutomatizacionCheckinCargaService {
 			Iterator<Object> itr = res.getBody().getArray().iterator();
 		    while(itr.hasNext()) {
 		    	JSONObject vuelo = (JSONObject)itr.next();
-		    	if(String.valueOf(vuelo.get("estado")).equals(estadoDeVueloParaCheckin)) {
+		    	if(String.valueOf(vuelo.get("estado")).equals(estadoDeVueloParaCheckin) && !existeCheckin(String.valueOf(vuelo.get("idvuelo")))) {
 		    		DatosGeneradorCheckin dgc = new DatosGeneradorCheckin();
 		    		dgc.setCantPasajeros(getCantidadDePasajeros(vuelo));
 		    		dgc.setCodigo(String.valueOf(vuelo.get("idvuelo")));
@@ -80,30 +114,70 @@ public class AutomatizacionCheckinCargaService {
  		return fechaPartida;
 	}
 
+	//FUNCION SIN OPTIMIZACION
+//	private Integer getCantidadDePasajeros(JSONObject vuelo) {
+//		String urlAeronaves = "https://proyecto-icarus.herokuapp.com/aeronaves";
+//		String modeloAeronave = String.valueOf(vuelo.get("modeloaeronave"));
+//		int cantidadPasajeros = 60;
+//		try{
+//			HttpResponse<JsonNode> res = Unirest.get(urlAeronaves).asJson();
+//			Iterator<Object> itr = res.getBody().getArray().iterator();
+//			while(itr.hasNext()) {
+//		    	JSONObject aeronave = (JSONObject)itr.next();
+//		    	if(String.valueOf(aeronave.get("modeloaeronave")).equals(modeloAeronave)) {
+//		    		int max = Integer.parseInt(String.valueOf(aeronave.get("capacidadreal")));
+//		    		int min = max - 15;
+//		    		cantidadPasajeros = (int) (Math.floor(Math.random() * (max - min) + min));
+//		    		break;
+//		    	}
+//		    }
+//		    return cantidadPasajeros;
+//		}
+//		catch (Exception e) {
+//			e.printStackTrace();
+//			return cantidadPasajeros;
+//		}
+//	}
+	
 	private Integer getCantidadDePasajeros(JSONObject vuelo) {
-		String urlAeronaves = "https://proyecto-icarus.herokuapp.com/aeronaves";
 		String modeloAeronave = String.valueOf(vuelo.get("modeloaeronave"));
 		int cantidadPasajeros = 60;
-		try{
-			HttpResponse<JsonNode> res = Unirest.get(urlAeronaves).asJson();
-			Iterator<Object> itr = res.getBody().getArray().iterator();
-			while(itr.hasNext()) {
-		    	JSONObject aeronave = (JSONObject)itr.next();
-		    	if(String.valueOf(aeronave.get("modeloaeronave")).equals(modeloAeronave)) {
-		    		int max = Integer.parseInt(String.valueOf(aeronave.get("capacidadreal")));
-		    		int min = max - 15;
-		    		cantidadPasajeros = (int) (Math.floor(Math.random() * (max - min) + min));
-		    		break;
-		    	}
-		    }
-		    return cantidadPasajeros;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return cantidadPasajeros;
-		}
+		while(iteradorAeronaves.hasNext()) {
+	    	JSONObject aeronave = (JSONObject)iteradorAeronaves.next();
+	    	if(String.valueOf(aeronave.get("modeloaeronave")).equals(modeloAeronave)) {
+	    		int max = Integer.parseInt(String.valueOf(aeronave.get("capacidadreal")));
+	    		int min = max - 15;
+	    		cantidadPasajeros = (int) (Math.floor(Math.random() * (max - min) + min));
+	    		break;
+	    	}
+	    }
+		//reset del iterador por si se necesita usar nuevamente
+		iteradorAeronaves = getIteradorAeronaves();
+	    return cantidadPasajeros;
 	}
-
+	
+	//FUNCION SIN OPTIMIZACION
+//	public void crearCheckinConVuelos(List<DatosGeneradorCheckin> vuelos) {
+//		for (DatosGeneradorCheckin vuelo : vuelos)
+//			if (!existeCheckin(vuelo.getCodigo())) {
+//				ultimoAsiento = "";
+//				List<CheckinTest> checkinAPersistir = new ArrayList<CheckinTest>(vuelo.getCantPasajeros());
+//				Integer randomCargaNumber = randomCargaNumber(vuelo.getCantPasajeros());
+//				List<CargaTest> cargaAPersistir = new ArrayList<CargaTest>(randomCargaNumber);
+//				for (int numPasajero = 0; numPasajero < vuelo.getCantPasajeros(); numPasajero++) {
+//					// generar rows
+//					generarRowCheckin(numPasajero, vuelo, checkinAPersistir);
+//
+//				}
+//				for (int iteracion = 0; iteracion < randomCargaNumber; iteracion++) {
+//					generarRowCarga(randomCargaNumber, vuelo, cargaAPersistir);
+//				}
+//				// persistir rows
+//				checkinTRepo.saveAll(checkinAPersistir);
+//				cargaTRepo.saveAll(cargaAPersistir);
+//			}
+//	}
+	
 	public void crearCheckinConVuelos(List<DatosGeneradorCheckin> vuelos) {
 		for (DatosGeneradorCheckin vuelo : vuelos)
 			if (!existeCheckin(vuelo.getCodigo())) {
@@ -111,13 +185,19 @@ public class AutomatizacionCheckinCargaService {
 				List<CheckinTest> checkinAPersistir = new ArrayList<CheckinTest>(vuelo.getCantPasajeros());
 				Integer randomCargaNumber = randomCargaNumber(vuelo.getCantPasajeros());
 				List<CargaTest> cargaAPersistir = new ArrayList<CargaTest>(randomCargaNumber);
-				//TODO optimizar para usar algunas iteraciones del for del checkin para la carga
+				int iteradorCarga = 0;
+				// generar rows
 				for (int numPasajero = 0; numPasajero < vuelo.getCantPasajeros(); numPasajero++) {
-					// generar rows
 					generarRowCheckin(numPasajero, vuelo, checkinAPersistir);
-
+					//Este if cubre los casos en donde las cargas sean igual o menores a la cant. de pasajeros
+					//a modo de optimizacion, para no tener dos for que corran n veces.
+					if(iteradorCarga < randomCargaNumber) {
+						generarRowCarga(randomCargaNumber, vuelo, cargaAPersistir);
+					}
+					iteradorCarga += 1;
 				}
-				for (int iteracion = 0; iteracion < randomCargaNumber; iteracion++) {
+				//Este for cubre los casos en donde las cargas sean mayores a la cant. de pasajeros
+				for (int iteracion = iteradorCarga; iteracion < randomCargaNumber; iteracion++) {
 					generarRowCarga(randomCargaNumber, vuelo, cargaAPersistir);
 				}
 				// persistir rows
@@ -146,7 +226,7 @@ public class AutomatizacionCheckinCargaService {
 		ct.setTipo(generarTipo());
 		ct.setTag(generarTag(ct.getTipo()));
 		ct.setPeso(generarPeso(ct.getTipo()));
-		ct.setFechaHoraVuelo(LocalDateAndStringConverter.stringToLocalDateCheckin(vuelo.getFechaPartida()));
+		ct.setFechaHoraVuelo(LocalDateAndStringConverter.stringToLocalDateTimeCheckin(vuelo.getFechaPartida()));
 		
 		cargaAPersistir.add(ct);
 	}
@@ -207,8 +287,13 @@ public class AutomatizacionCheckinCargaService {
 		  return codigoPasajero;
 	}
 
+	//FUNCION NO OPTIMIZADA
+//	private boolean existeCheckin(String codigo) {
+//		return getCheckinTestConCodigo(codigo) != null ? true : false;
+//	}
+	
 	private boolean existeCheckin(String codigo) {
-		return getCheckinTestConCodigo(codigo) != null ? true : false;
+		return conjuntoCodigosDeCheckin.contains(codigo) ? true : false;
 	}
 
 	private void generarRowCheckin(int numPasajero, DatosGeneradorCheckin vuelo, List<CheckinTest> checkinAPersistir) {
@@ -229,7 +314,7 @@ public class AutomatizacionCheckinCargaService {
 		ct.setCreadoPor(CREADOR_GENERICO);
 		ct.setDestino(vuelo.getDestino());
 		ct.setEdad(generarEdad());
-		ct.setFechaPartida(LocalDateAndStringConverter.stringToLocalDateCheckin(vuelo.getFechaPartida()));
+		ct.setFechaPartida(LocalDateAndStringConverter.stringToLocalDateTimeCheckin(vuelo.getFechaPartida()));
 		ct.setNacionalidad(generarNacionalidad());
 		ct.setNombre(generarNombre());
 		ct.setOrigen(vuelo.getOrigen());
@@ -367,6 +452,7 @@ public class AutomatizacionCheckinCargaService {
 
 	}
 
+	//TODO OPTIMIZAR
 	private String generarAsiento() {
 		if (ultimoAsiento.isEmpty()) {
 			ultimoAsiento = "1A";

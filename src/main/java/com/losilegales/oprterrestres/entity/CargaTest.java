@@ -1,6 +1,7 @@
 package com.losilegales.oprterrestres.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -60,5 +61,5 @@ public class CargaTest {
 	private String codigoVuelo;
 	
 	@Column(name = "fecha_partida")
-	private LocalDate fechaHoraVuelo;
+	private LocalDateTime fechaHoraVuelo;
 }

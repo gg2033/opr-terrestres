@@ -1,6 +1,7 @@
 package converter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class LocalDateAndStringConverter {
@@ -34,5 +35,19 @@ public class LocalDateAndStringConverter {
     	else
     		return null;
     }
+
+	public static LocalDateTime stringToLocalDateTimeCheckin(String s) {
+    	if(s != null)
+    		return LocalDateTime.parse(s, formatterwithtime);
+    	else
+    		return null;
+	}
+	
+	public static String localDateTimeToStringCheckin(LocalDateTime ldt) {
+    	if (ldt != null)
+    		return ldt.format(formatterwithtime);
+    	else
+    		return null;
+	}
 
 }
