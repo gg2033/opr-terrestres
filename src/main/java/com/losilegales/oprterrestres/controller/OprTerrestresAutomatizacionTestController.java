@@ -35,6 +35,12 @@ public class OprTerrestresAutomatizacionTestController {
 		return nombre;
 	}
 	
+	@PostMapping("automatizacion/testreal")
+	void testAutomatizacion() {
+		autocheckinservice.ejecutarAutomatizacion();
+		return;
+	}
+	
 	@PostMapping("/automatizacion/test")
 	void testAutomatizacion(@RequestBody DatosGeneradorCheckin dtc){
 		List<DatosGeneradorCheckin> lista = new ArrayList<DatosGeneradorCheckin>();

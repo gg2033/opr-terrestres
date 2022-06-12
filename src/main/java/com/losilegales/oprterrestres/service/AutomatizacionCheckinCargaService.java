@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 //import org.json.simple.JSONObject;
@@ -38,6 +39,70 @@ public class AutomatizacionCheckinCargaService {
 	private CargaTestRepository cargaTRepo;
 
 	private String ultimoAsiento = "";
+	private String estadoDeVueloParaCheckin = "confirmado";
+	
+	public void ejecutarAutomatizacion() {
+		crearCheckinConVuelos(conseguirVuelos());
+	}
+	
+	public List<DatosGeneradorCheckin> conseguirVuelos (){
+		List<DatosGeneradorCheckin> listaGeneradora = new ArrayList<DatosGeneradorCheckin>();
+		try {
+			String urlVuelos = "https://proyecto-icarus.herokuapp.com/vuelos";
+			HttpResponse<JsonNode> res = Unirest.get(urlVuelos).asJson();
+			Iterator<Object> itr = res.getBody().getArray().iterator();
+		    while(itr.hasNext()) {
+		    	JSONObject vuelo = (JSONObject)itr.next();
+		    	if(String.valueOf(vuelo.get("estado")).equals(estadoDeVueloParaCheckin)) {
+		    		DatosGeneradorCheckin dgc = new DatosGeneradorCheckin();
+		    		dgc.setCantPasajeros(getCantidadDePasajeros(vuelo));
+		    		dgc.setCodigo(String.valueOf(vuelo.get("idvuelo")));
+		    		dgc.setDestino(String.valueOf(vuelo.get("destinoteorico_codiata")));
+		    		dgc.setFechaPartida(getFechaPartidaVuelo(vuelo));
+		    		dgc.setOrigen(String.valueOf(vuelo.get("origenteorico_codiata")));
+		    		
+		    		listaGeneradora.add(dgc);
+		    	}
+		    }
+			return listaGeneradora;
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return listaGeneradora;
+		}
+	}
+
+	private String getFechaPartidaVuelo(JSONObject vuelo) {
+		String fecha = String.valueOf(vuelo.get("fechadespegueestimado"));
+		fecha = fecha.substring(0, 10);
+		String horario = String.valueOf(vuelo.get("horadespegueestimado"));
+		String fechaPartida = fecha + " " + horario;
+ 		return fechaPartida;
+	}
+
+	private Integer getCantidadDePasajeros(JSONObject vuelo) {
+		String urlAeronaves = "https://proyecto-icarus.herokuapp.com/aeronaves";
+		String modeloAeronave = String.valueOf(vuelo.get("modeloaeronave"));
+		int cantidadPasajeros = 60;
+		try{
+			HttpResponse<JsonNode> res = Unirest.get(urlAeronaves).asJson();
+			Iterator<Object> itr = res.getBody().getArray().iterator();
+			while(itr.hasNext()) {
+		    	JSONObject aeronave = (JSONObject)itr.next();
+		    	if(String.valueOf(aeronave.get("modeloaeronave")).equals(modeloAeronave)) {
+		    		int max = Integer.parseInt(String.valueOf(aeronave.get("capacidadreal")));
+		    		int min = max - 15;
+		    		cantidadPasajeros = (int) (Math.floor(Math.random() * (max - min) + min));
+		    		break;
+		    	}
+		    }
+		    return cantidadPasajeros;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return cantidadPasajeros;
+		}
+	}
 
 	public void crearCheckinConVuelos(List<DatosGeneradorCheckin> vuelos) {
 		for (DatosGeneradorCheckin vuelo : vuelos)
