@@ -103,14 +103,15 @@ public class OprTerrestresCheckIngService {
 			//Recorrer esa lista de cargas para obtener el peso de cada una
 		    int pesoTotalCargasEnKG = getPesoSumadoCargas(listaCargas);
 			int pesoTotalPasajerosEnKG = getPesoPromedioPorPasajero(listaCheckin);
+			int pesoTotalInsumosEnKg = getPesoInsumos(codigoVuelo);
 			//Comparar la suma de las cargas con la capacidad de la aeronave
 			//Se multiplica por 1000 porque esta en toneladas
-		    if(pesoTotalCargasEnKG + pesoTotalPasajerosEnKG > capacidadEnToneladas*1000) {
+		    if(pesoTotalCargasEnKG + pesoTotalPasajerosEnKG + pesoTotalInsumosEnKg> capacidadEnToneladas*1000) {
 				//Si sobrepasa
 				ret.put("mensaje", "Si supera la capacidad maxima");
 				ret.put("sobrecarga", true);
 				ret.put("cantidadPasajeros", listaCheckin.size());
-				ret.put("pesoKG", pesoTotalCargasEnKG + pesoTotalPasajerosEnKG);
+				ret.put("pesoKG", pesoTotalCargasEnKG + pesoTotalPasajerosEnKG + pesoTotalInsumosEnKg);
 		    	return ret;
 		    }
 		    else {
@@ -118,7 +119,7 @@ public class OprTerrestresCheckIngService {
 				ret.put("mensaje", "No supera la capacidad maxima");
 				ret.put("sobrecarga", false);
 				ret.put("cantidadPasajeros", listaCheckin.size());
-				ret.put("pesoKG", pesoTotalCargasEnKG + pesoTotalPasajerosEnKG);
+				ret.put("pesoKG", pesoTotalCargasEnKG + pesoTotalPasajerosEnKG + pesoTotalInsumosEnKg);
 		    	return ret;
 		    }
 		}
@@ -132,34 +133,52 @@ public class OprTerrestresCheckIngService {
 		return ret;
 	}
 
-	private String getCodigoVueloFormatoActualizado(String codigoVuelo) {
-		StringBuilder sb = new StringBuilder(codigoVuelo);
-		for(int i=0; i < codigoVuelo.length(); i++) {
-	         if(Character.isWhitespace(codigoVuelo.charAt(i))) {
-	        	 sb.replace(i, i+1, "-");
-	        	 break;
-	         }
+	private int getPesoInsumos(String codigo) {
+		String url = "https://operaciones-mantenimiento.herokuapp.com/Insumo/Vuelo/allByVuelo/" + codigo;
+		try {
+			HttpResponse <JsonNode> response = Unirest.get(url).asJson();
+			//TODO OBTENER INFORMACION DE COMO RECORRER ESTA RESPONSE
+//		String nombreAeronave = "";
+//		Iterator<Object> itr = response.getBody().getArray().iterator();
+//		while(itr.hasNext()) {
+//	    	JSONObject vuelo = (JSONObject)itr.next();
+//	    	if(vuelo.get("idvuelo").equals(codigoVuelo)) {
+//	    		nombreAeronave = String.valueOf(vuelo.get("modeloaeronave"));
+//	    		break;
+//	    	}
+//	    }
+		} catch (UnirestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return sb.toString();
-		
+		return 0;
 	}
+
+	//	private String getCodigoVueloFormatoActualizado(String codigoVuelo) {
+//		StringBuilder sb = new StringBuilder(codigoVuelo);
+//		for(int i=0; i < codigoVuelo.length(); i++) {
+//	         if(Character.isWhitespace(codigoVuelo.charAt(i))) {
+//	        	 sb.replace(i, i+1, "-");
+//	        	 break;
+//	         }
+//		}
+//		return sb.toString();
+//		
+//	}
 	private int capacidadAeronaveEnToneladas(String codigoVuelo) throws UnirestException {
-		HttpResponse <JsonNode> response = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/flight/getAll").asJson();
-		codigoVuelo = getCodigoVueloFormatoActualizado(codigoVuelo);
-		//Obtener de esa lista el vuelo con el codigo de vuelo pasado por parametro
-		JSONObject vuelo = new JSONObject();
+		HttpResponse <JsonNode> response = Unirest.get("https://proyecto-icarus.herokuapp.com/vuelos").asJson();
 		String nombreAeronave = "";
 		Iterator<Object> itr = response.getBody().getArray().iterator();
-	    while(itr.hasNext() && vuelo.get("name") == null) {
-	    	JSONObject element = (JSONObject)itr.next();
-	    	if(element.get("code").equals(codigoVuelo)) {
-	    		vuelo = element;
-	    		nombreAeronave = String.valueOf(element.get("aircraft"));
+		while(itr.hasNext()) {
+	    	JSONObject vuelo = (JSONObject)itr.next();
+	    	if(vuelo.get("idvuelo").equals(codigoVuelo)) {
+	    		nombreAeronave = String.valueOf(vuelo.get("modeloaeronave"));
 	    		break;
 	    	}
 	    }
 	    
 		//Obtener las aeronaves
+		//TODO USAR EL ENDPOINT DEL GRUPO DE NICO
 	    HttpResponse <JsonNode> responseAeronave = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/aircraft/getAll").asJson();
 		
 	    //Obtener de esa lista la aeronave que figura en el el vuelo con el codigo de vuelo pasado por parametro
