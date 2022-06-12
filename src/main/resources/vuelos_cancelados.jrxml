@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_report_template" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e076d5ee-eb35-4717-88b9-4b91138d5fad">
+	<property name="ireport.zoom" value="2.1435888100000016"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="aeronaveMatriculaFk" class="java.lang.String">
+		<fieldDescription><![CDATA[aeronaveMatriculaFk]]></fieldDescription>
+	</field>
+	<field name="modeloaeronave" class="java.lang.String">
+		<fieldDescription><![CDATA[modeloaeronave]]></fieldDescription>
+	</field>
+	<field name="origenrealCodiata" class="java.lang.String"/>
+	<field name="destinorealCodiata" class="java.lang.String"/>
+	<field name="nombrecompania" class="java.lang.String"/>
+	<field name="tipodevuelo" class="java.lang.String"/>
+	<field name="motivoestado" class="java.lang.String"/>
+	<pageHeader>
+		<band height="68">
+			<staticText>
+				<reportElement x="139" y="20" width="352" height="37" uuid="7958403e-bf02-4048-98d5-55ffbe61dfef"/>
+				<textElement textAlignment="Justified">
+					<font size="24" isBold="true" isItalic="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Vuelos Cancelados - Motivos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="e9719e14-f802-466c-83bf-bd3771b41a6c"/>
+				<text><![CDATA[Ungs - 2022]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="535" height="23" backcolor="#70A9A9" uuid="f7bb46f6-4667-496d-9926-f624088966d7"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[ ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="79" height="20" uuid="6a9e0e73-ab6d-4ac9-8cd8-50e5224d80c1"/>
+				<text><![CDATA[Matricula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="0" width="79" height="20" uuid="0d37f107-3ee9-4130-b2f1-dbb68f0af213"/>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="158" y="0" width="79" height="20" uuid="3a483e6b-ecce-4cf8-93ac-ecaa2ddbc3af"/>
+				<text><![CDATA[Origen Cod. iata]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="237" y="0" width="79" height="20" uuid="7d1b51d9-474a-4103-8cbb-abaaf212d3d2"/>
+				<text><![CDATA[Dest. Cod iata]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="316" y="0" width="79" height="20" uuid="e97231b7-f8c5-4c8c-93a0-8ec570fef690"/>
+				<text><![CDATA[Compañia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="0" width="79" height="20" uuid="cd7f0e29-635e-49bf-bf42-f3dc87d52937"/>
+				<text><![CDATA[Tipo de Vuelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="474" y="0" width="79" height="20" uuid="1f916043-f205-4612-b430-54723c7d06fb"/>
+				<text><![CDATA[Motivo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="535" height="14" backcolor="#E5ECF9" uuid="9b4ec434-135f-4a04-9b39-50a5b06cd572"/>
+				<box>
+					<bottomPen lineWidth="0.25" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[ ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="79" height="20" uuid="08b76959-ffd9-4b18-b77d-d3ae466eeee7"/>
+				<textFieldExpression><![CDATA[($F{aeronaveMatriculaFk} != null) ? $F{aeronaveMatriculaFk} : "LV-CKK"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="79" y="0" width="79" height="20" uuid="62996cc4-a557-4157-b6b6-636d4fd992f6"/>
+				<textFieldExpression><![CDATA[($F{modeloaeronave} != null) ? $F{modeloaeronave} : "Learjet 60"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="0" width="79" height="20" uuid="8b3a2ce4-86e5-46be-b79b-f3c85bccfa96"/>
+				<textFieldExpression><![CDATA[$F{origenrealCodiata}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="0" width="79" height="20" uuid="8c479959-c148-45ab-a9ad-90abd6524c41"/>
+				<textFieldExpression><![CDATA[$F{destinorealCodiata}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="316" y="0" width="79" height="20" uuid="f98977a4-591d-4f61-81d5-a56a7ff5a061"/>
+				<textFieldExpression><![CDATA[$F{nombrecompania}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="395" y="0" width="79" height="20" uuid="48e7f99d-aa0e-46ef-adeb-009fe9ed6dd2"/>
+				<textFieldExpression><![CDATA[$F{tipodevuelo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement x="474" y="0" width="79" height="20" uuid="b2e46e49-ee43-40da-9629-1b691b776d37"/>
+				<textFieldExpression><![CDATA[($F{motivoestado} != null) ? $F{motivoestado} : "Huelga"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50">
+			<textField>
+				<reportElement x="443" y="18" width="100" height="20" uuid="c3ef2145-11b9-40f3-99c2-d00aa3b47d89"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="408" y="18" width="35" height="20" uuid="4a42674d-48ca-4ce4-8c12-7a22bfdbc5ad"/>
+				<text><![CDATA[Página:]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

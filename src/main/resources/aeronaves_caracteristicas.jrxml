@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_report_template" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e076d5ee-eb35-4717-88b9-4b91138d5fad">
+	<property name="ireport.zoom" value="2.1435888100000016"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="model" class="java.lang.String">
+		<fieldDescription><![CDATA[model]]></fieldDescription>
+	</field>
+	<field name="fuelConsumption" class="java.lang.String">
+		<fieldDescription><![CDATA[fuelConsumption]]></fieldDescription>
+	</field>
+	<field name="lubricantConsumption" class="java.lang.String"/>
+	<field name="passengerCapacity" class="java.lang.String"/>
+	<field name="weightTolerance" class="java.lang.String"/>
+	<field name="maxDistance" class="java.lang.String"/>
+	<field name="crewMembers" class="java.lang.String"/>
+	<pageHeader>
+		<band height="50">
+			<staticText>
+				<reportElement x="158" y="13" width="223" height="20" uuid="7958403e-bf02-4048-98d5-55ffbe61dfef"/>
+				<textElement textAlignment="Justified">
+					<font size="12" isBold="true" isItalic="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Naves No Tripuladas - Caracteristicas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="e9719e14-f802-466c-83bf-bd3771b41a6c"/>
+				<text><![CDATA[Ungs - 2022]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="535" height="23" backcolor="#70A9A9" uuid="f7bb46f6-4667-496d-9926-f624088966d7"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[ ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="79" height="20" uuid="24ae8b6e-c59a-4bda-afd1-293e70c2291f"/>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="79" y="0" width="79" height="20" uuid="dbaf26b8-4c39-47b0-9fd1-4a2a0fab6979"/>
+				<text><![CDATA[Cons. Combustible]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="158" y="0" width="79" height="20" uuid="26c0cd1a-2e35-4594-b216-b4eff064a30b"/>
+				<text><![CDATA[Cons. Lubricante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="237" y="0" width="79" height="20" uuid="3b27b0ad-d26e-4e9a-bedd-5193306f345b"/>
+				<text><![CDATA[Capac. Pasajeros]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="316" y="0" width="79" height="20" uuid="c2a741dc-4809-4081-b5de-8fdb5503d68e"/>
+				<text><![CDATA[Tolerancia Peso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="0" width="79" height="20" uuid="09a56ec0-98ec-4e01-b093-b4dbbd95a0c9"/>
+				<text><![CDATA[Maxima distancia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="474" y="0" width="79" height="20" uuid="3e3c504d-56e4-4a76-958b-109cd2b9d92b"/>
+				<text><![CDATA[M. Tripulacion]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="535" height="14" backcolor="#E5ECF9" uuid="9b4ec434-135f-4a04-9b39-50a5b06cd572"/>
+				<box>
+					<bottomPen lineWidth="0.25" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[ ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="79" height="20" uuid="b317d398-a208-4f72-b0f8-54b581d9b0b1"/>
+				<textFieldExpression><![CDATA[$F{model}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="79" y="0" width="79" height="14" uuid="e069f3b0-efc9-4efb-94c7-3c1e0b10c5dc"/>
+				<textFieldExpression><![CDATA[$F{fuelConsumption}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="0" width="79" height="14" uuid="17ee065c-2b4a-483c-98f4-f934ad44c378"/>
+				<textFieldExpression><![CDATA[$F{lubricantConsumption}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="0" width="79" height="14" uuid="8f870855-6c10-439b-942a-0204ff57c8a5"/>
+				<textFieldExpression><![CDATA[$F{passengerCapacity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="316" y="0" width="79" height="16" uuid="7bf16092-1b6a-465f-b616-5c59091249b3"/>
+				<textFieldExpression><![CDATA[$F{weightTolerance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="395" y="0" width="79" height="16" uuid="4c593979-c33c-4dc4-8515-c4b7f21bc83c"/>
+				<textFieldExpression><![CDATA[$F{maxDistance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="0" width="79" height="16" uuid="4e02372a-fe45-4e3f-ad43-60e2e221a390"/>
+				<textFieldExpression><![CDATA[$F{crewMembers}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50">
+			<textField>
+				<reportElement x="443" y="18" width="100" height="20" uuid="c3ef2145-11b9-40f3-99c2-d00aa3b47d89"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="408" y="18" width="35" height="20" uuid="4a42674d-48ca-4ce4-8c12-7a22bfdbc5ad"/>
+				<text><![CDATA[Página:]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

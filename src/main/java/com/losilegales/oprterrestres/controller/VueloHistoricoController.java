@@ -60,4 +60,18 @@ public class VueloHistoricoController {
 		
 	}
 	
+	@Operation(summary = "Reporte de las naves no tripuladas")
+	@GetMapping("/reporte/aeronavesNoTripuladas")
+	public ResponseEntity<byte[]> getReporteAeronavesNoTripuladas() {
+		return reportService.getReporteAeronavesNoTripuladas();
+		
+	}
+	
+	@Operation(summary = "Reporte de vuelos cancelados, con sus respectivos motivos")
+	@GetMapping("/reporte/vuelosCancelados")
+	public ResponseEntity<byte[]> GetReporteVuelosCancelados() {
+		return reportService.getReporteVuelosCancelados();
+		
+	}
+	
 }
