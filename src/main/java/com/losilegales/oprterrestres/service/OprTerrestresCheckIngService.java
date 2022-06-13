@@ -3,6 +3,7 @@ package com.losilegales.oprterrestres.service;
 import java.net.URI;
 
 
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -15,8 +16,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONObject;
-//import org.json.JSONObject;
+//import org.json.simple.JSONObject;
+import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,33 +86,21 @@ public class OprTerrestresCheckIngService {
 	@SuppressWarnings("unchecked")
 	public org.json.simple.JSONObject sobrepasaPesoAeronave(String codigoVuelo) throws UnirestException {
 		org.json.simple.JSONObject ret = new org.json.simple.JSONObject();
-		//Obtener los vuelos
+	    List<Carga> listaCargas = cargaRepository.cargasPorVuelo(codigoVuelo);
+	    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
 		try {
-			int capacidadEnToneladas = capacidadAeronaveEnToneladas(codigoVuelo);
-		    //Codigo por si existe diferencia entre vuelos de pasajeros
-	//		//Recorrer checkins y por cada uno obtener el codigo de pasajero
-	//	    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
-	//		//Obtener todas las cargas con ese codigo de pasajero
-	//	    List<Carga> listaCargas = new LinkedList<Carga>();
-	//	    for (Checkin p : listaCheckin) {
-	//	    	String codigoPasajero = p.getCodigoPasajero();
-	//	    	listaCargas.addAll(cargaRepository.cargasPorPasajero(codigoPasajero));
-	//	    }
-		    
-		    List<Carga> listaCargas = cargaRepository.cargasPorVuelo(codigoVuelo);
-		    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
-			//Recorrer esa lista de cargas para obtener el peso de cada una
+			int capacidadEnToneladas = getCapacidadAeronaveEnToneladas(codigoVuelo);
 		    int pesoTotalCargasEnKG = getPesoSumadoCargas(listaCargas);
 			int pesoTotalPasajerosEnKG = getPesoPromedioPorPasajero(listaCheckin);
 			int pesoTotalInsumosEnKg = getPesoInsumos(codigoVuelo);
-			//Comparar la suma de las cargas con la capacidad de la aeronave
-			//Se multiplica por 1000 porque esta en toneladas
-		    if(pesoTotalCargasEnKG + pesoTotalPasajerosEnKG + pesoTotalInsumosEnKg> capacidadEnToneladas*1000) {
+			int pesoTotalEnKG = pesoTotalCargasEnKG + pesoTotalPasajerosEnKG + pesoTotalInsumosEnKg;
+			int toleranciaAeronaveEnKG = capacidadEnToneladas*1000; 
+		    if(pesoTotalEnKG > toleranciaAeronaveEnKG) {
 				//Si sobrepasa
 				ret.put("mensaje", "Si supera la capacidad maxima");
 				ret.put("sobrecarga", true);
 				ret.put("cantidadPasajeros", listaCheckin.size());
-				ret.put("pesoKG", pesoTotalCargasEnKG + pesoTotalPasajerosEnKG + pesoTotalInsumosEnKg);
+				ret.put("pesoKG", pesoTotalEnKG);
 		    	return ret;
 		    }
 		    else {
@@ -119,7 +108,7 @@ public class OprTerrestresCheckIngService {
 				ret.put("mensaje", "No supera la capacidad maxima");
 				ret.put("sobrecarga", false);
 				ret.put("cantidadPasajeros", listaCheckin.size());
-				ret.put("pesoKG", pesoTotalCargasEnKG + pesoTotalPasajerosEnKG + pesoTotalInsumosEnKg);
+				ret.put("pesoKG", pesoTotalEnKG);
 		    	return ret;
 		    }
 		}
@@ -134,38 +123,29 @@ public class OprTerrestresCheckIngService {
 	}
 
 	private int getPesoInsumos(String codigo) {
+
 		String url = "https://operaciones-mantenimiento.herokuapp.com/Insumo/Vuelo/allByVuelo/" + codigo;
+		int pesoTotal = 0;
 		try {
 			HttpResponse <JsonNode> response = Unirest.get(url).asJson();
-			//TODO OBTENER INFORMACION DE COMO RECORRER ESTA RESPONSE
-//		String nombreAeronave = "";
-//		Iterator<Object> itr = response.getBody().getArray().iterator();
-//		while(itr.hasNext()) {
-//	    	JSONObject vuelo = (JSONObject)itr.next();
-//	    	if(vuelo.get("idvuelo").equals(codigoVuelo)) {
-//	    		nombreAeronave = String.valueOf(vuelo.get("modeloaeronave"));
-//	    		break;
-//	    	}
-//	    }
+			Iterator<Object> insumos = response.getBody().getArray().iterator();
+			while(insumos.hasNext()) {
+				JSONObject insumo = (JSONObject)insumos.next();
+				int cantidadDeInsumo = Integer.parseInt(String.valueOf(insumo.get("FinalQuantity")));
+				JSONObject supply = (JSONObject)insumo.get("Supply");
+				float pesoInsumo = Float.parseFloat(String.valueOf(supply.get("Weight")));
+				pesoTotal += pesoInsumo * cantidadDeInsumo;
+			}
+			return pesoTotal;
 		} catch (UnirestException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return 0;
 		}
-		return 0;
 	}
 
-	//	private String getCodigoVueloFormatoActualizado(String codigoVuelo) {
-//		StringBuilder sb = new StringBuilder(codigoVuelo);
-//		for(int i=0; i < codigoVuelo.length(); i++) {
-//	         if(Character.isWhitespace(codigoVuelo.charAt(i))) {
-//	        	 sb.replace(i, i+1, "-");
-//	        	 break;
-//	         }
-//		}
-//		return sb.toString();
-//		
-//	}
-	private int capacidadAeronaveEnToneladas(String codigoVuelo) throws UnirestException {
+	private int getCapacidadAeronaveEnToneladas(String codigoVuelo) throws UnirestException {
+		//Obtenemos el modelo del avion con el codigo de vuelo
 		HttpResponse <JsonNode> response = Unirest.get("https://proyecto-icarus.herokuapp.com/vuelos").asJson();
 		String nombreAeronave = "";
 		Iterator<Object> itr = response.getBody().getArray().iterator();
@@ -182,13 +162,11 @@ public class OprTerrestresCheckIngService {
 	    HttpResponse <JsonNode> responseAeronave = Unirest.get("https://grops-backend-dnj2km2huq-rj.a.run.app/aircraft/getAll").asJson();
 		
 	    //Obtener de esa lista la aeronave que figura en el el vuelo con el codigo de vuelo pasado por parametro
-		JSONObject aeronave = new JSONObject();
 		int capacidadEnToneladas = 0;
 		Iterator<Object> itrA = responseAeronave.getBody().getArray().iterator();
-	    while(itrA.hasNext() && aeronave.get("name") == null) {
+	    while(itrA.hasNext()) {
 	    	JSONObject element = (JSONObject)itrA.next();
 	    	if(element.get("model").equals(nombreAeronave)) {
-	    		aeronave = element;
 	    	    //Obtener la capacidad de esa aeronave
 	    		capacidadEnToneladas = Integer.parseInt(String.valueOf(element.get("weightTolerance")));
 	    		break;
@@ -197,8 +175,6 @@ public class OprTerrestresCheckIngService {
 		return capacidadEnToneladas;
 	}
 
-	//TODO se podria recibir la lista de checkin, verificar cuales son mujeres y cuales hombres
-	//y sacar un promedio utilizando esos valores.
 	private int getPesoPromedioPorPasajero(List<Checkin> pasajeros) {
 		int pesoPromedioM = 75;
 		int pesoPromedioF = 65;
