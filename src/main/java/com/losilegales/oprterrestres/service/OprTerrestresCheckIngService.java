@@ -90,6 +90,9 @@ public class OprTerrestresCheckIngService {
 	    List<Checkin> listaCheckin = checkinRepository.checkinPorVuelo(codigoVuelo);
 		try {
 			int capacidadEnToneladas = getCapacidadAeronaveEnToneladas(codigoVuelo);
+			if(capacidadEnToneladas == 0) {
+				throw new Exception("No se pudo encontrar la aeronave");
+			}
 		    int pesoTotalCargasEnKG = getPesoSumadoCargas(listaCargas);
 			int pesoTotalPasajerosEnKG = getPesoPromedioPorPasajero(listaCheckin);
 			int pesoTotalInsumosEnKg = getPesoInsumos(codigoVuelo);
@@ -112,14 +115,22 @@ public class OprTerrestresCheckIngService {
 		    	return ret;
 		    }
 		}
+		catch(UnirestException e) {
+			e.printStackTrace();
+			ret.put("mensaje", "Hubo un error");
+			ret.put("sobrecarga", null);
+			ret.put("cantidadPasajeros", null);
+			ret.put("pesoKG", null);
+			return ret;
+		}
 		catch(Exception e) {
 			e.printStackTrace();
+			ret.put("mensaje", "No ha sido posible encontrar la aeronave para el vuelo indicado");
+			ret.put("sobrecarga", null);
+			ret.put("cantidadPasajeros", null);
+			ret.put("pesoKG", null);
+			return ret;
 		}
-		ret.put("mensaje", "Hubo un error");
-		ret.put("sobrecarga", null);
-		ret.put("cantidadPasajeros", null);
-		ret.put("pesoKG", null);
-		return ret;
 	}
 
 	private int getPesoInsumos(String codigo) {
