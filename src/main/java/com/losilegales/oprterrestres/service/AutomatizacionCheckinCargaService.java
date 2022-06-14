@@ -17,12 +17,10 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.losilegales.oprterrestres.entity.CargaTest;
-import com.losilegales.oprterrestres.entity.CheckinTest;
+import com.losilegales.oprterrestres.entity.Carga;
+import com.losilegales.oprterrestres.entity.Checkin;
 import com.losilegales.oprterrestres.repository.CargaRepository;
-import com.losilegales.oprterrestres.repository.CargaTestRepository;
 import com.losilegales.oprterrestres.repository.CheckinRepository;
-import com.losilegales.oprterrestres.repository.CheckinTestRepository;
 import com.losilegales.oprterrestres.utils.DatosGeneradorCheckin;
 import com.losilegales.oprterrestres.utils.OprUtils;
 import com.mashape.unirest.http.HttpResponse;
@@ -51,16 +49,22 @@ public class AutomatizacionCheckinCargaService {
 	private Set<String> conjuntoCodigosDeCheckin;
 	
 	public void ejecutarAutomatizacion() {
-		arrayAeronaves = getArrayAeronaves();
-		iteradorAeronaves = getIteradorAeronaves();
-		conjuntoCodigosDeCheckin = getConjuntoCodigosDeCheckin();
+		this.arrayAeronaves = getArrayAeronaves();
+		this.iteradorAeronaves = getIteradorAeronaves();
+		this.conjuntoCodigosDeCheckin = getConjuntoCodigosDeCheckin();
 		crearCheckinConVuelos(conseguirVuelos());
+	}
+	
+	private void inicializarVariablesDeClase() {
+		this.arrayAeronaves = getArrayAeronaves();
+		this.iteradorAeronaves = getIteradorAeronaves();
+		this.conjuntoCodigosDeCheckin = getConjuntoCodigosDeCheckin();
 	}
 	
 	private Set<String> getConjuntoCodigosDeCheckin() {
 		Set<String> set = new HashSet<String>();
-		List<CheckinTest> lista = getListaCheckinTest();
-		for (CheckinTest ct : lista) {
+		List<Checkin> lista = getListaCheckin();
+		for (Checkin ct : lista) {
 			set.add(ct.getCodigo());
 		}
 		return set;
@@ -117,30 +121,6 @@ public class AutomatizacionCheckinCargaService {
  		return fechaPartida;
 	}
 
-	//FUNCION SIN OPTIMIZACION
-//	private Integer getCantidadDePasajeros(JSONObject vuelo) {
-//		String urlAeronaves = "https://proyecto-icarus.herokuapp.com/aeronaves";
-//		String modeloAeronave = String.valueOf(vuelo.get("modeloaeronave"));
-//		int cantidadPasajeros = 60;
-//		try{
-//			HttpResponse<JsonNode> res = Unirest.get(urlAeronaves).asJson();
-//			Iterator<Object> itr = res.getBody().getArray().iterator();
-//			while(itr.hasNext()) {
-//		    	JSONObject aeronave = (JSONObject)itr.next();
-//		    	if(String.valueOf(aeronave.get("modeloaeronave")).equals(modeloAeronave)) {
-//		    		int max = Integer.parseInt(String.valueOf(aeronave.get("capacidadreal")));
-//		    		int min = max - 15;
-//		    		cantidadPasajeros = (int) (Math.floor(Math.random() * (max - min) + min));
-//		    		break;
-//		    	}
-//		    }
-//		    return cantidadPasajeros;
-//		}
-//		catch (Exception e) {
-//			e.printStackTrace();
-//			return cantidadPasajeros;
-//		}
-//	}
 	
 	private Integer getCantidadDePasajeros(JSONObject vuelo) {
 		String modeloAeronave = String.valueOf(vuelo.get("modeloaeronave"));
@@ -159,35 +139,16 @@ public class AutomatizacionCheckinCargaService {
 	    return cantidadPasajeros;
 	}
 	
-	//FUNCION SIN OPTIMIZACION
-//	public void crearCheckinConVuelos(List<DatosGeneradorCheckin> vuelos) {
-//		for (DatosGeneradorCheckin vuelo : vuelos)
-//			if (!existeCheckin(vuelo.getCodigo())) {
-//				ultimoAsiento = "";
-//				List<CheckinTest> checkinAPersistir = new ArrayList<CheckinTest>(vuelo.getCantPasajeros());
-//				Integer randomCargaNumber = randomCargaNumber(vuelo.getCantPasajeros());
-//				List<CargaTest> cargaAPersistir = new ArrayList<CargaTest>(randomCargaNumber);
-//				for (int numPasajero = 0; numPasajero < vuelo.getCantPasajeros(); numPasajero++) {
-//					// generar rows
-//					generarRowCheckin(numPasajero, vuelo, checkinAPersistir);
-//
-//				}
-//				for (int iteracion = 0; iteracion < randomCargaNumber; iteracion++) {
-//					generarRowCarga(randomCargaNumber, vuelo, cargaAPersistir);
-//				}
-//				// persistir rows
-//				checkinTRepo.saveAll(checkinAPersistir);
-//				cargaTRepo.saveAll(cargaAPersistir);
-//			}
-//	}
 	
 	public void crearCheckinConVuelos(List<DatosGeneradorCheckin> vuelos) {
+		//SOLO PARA ESTE EJEMPLO, LUEGO BORRAR...
+		inicializarVariablesDeClase();
 		for (DatosGeneradorCheckin vuelo : vuelos)
 			if (!existeCheckin(vuelo.getCodigo())) {
 				ultimoAsiento = "";
-				List<CheckinTest> checkinAPersistir = new ArrayList<CheckinTest>(vuelo.getCantPasajeros());
+				List<Checkin> checkinAPersistir = new ArrayList<Checkin>(vuelo.getCantPasajeros());
 				Integer randomCargaNumber = randomCargaNumber(vuelo.getCantPasajeros());
-				List<CargaTest> cargaAPersistir = new ArrayList<CargaTest>(randomCargaNumber);
+				List<Carga> cargaAPersistir = new ArrayList<Carga>(randomCargaNumber);
 				int iteradorCarga = 0;
 				// generar rows
 				for (int numPasajero = 0; numPasajero < vuelo.getCantPasajeros(); numPasajero++) {
@@ -216,8 +177,8 @@ public class AutomatizacionCheckinCargaService {
 	}
 
 	private void generarRowCarga(Integer randomCargaNumber, DatosGeneradorCheckin vuelo,
-			List<CargaTest> cargaAPersistir) {
-		CargaTest ct = new CargaTest();
+			List<Carga> cargaAPersistir) {
+		Carga ct = new Carga();
 		
 		ct.setActivo(true);
 		ct.setCodigo(vuelo.getCodigo());
@@ -290,17 +251,13 @@ public class AutomatizacionCheckinCargaService {
 		  return codigoPasajero;
 	}
 
-	//FUNCION NO OPTIMIZADA
-//	private boolean existeCheckin(String codigo) {
-//		return getCheckinTestConCodigo(codigo) != null ? true : false;
-//	}
-	
 	private boolean existeCheckin(String codigo) {
+
 		return conjuntoCodigosDeCheckin.contains(codigo) ? true : false;
 	}
 
-	private void generarRowCheckin(int numPasajero, DatosGeneradorCheckin vuelo, List<CheckinTest> checkinAPersistir) {
-		CheckinTest ct = new CheckinTest();
+	private void generarRowCheckin(int numPasajero, DatosGeneradorCheckin vuelo, List<Checkin> checkinAPersistir) {
+		Checkin ct = new Checkin();
 
 		ct.setActivo(true);
 		ct.setAlimentacion(generarAlimentacion());
@@ -484,12 +441,12 @@ public class AutomatizacionCheckinCargaService {
 
 	//Funciones para CONTROLLER
 
-	public List<CheckinTest> getListaCheckinTest() {
+	public List<Checkin> getListaCheckin() {
 		return checkinRepo.findAll();
 	}
 
-	public CheckinTest getCheckinTestConCodigo(String codigo) {
-		return checkinRepo.getCheckinTestConCodigo(codigo);
+	public Checkin getCheckinConCodigo(String codigo) {
+		return checkinRepo.checkinUnicoPorVuelo(codigo);
 	}
 
 }

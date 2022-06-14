@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.losilegales.oprterrestres.entity.Checkin;
 import com.losilegales.oprterrestres.entity.CheckinTest;
 import com.losilegales.oprterrestres.service.AutomatizacionCheckinCargaService;
 import com.losilegales.oprterrestres.utils.DatosGeneradorCheckin;
@@ -27,13 +28,13 @@ public class OprTerrestresAutomatizacionTestController {
 	@Autowired
 	private AutomatizacionCheckinCargaService autocheckinservice;
 	
-	@SuppressWarnings("unchecked")
-	@GetMapping("/automatizacion")
-	org.json.simple.JSONObject verNombre() {
-		org.json.simple.JSONObject nombre = new org.json.simple.JSONObject();
-		nombre.put("nombre", autocheckinservice.generarNombre());
-		return nombre;
-	}
+//	@SuppressWarnings("unchecked")
+//	@GetMapping("/automatizacion")
+//	org.json.simple.JSONObject verNombre() {
+//		org.json.simple.JSONObject nombre = new org.json.simple.JSONObject();
+//		nombre.put("nombre", autocheckinservice.generarNombre());
+//		return nombre;
+//	}
 	
 	@PostMapping("automatizacion/testreal")
 	void testAutomatizacion() {
@@ -55,14 +56,14 @@ public class OprTerrestresAutomatizacionTestController {
 		return;
 	}
 	
-	@GetMapping("/automatizacion/getcheckintest")
-	List<CheckinTest> getListaCheckinTest(){
-		return autocheckinservice.getListaCheckinTest();
+	@GetMapping("/automatizacion/getcheckin")
+	List<Checkin> getListaCheckin(){
+		return autocheckinservice.getListaCheckin();
 	}
 	
-	@GetMapping("/automatizacion/getcheckintest/{codigo}")
-	CheckinTest getCheckinTestConCodigo(@PathVariable String codigo){
-		return autocheckinservice.getCheckinTestConCodigo(codigo);
+	@GetMapping("/automatizacion/getcheckin/{codigo}")
+	Checkin getCheckinConCodigo(@PathVariable String codigo){
+		return autocheckinservice.getCheckinConCodigo(codigo);
 	}
 
 }
