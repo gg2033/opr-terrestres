@@ -2,6 +2,7 @@ package com.losilegales.oprterrestres.service;
 
 import java.time.format.DateTimeFormatter;
 
+
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import com.losilegales.oprterrestres.entity.CargaTest;
 import com.losilegales.oprterrestres.entity.CheckinTest;
+import com.losilegales.oprterrestres.repository.CargaRepository;
 import com.losilegales.oprterrestres.repository.CargaTestRepository;
+import com.losilegales.oprterrestres.repository.CheckinRepository;
 import com.losilegales.oprterrestres.repository.CheckinTestRepository;
 import com.losilegales.oprterrestres.utils.DatosGeneradorCheckin;
 import com.losilegales.oprterrestres.utils.OprUtils;
@@ -37,9 +40,9 @@ public class AutomatizacionCheckinCargaService {
 	private final String CREADOR_GENERICO = "SISTEMA";
 
 	@Autowired
-	private CheckinTestRepository checkinTRepo;
+	private CheckinRepository checkinRepo;
 	@Autowired
-	private CargaTestRepository cargaTRepo;
+	private CargaRepository cargaRepo;
 
 	private String ultimoAsiento = "";
 	private String estadoDeVueloParaCheckin = "confirmado";
@@ -201,8 +204,8 @@ public class AutomatizacionCheckinCargaService {
 					generarRowCarga(randomCargaNumber, vuelo, cargaAPersistir);
 				}
 				// persistir rows
-				checkinTRepo.saveAll(checkinAPersistir);
-				cargaTRepo.saveAll(cargaAPersistir);
+				checkinRepo.saveAll(checkinAPersistir);
+				cargaRepo.saveAll(cargaAPersistir);
 			}
 	}
 
@@ -482,11 +485,11 @@ public class AutomatizacionCheckinCargaService {
 	//Funciones para CONTROLLER
 
 	public List<CheckinTest> getListaCheckinTest() {
-		return checkinTRepo.findAll();
+		return checkinRepo.findAll();
 	}
 
 	public CheckinTest getCheckinTestConCodigo(String codigo) {
-		return checkinTRepo.getCheckinTestConCodigo(codigo);
+		return checkinRepo.getCheckinTestConCodigo(codigo);
 	}
 
 }
