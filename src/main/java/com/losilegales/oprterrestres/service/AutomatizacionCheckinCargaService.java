@@ -49,12 +49,16 @@ public class AutomatizacionCheckinCargaService {
 	private Set<String> conjuntoCodigosDeCheckin;
 	
 	public void ejecutarAutomatizacion() {
-		this.arrayAeronaves = getArrayAeronaves();
-		this.iteradorAeronaves = getIteradorAeronaves();
-		this.conjuntoCodigosDeCheckin = getConjuntoCodigosDeCheckin();
+		inicializarVariablesDeClase();
 		crearCheckinConVuelos(conseguirVuelos());
 	}
 	
+	public void ejecutarAutomatizacionProgramada(List<String> lista) {
+		inicializarVariablesDeClase();
+		crearCheckinConVuelos(conseguirVuelosProgramados(lista));
+		
+	}
+
 	private void inicializarVariablesDeClase() {
 		this.arrayAeronaves = getArrayAeronaves();
 		this.iteradorAeronaves = getIteradorAeronaves();
@@ -95,6 +99,35 @@ public class AutomatizacionCheckinCargaService {
 		    while(itr.hasNext()) {
 		    	JSONObject vuelo = (JSONObject)itr.next();
 		    	if(String.valueOf(vuelo.get("estado")).equals(estadoDeVueloParaCheckin) && !existeCheckin(String.valueOf(vuelo.get("idvuelo")))) {
+		    		DatosGeneradorCheckin dgc = new DatosGeneradorCheckin();
+		    		dgc.setCantPasajeros(getCantidadDePasajeros(vuelo));
+		    		dgc.setCodigo(String.valueOf(vuelo.get("idvuelo")));
+		    		dgc.setDestino(String.valueOf(vuelo.get("destinoteorico_codiata")));
+		    		dgc.setFechaPartida(getFechaPartidaVuelo(vuelo));
+		    		dgc.setOrigen(String.valueOf(vuelo.get("origenteorico_codiata")));
+		    		
+		    		listaGeneradora.add(dgc);
+		    	}
+		    }
+			return listaGeneradora;
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return listaGeneradora;
+		}
+	}
+	
+	//TODO Este se podria fucionar con el metodo de arriba
+	private List<DatosGeneradorCheckin> conseguirVuelosProgramados(List<String> listaCodigos) {
+		List<DatosGeneradorCheckin> listaGeneradora = new ArrayList<DatosGeneradorCheckin>();
+		try {
+			String urlVuelos = "https://proyecto-icarus.herokuapp.com/vuelos";
+			HttpResponse<JsonNode> res = Unirest.get(urlVuelos).asJson();
+			Iterator<Object> itr = res.getBody().getArray().iterator();
+		    while(itr.hasNext()) {
+		    	JSONObject vuelo = (JSONObject)itr.next();
+		    	boolean esVueloProgramado = listaCodigos.contains(String.valueOf(vuelo.get("idvuelo")));
+		    	if(esVueloProgramado && !existeCheckin(String.valueOf(vuelo.get("idvuelo")))) {
 		    		DatosGeneradorCheckin dgc = new DatosGeneradorCheckin();
 		    		dgc.setCantPasajeros(getCantidadDePasajeros(vuelo));
 		    		dgc.setCodigo(String.valueOf(vuelo.get("idvuelo")));
@@ -448,5 +481,6 @@ public class AutomatizacionCheckinCargaService {
 	public Checkin getCheckinConCodigo(String codigo) {
 		return checkinRepo.checkinUnicoPorVuelo(codigo);
 	}
+
 
 }

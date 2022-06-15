@@ -1,9 +1,10 @@
 package com.losilegales.oprterrestres.controller;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,22 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Operaciones de Automatizacion", description = "Operaciones de test automatizacion")
 public class OprTerrestresAutomatizacionTestController {
 	
+	public class ListaCodigosCheckin{
+		private List<String> lista;
+		
+		public ListaCodigosCheckin(List<String> lista) {
+			this.lista = new ArrayList<String>(lista);
+		}
+		
+		public ListaCodigosCheckin() {
+			this.lista = new ArrayList<String>();
+		}
+		
+		public List<String> getLista() {
+			return this.lista;
+		}
+	}
+	
 	@Autowired
 	private AutomatizacionCheckinCargaService autocheckinservice;
 	
@@ -39,6 +56,23 @@ public class OprTerrestresAutomatizacionTestController {
 	@PostMapping("automatizacion/testreal")
 	void testAutomatizacion() {
 		autocheckinservice.ejecutarAutomatizacion();
+		return;
+	}
+	
+	@PostMapping("automatizacion/testmultipleautomatico")
+	void testAutomatizacion(@RequestBody JSONObject json){
+		try {
+			List<String> lista = (List<String>)json.get("codigos");
+	//		for (String s : lista) {
+	//			System.out.println(s);
+	//		}
+	//		System.out.println(" ");
+	//		System.out.println(lista.toString());
+			autocheckinservice.ejecutarAutomatizacionProgramada(lista);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		return;
 	}
 	
