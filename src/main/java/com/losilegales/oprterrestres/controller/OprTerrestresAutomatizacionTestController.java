@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.losilegales.oprterrestres.automatizacion.AutomatizacionBody;
 import com.losilegales.oprterrestres.entity.Checkin;
 import com.losilegales.oprterrestres.entity.CheckinTest;
 import com.losilegales.oprterrestres.service.AutomatizacionCheckinCargaService;
@@ -25,22 +26,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping(OprConstants.BASE_ENDPOINT)
 @Tag(name = "Operaciones de Automatizacion", description = "Operaciones de test automatizacion")
 public class OprTerrestresAutomatizacionTestController {
-	
-	public class ListaCodigosCheckin{
-		private List<String> lista;
-		
-		public ListaCodigosCheckin(List<String> lista) {
-			this.lista = new ArrayList<String>(lista);
-		}
-		
-		public ListaCodigosCheckin() {
-			this.lista = new ArrayList<String>();
-		}
-		
-		public List<String> getLista() {
-			return this.lista;
-		}
-	}
 	
 	@Autowired
 	private AutomatizacionCheckinCargaService autocheckinservice;
@@ -58,6 +43,18 @@ public class OprTerrestresAutomatizacionTestController {
 		autocheckinservice.ejecutarAutomatizacion();
 		return;
 	}
+	
+//	@PostMapping("/automatizacion/pruebapath")
+//	void testPath(@PathVariable int numero, @PathVariable String nombre) {
+//		System.out.println("numero: " + numero + " | nombre: " + nombre);
+//	}
+	
+//	@PostMapping("/automatizacion/pruebapath")
+//	void testPath(@RequestBody AutomatizacionBody ab) {
+//		DatosGeneradorCheckin dtc = ab.getListaDeDatosGeneradorCheckin().get(0);
+//		System.out.println(dtc);
+//		System.out.println(ab.toString());
+//	}
 	
 	@PostMapping("automatizacion/testmultipleautomatico")
 	void testAutomatizacion(@RequestBody JSONObject json){

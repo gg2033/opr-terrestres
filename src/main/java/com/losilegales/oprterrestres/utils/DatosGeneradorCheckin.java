@@ -1,7 +1,5 @@
 package com.losilegales.oprterrestres.utils;
 
-import com.losilegales.oprterrestres.service.AutomatizacionCheckinCargaService;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
