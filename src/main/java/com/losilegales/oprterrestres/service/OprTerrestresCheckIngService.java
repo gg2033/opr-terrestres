@@ -83,6 +83,8 @@ public class OprTerrestresCheckIngService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+
+	private int valorDefaultCapacidadAeronave = 70;
 	
 	@SuppressWarnings("unchecked")
 	public org.json.simple.JSONObject sobrepasaPesoAeronave(String codigoVuelo) throws UnirestException {
@@ -92,7 +94,7 @@ public class OprTerrestresCheckIngService {
 		try {
 			int capacidadEnToneladas = getCapacidadAeronaveEnToneladas(codigoVuelo);
 			if(capacidadEnToneladas == 0) {
-				throw new Exception("No se pudo encontrar la aeronave");
+				capacidadEnToneladas = valorDefaultCapacidadAeronave ;
 			}
 		    int pesoTotalCargasEnKG = getPesoSumadoCargas(listaCargas);
 			int pesoTotalPasajerosEnKG = getPesoPromedioPorPasajero(listaCheckin);
