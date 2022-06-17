@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.losilegales.oprterrestres.entity.VerificacionComisariato;
 import com.losilegales.oprterrestres.repository.VerificacionComisariatoRepository;
 import com.losilegales.oprterrestres.utils.OprUtils;
+
 @Service
 public class OprTerrestresComisariatoService {
 	

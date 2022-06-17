@@ -6,6 +6,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,7 +29,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.losilegales.oprterrestres.config.AppConfig;
+import com.losilegales.oprterrestres.dto.VueloCanceladoDTO;
 import com.losilegales.oprterrestres.dto.VueloHistoricoDTO;
+import com.losilegales.oprterrestres.dto.AeroNaves.AeronaveDTO;
 import com.losilegales.oprterrestres.dto.CheckIn.CargaPorTagDTO;
 import com.losilegales.oprterrestres.dto.CheckIn.CargaPorTipoReporteDTO;
 import com.losilegales.oprterrestres.repository.CargaRepository;
@@ -194,6 +197,90 @@ public class ReportService {
 		}
 	}
 
+	
+	public ResponseEntity<byte[]> getReporteVuelosCancelados() {
+		URI uri;
+		try {
+			
+			uri = new URI("https://proyecto-icarus.herokuapp.com/vuelosCancelados");
+
+			ResponseEntity<VueloCanceladoDTO[]> responseEntity = simpleRestTemplate.getForEntity(uri, VueloCanceladoDTO[].class);
+			List<VueloCanceladoDTO> vuelosCancelados = Arrays.asList(responseEntity.getBody());
+//			vuelosCancelados = vuelosCancelados.stream().filter(e -> e.getMotivoestado()!=null).collect(Collectors.toList());
+			//dynamic parameters required for report
+			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(
+					vuelosCancelados);
+			
+			JasperPrint empReport =
+					JasperFillManager.fillReport
+				   (
+							JasperCompileManager.compileReport(
+									new FileInputStream("src/main/resources/vuelos_cancelados.jrxml")
+									) // path of the jasper report
+							, null // dynamic parameters
+							, beanColDataSource 
+							
+					);
+
+			HttpHeaders headers = new HttpHeaders();
+			//set the PDF format
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.setContentDispositionFormData("filename", "naves-top-reporte.pdf");
+			//create the report in PDF format
+			return new ResponseEntity<byte[]>
+					(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
+		}
+		catch (Exception e ) {
+			e.printStackTrace();
+			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+	public ResponseEntity<byte[]> getReporteAeronavesNoTripuladas() {
+		URI uri;
+		try {
+			
+			uri = new URI("https://grops-backend-dnj2km2huq-rj.a.run.app/aircraft/getAll");
+
+			ResponseEntity<AeronaveDTO[]> responseEntity = simpleRestTemplate.getForEntity(uri, AeronaveDTO[].class);
+			List<AeronaveDTO> aeronaves = Arrays.asList(responseEntity.getBody());
+			
+			//dynamic parameters required for report
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("ReportTitle", "Top de Naves mas usadas");
+			parameters.put("Author", "Naves");
+//			parameters.put("CODIGO_VUELO", codigoVuelo);
+			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(
+					aeronaves);
+			
+			JasperPrint empReport =
+					JasperFillManager.fillReport
+				   (
+							JasperCompileManager.compileReport(
+									new FileInputStream("src/main/resources/aeronaves_caracteristicas.jrxml")
+									) // path of the jasper report
+							, parameters // dynamic parameters
+							, beanColDataSource 
+							
+					);
+
+			HttpHeaders headers = new HttpHeaders();
+			//set the PDF format
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			headers.setContentDispositionFormData("filename", "naves-top-reporte.pdf");
+			//create the report in PDF format
+			return new ResponseEntity<byte[]>
+					(JasperExportManager.exportReportToPdf(empReport), headers, HttpStatus.OK);
+		}
+		catch (Exception e ) {
+			e.printStackTrace();
+			return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+	
 	public ResponseEntity<byte[]> getAeronavesMasUsadasTop3() {
 		URI uri;
 		try {

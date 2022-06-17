@@ -3,6 +3,7 @@ package com.losilegales.oprterrestres.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.simple.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,10 @@ import com.losilegales.oprterrestres.entity.Carga;
 import com.losilegales.oprterrestres.repository.CargaRepository;
 import com.losilegales.oprterrestres.service.EmailService;
 import com.losilegales.oprterrestres.service.OprTerrestresCargaService;
+import com.losilegales.oprterrestres.service.OprTerrestresCheckIngService;
 import com.losilegales.oprterrestres.service.ReportService;
 import com.losilegales.oprterrestres.utils.OprConstants;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,6 +47,9 @@ public class OprTerrestresCargaController {
 	
 	@Autowired
 	OprTerrestresCargaService oprTerrestresCargaService;
+	
+	@Autowired
+	OprTerrestresCheckIngService oprTerrestresCheckinService;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -70,18 +76,50 @@ public class OprTerrestresCargaController {
 		return cargasDTO;
 	}
 	
+//	@Operation(summary = "Obtiene todas las cargas por vuelo")
+//	@GetMapping("/cargas/{codigoVuelo}")
+//	public List<CargaDTO> getCargasPorVuelo(@PathVariable String codigoVuelo) {
+//		//TODO descomentar esto cuando se arregle el problema de el codigo de vuelo para cargas en DB
+////		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
+//		List<Carga> cargas = cargaRepository.cargasPorVuelo(codigoVuelo);
+//		
+//		List<CargaDTO> cargasDTO = new ArrayList<CargaDTO>();
+//		for (Carga carga : cargas) {
+//			cargasDTO.add(modelMapper.map(carga, CargaDTO.class));
+//		}
+//		return cargasDTO;
+//
+//	}
+	
 	@Operation(summary = "Obtiene todas las cargas por vuelo")
 	@GetMapping("/cargas/{codigoVuelo}")
-	public List<CargaDTO> getCargasPorVuelo(@PathVariable String codigoVuelo) {
+	public List<CargaDTO> getCargasPorVuelo(@PathVariable String codigoVuelo) throws Exception{
 		//TODO descomentar esto cuando se arregle el problema de el codigo de vuelo para cargas en DB
 //		codigoVuelo = OprUtils.formatoCodigoVuelo(codigoVuelo);
-		List<Carga> cargas = cargaRepository.cargasPorVuelo(codigoVuelo);
-		
-		List<CargaDTO> cargasDTO = new ArrayList<CargaDTO>();
-		for (Carga carga : cargas) {
-			cargasDTO.add(modelMapper.map(carga, CargaDTO.class));
+		JSONObject json;
+		try {
+			json = oprTerrestresCheckinService.sobrepasaPesoAeronave(codigoVuelo);
+			Boolean sobrepasa = json.get("sobrecarga") == null ? null : (boolean) json.get("sobrecarga");
+			if(sobrepasa == null) {
+				throw new Exception("A ocurrido un error, no ha sido posible obtener el peso de la aeronave");
+			}
+			else if (sobrepasa) {
+				throw new Exception("La carga sobrepasa el peso maximo de la aeronave");
+			}
+			else {
+				List<Carga> cargas = cargaRepository.cargasPorVuelo(codigoVuelo);
+				List<CargaDTO> cargasDTO = new ArrayList<CargaDTO>();
+				for (Carga carga : cargas) {
+					cargasDTO.add(modelMapper.map(carga, CargaDTO.class));
+				}
+				return cargasDTO;
+			}
+		} 
+		catch (UnirestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new Exception("A ocurrido un error, no ha sido posible obtener el peso de la aeronave");
 		}
-		return cargasDTO;
 
 	}
 	
