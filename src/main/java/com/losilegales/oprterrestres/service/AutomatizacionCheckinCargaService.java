@@ -43,7 +43,7 @@ public class AutomatizacionCheckinCargaService {
 	private CargaRepository cargaRepo;
 
 	private String ultimoAsiento = "";
-	private String estadoDeVueloParaCheckin = "confirmado";
+//	private String estadoDeVueloParaCheckin = "confirmado";
 	private Iterator<Object> iteradorAeronaves;
 	private JSONArray arrayAeronaves;
 	private Set<String> conjuntoCodigosDeCheckin;
@@ -98,7 +98,8 @@ public class AutomatizacionCheckinCargaService {
 			Iterator<Object> itr = res.getBody().getArray().iterator();
 		    while(itr.hasNext()) {
 		    	JSONObject vuelo = (JSONObject)itr.next();
-		    	if(String.valueOf(vuelo.get("estado")).equals(estadoDeVueloParaCheckin) && !existeCheckin(String.valueOf(vuelo.get("idvuelo")))) {
+//		    	String.valueOf(vuelo.get("estado")).equals(estadoDeVueloParaCheckin)
+		    	if(!existeCheckin(String.valueOf(vuelo.get("idvuelo")))) {
 		    		DatosGeneradorCheckin dgc = new DatosGeneradorCheckin();
 		    		dgc.setCantPasajeros(getCantidadDePasajeros(vuelo));
 		    		dgc.setCodigo(String.valueOf(vuelo.get("idvuelo")));
@@ -175,31 +176,31 @@ public class AutomatizacionCheckinCargaService {
 	
 	public void crearCheckinConVuelos(List<DatosGeneradorCheckin> vuelos) {
 		//SOLO PARA ESTE EJEMPLO, LUEGO BORRAR...
-		inicializarVariablesDeClase();
-		for (DatosGeneradorCheckin vuelo : vuelos)
-			if (!existeCheckin(vuelo.getCodigo())) {
-				ultimoAsiento = "";
-				List<Checkin> checkinAPersistir = new ArrayList<Checkin>(vuelo.getCantPasajeros());
-				Integer randomCargaNumber = randomCargaNumber(vuelo.getCantPasajeros());
-				List<Carga> cargaAPersistir = new ArrayList<Carga>(randomCargaNumber);
-				int iteradorCarga = 0;
-				// generar rows
-				for (int numPasajero = 0; numPasajero < vuelo.getCantPasajeros(); numPasajero++) {
-					generarRowCheckin(numPasajero, vuelo, checkinAPersistir);
-					//Este if cubre los casos en donde las cargas sean igual o menores a la cant. de pasajeros
-					//a modo de optimizacion, para no tener dos for que corran n veces.
-					if(iteradorCarga < randomCargaNumber) {
-						generarRowCarga(randomCargaNumber, vuelo, cargaAPersistir);
-					}
-					iteradorCarga += 1;
-				}
-				//Este for cubre los casos en donde las cargas sean mayores a la cant. de pasajeros
-				for (int iteracion = iteradorCarga; iteracion < randomCargaNumber; iteracion++) {
+//		inicializarVariablesDeClase();
+		for (DatosGeneradorCheckin vuelo : vuelos) {
+//			if (!existeCheckin(vuelo.getCodigo())) {
+			ultimoAsiento = "";
+			List<Checkin> checkinAPersistir = new ArrayList<Checkin>(vuelo.getCantPasajeros());
+			Integer randomCargaNumber = randomCargaNumber(vuelo.getCantPasajeros());
+			List<Carga> cargaAPersistir = new ArrayList<Carga>(randomCargaNumber);
+			int iteradorCarga = 0;
+			// generar rows
+			for (int numPasajero = 0; numPasajero < vuelo.getCantPasajeros(); numPasajero++) {
+				generarRowCheckin(numPasajero, vuelo, checkinAPersistir);
+				//Este if cubre los casos en donde las cargas sean igual o menores a la cant. de pasajeros
+				//a modo de optimizacion, para no tener dos for que corran n veces.
+				if(iteradorCarga < randomCargaNumber) {
 					generarRowCarga(randomCargaNumber, vuelo, cargaAPersistir);
 				}
-				// persistir rows
-				checkinRepo.saveAll(checkinAPersistir);
-				cargaRepo.saveAll(cargaAPersistir);
+				iteradorCarga += 1;
+			}
+			//Este for cubre los casos en donde las cargas sean mayores a la cant. de pasajeros
+			for (int iteracion = iteradorCarga; iteracion < randomCargaNumber; iteracion++) {
+				generarRowCarga(randomCargaNumber, vuelo, cargaAPersistir);
+			}
+			// persistir rows
+			checkinRepo.saveAll(checkinAPersistir);
+			cargaRepo.saveAll(cargaAPersistir);
 			}
 	}
 
@@ -286,7 +287,7 @@ public class AutomatizacionCheckinCargaService {
 
 	private boolean existeCheckin(String codigo) {
 
-		return conjuntoCodigosDeCheckin.contains(codigo) ? true : false;
+		return conjuntoCodigosDeCheckin.contains(codigo);
 	}
 
 	private void generarRowCheckin(int numPasajero, DatosGeneradorCheckin vuelo, List<Checkin> checkinAPersistir) {
