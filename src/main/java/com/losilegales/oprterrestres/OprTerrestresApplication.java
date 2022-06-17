@@ -5,6 +5,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import org.modelmapper.ModelMapper;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,13 +30,42 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.losilegales.oprterrestres.automatizacion.Task;
 
 @SpringBootApplication
 @Configuration
 public class OprTerrestresApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		SpringApplication.run(OprTerrestresApplication.class, args);
+		
+		try {
+            // Grab the Scheduler instance from the Factory
+            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+
+            // and start it off
+            scheduler.start();
+            // define the job and tie it to our HelloJob class
+            JobDetail job = JobBuilder.newJob(Task.class)
+                .withIdentity("job1", "group1")
+                .build();
+
+            // Trigger the job to run now, and then repeat every 40 seconds
+            CronTrigger trigger = TriggerBuilder.newTrigger()
+            		  .withIdentity("trigger3", "group1")
+            		  .withSchedule(CronScheduleBuilder.cronSchedule("0 0 13 * * ?"))
+            		  .forJob("job1", "group1")
+            		  .build();
+
+            // Tell quartz to schedule the job using our trigger
+            scheduler.scheduleJob(job, trigger);
+//            Thread.sleep(60000);
+
+//            scheduler.shutdown();
+
+        } catch (SchedulerException se) {
+            se.printStackTrace();
+        }
 
 	}
 

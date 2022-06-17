@@ -13,11 +13,12 @@ import javax.persistence.Table;
 
 import lombok.Data;
 
+
 @Entity
-@Table(name = "CARGAS", schema = "public")
+@Table(name = "CARGAS_TEST", schema = "public")
 @Data
-public class Carga {
-	
+public class CargaTest {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_carga")
@@ -25,12 +26,6 @@ public class Carga {
 	
 	@Column(name = "codigo")
 	private String codigo;
-
-	@Column(name = "envio")
-	private int envio;
-	
-	@Column(name = "codigo_carga")
-	private String codigoCarga;
 	
 	@Column(name = "codigo_pasajero")
 	private String codigoPasajero;
@@ -67,5 +62,4 @@ public class Carga {
 	
 	@Column(name = "fecha_partida")
 	private LocalDateTime fechaHoraVuelo;
-
 }

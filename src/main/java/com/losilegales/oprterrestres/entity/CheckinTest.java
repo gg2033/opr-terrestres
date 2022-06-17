@@ -1,4 +1,5 @@
 package com.losilegales.oprterrestres.entity;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -17,8 +18,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="CHECKIN",schema="public")
-public class Checkin {
+@Table(name="CHECKIN_TEST",schema="public")
+public class CheckinTest {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id_checkin")
@@ -26,9 +27,6 @@ public class Checkin {
 	
 	@Column(name = "codigo")
 	private String codigo;
-	
-	@Column(name="envio")
-	private int envio;
 	
 	@Column(name="codigo_pasajero")
 	private String codigoPasajero;

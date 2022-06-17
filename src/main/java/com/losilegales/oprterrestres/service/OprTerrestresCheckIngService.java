@@ -6,6 +6,7 @@ import java.net.URI;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -481,7 +482,7 @@ public class OprTerrestresCheckIngService {
 				break;
 			case("fecha_partida"):
 				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-				LocalDate fecha_partida = LocalDate.parse(celda.getF().toString(), dtf);
+				LocalDateTime fecha_partida = LocalDateTime.parse(celda.getF().toString(), dtf);
 				chck.setFechaPartida(fecha_partida);
 				break;
 			case("origen"):
