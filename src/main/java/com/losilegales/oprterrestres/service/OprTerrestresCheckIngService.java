@@ -85,6 +85,8 @@ public class OprTerrestresCheckIngService {
 	private ModelMapper modelMapper;
 
 	private int valorDefaultCapacidadAeronave = 70;
+
+	private int valorDefaultPesoInsumos = 30;
 	
 	@SuppressWarnings("unchecked")
 	public org.json.simple.JSONObject sobrepasaPesoAeronave(String codigoVuelo) throws UnirestException {
@@ -154,7 +156,7 @@ public class OprTerrestresCheckIngService {
 		} catch (UnirestException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return 0;
+			return valorDefaultPesoInsumos ;
 		}
 	}
 
