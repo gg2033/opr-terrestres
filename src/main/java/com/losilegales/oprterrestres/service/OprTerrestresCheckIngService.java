@@ -158,6 +158,10 @@ public class OprTerrestresCheckIngService {
 			e.printStackTrace();
 			return valorDefaultPesoInsumos ;
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return valorDefaultPesoInsumos;
+		}
 	}
 
 	private int getCapacidadAeronaveEnToneladas(String codigoVuelo) throws UnirestException {
