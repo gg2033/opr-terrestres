@@ -158,7 +158,7 @@ public class OprTerrestresCheckIngService {
 			e.printStackTrace();
 			return valorDefaultPesoInsumos ;
 		}
-		catch (Exception e) {
+		catch (org.json.JSONException e) {
 			e.printStackTrace();
 			return valorDefaultPesoInsumos;
 		}
