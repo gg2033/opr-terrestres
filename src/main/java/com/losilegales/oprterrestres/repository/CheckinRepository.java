@@ -23,5 +23,8 @@ public interface CheckinRepository extends JpaRepository<Checkin, Integer> {
 
 	@Query(value = "TRUNCATE TABLE checkin RESTART IDENTITY", nativeQuery = true)
 	void truncateTabla();
+	
+	@Query(value = "SELECT DISTINCT (codigo) FROM checkin", nativeQuery = true)
+	List<String> getCodigosCheckin();
 
 }
