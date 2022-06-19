@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.losilegales.oprterrestres.automatizacion.AutomatizacionBody;
+import com.losilegales.oprterrestres.automatizacion.Task;
 import com.losilegales.oprterrestres.entity.Checkin;
 import com.losilegales.oprterrestres.entity.CheckinTest;
 import com.losilegales.oprterrestres.service.AutomatizacionCheckinCargaService;
@@ -30,6 +31,8 @@ public class OprTerrestresAutomatizacionTestController {
 	@Autowired
 	private AutomatizacionCheckinCargaService autocheckinservice;
 	
+	@Autowired
+	private Task task;
 //	@SuppressWarnings("unchecked")
 //	@GetMapping("/automatizacion")
 //	org.json.simple.JSONObject verNombre() {
@@ -43,6 +46,12 @@ public class OprTerrestresAutomatizacionTestController {
 		autocheckinservice.ejecutarAutomatizacion();
 		return;
 	}
+	
+	@PostMapping("automatizacion/insumos")
+	void testInsumos() {
+		task.cargarDatosInsumos();
+		return;
+	}	
 	
 //	@PostMapping("/automatizacion/pruebapath")
 //	void testPath(@PathVariable int numero, @PathVariable String nombre) {
