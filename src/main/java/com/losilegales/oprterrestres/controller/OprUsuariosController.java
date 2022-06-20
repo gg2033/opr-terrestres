@@ -115,7 +115,7 @@ public class OprUsuariosController {
 					dni.substring(dni.length() - 4);
 			
 			//Uso para la proxima iteracion (si existe)
-			dni = String.valueOf(usuario.getDni() + 1);
+			dni = String.valueOf(Integer.parseInt(dni) + 1);
 		}
 		while(usuarioRepository.usuarioConCodigo(codigoUsuario) != null);
 		return codigoUsuario;
